@@ -1,0 +1,74 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption: Python
+    chapters:
+    - file: python/python.myst.md
+    - file: python/1.introduction
+    - file: python/2.if-else
+    - file: python/3.loop
+    - file: python/4.sequential
+    - file: python/5.function
+    - file: python/6.module
+    - file: python/7.class
+  - caption: Python BootCamp
+    chapters:
+    - file: python/PythonBootCamp
+    - file: python/PythonBootCamp2
+    - file: python/PythonBootCamp3
+  - caption: NumPy/Pandas
+    chapters:
+    - file: numpy/numpy_basis1_初期化と簡単な演算
+    - file: numpy/numpy_basis2_行列計算
+    - file: numpy/numpy_basis3_行列の変形
+    - file: numpy/pandas_basis1_dfの作成と基本操作-資料編
+    sections:
+      - file: numpy/pandas_basis1_dfの作成と基本操作-演習編
+  - caption: Visualization
+    chapters:
+    - file: vis/matplotlib_pyplot_test
+    - file: vis/seaborn_test
+    - file: vis/pandas_plot_test
+    - file: vis/plotly_cufflinks_test
+    - file: vis/visualization_using_ml
+  - caption: Machine Learning
+    chapters:
+    - file: sklearn/scikit-learn-overview.ipynb
+    - file: machinelearning/k-nn.myst.md
+      sections:
+        - file: machinelearning/k-nn
+        - file: machinelearning/step_by_step_k_nn
+    - file: machinelearning/k-Means
+    - file: machinelearning/LinearRegression
+    - file: machinelearning/LogisticRegression
+    - file: machinelearning/PCA_Principal Component Analysis
+    - file: machinelearning/NMF_Non-Negative Matrix Factorization
+    - file: machinelearning/RF_RandomForest
+  - caption: Neural Network
+    chapters:
+    - file: neuralnet/perceptron
+      sections:
+        - file: neuralnet/perceptron.myst.md
+    - file: neuralnet/mlp
+      sections:
+        - file: neuralnet/matrix_ops
+        - file: neuralnet/activation_functions
+        - file: neuralnet/mlp_iris.myst.md
+        - file: neuralnet/penguin-PyTorch
+    - file: neuralnet/ae
+      sections:
+      - file: neuralnet/ae_mnist
+    - file: neuralnet/SOM
+      sections:
+      - file: neuralnet/SOM.myst.md
+    - file: neuralnet/word2vec
+      sections:
+        - file: neuralnet/cbow.myst.md
+        - file: neuralnet/skip_gram
+    - file: neuralnet/cnn
+  - caption: Python Tips
+    chapters:
+    - file: tips/Cython_speedtest

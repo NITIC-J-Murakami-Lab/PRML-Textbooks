@@ -169,3 +169,9 @@ _build/**
 # Jupyter Book.
 _build/
 .vscode/
+tmp.py
+tmp.ipynb
+
+**/data/
+**/input/
+**/output/
