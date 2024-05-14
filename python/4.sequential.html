@@ -1,0 +1,1056 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>シーケンス型 &#8212; PatternRecognitionWithPython</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"bbN": "\\mathbb{N}", "bbR": "\\mathbb{R}", "floor": ["\\lfloor#1\\rfloor", 1], "bmat": ["\\left[\\begin{array}"], "emat": ["\\end{array}\\right]"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/4.sequential';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="関数" href="5.function.html" />
+    <link rel="prev" title="繰り返し処理" href="3.loop.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="PatternRecognitionWithPython - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="PatternRecognitionWithPython - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="python.myst.html">Pythonの前提知識</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.introduction.html">初めてのPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.if-else.html">条件分岐</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.loop.html">繰り返し処理</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">シーケンス型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.function.html">関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.module.html">外部モジュールの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7.class.html">クラス</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python BootCamp</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="PythonBootCamp.html">Python BootCamp</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="PythonBootCamp2.html">Python BootCamp 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PythonBootCamp3.html">Python BootCamp 3</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NumPy/Pandas</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis1_%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%A8%E7%B0%A1%E5%8D%98%E3%81%AA%E6%BC%94%E7%AE%97.html">np.arrayの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis2_%E8%A1%8C%E5%88%97%E8%A8%88%E7%AE%97.html">配列同士の演算</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis3_%E8%A1%8C%E5%88%97%E3%81%AE%E5%A4%89%E5%BD%A2.html">reshape</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/pandas_basis1_df%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%E8%B3%87%E6%96%99%E7%B7%A8.html">Pandas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Visualization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../vis/matplotlib_pyplot_test.html">matplotlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/pandas_plot_test.html">DataFrame.plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/plotly_cufflinks_test.html">PlotlyとCufflinks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/visualization_using_ml.html">機械学習（次元圧縮, 行列分解）を利用した可視化</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Machine Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../sklearn/scikit-learn-overview.html">Scikit-Learn overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../machinelearning/k-nn.myst.html">k近傍法(k-nearest neighbor algorithm, k-NN）</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/k-nn.html">k近傍法(k-nearest neighbor algorithm, k-NN）の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/step_by_step_k_nn.html">Step-by-step k-NN実装</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/k-Means.html">k平均法(k-Means)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LinearRegression.html">線形回帰 （Linear Regression）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LogisticRegression.html">ロジスティック回帰 (Logistic Regression)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/PCA_Principal%20Component%20Analysis.html">PCA (Principal Component Analysis; 主成分分析)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/NMF_Non-Negative%20Matrix%20Factorization.html">NMF (Non-Negative Matrix Factorization; 非負値行列因子分解)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/RF_RandomForest.html">RF (Random Forest; ランダムフォレスト)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Network</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/perceptron.html">パーセプトロン（Perceptron）</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/perceptron.myst.html">perceptron.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/mlp.html">多層パーセプトロン (MLP: Multi-Layer Perceptron)</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/matrix_ops.html">行列計算で全結合層の計算が実装できる？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/activation_functions.html">活性化関数（Activation Functions）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/mlp_iris.myst.html">[課題]MLPによるiris datasetのクラス分類プログラムのCLIアプリ化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/penguin-PyTorch.html">パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/ae.html">Auto Encoder</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../neuralnet/SOM.html">自己組織化マップ (Self-Organizing Map; SOM)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/word2vec.html">Word2Vec</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/cbow.myst.html">cbow.pyのサンプルコード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/skip_gram.html">Skip-Gram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../neuralnet/cnn.html">Convolutional Neural Network</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/Cython_speedtest.html">Pythonを高速化するCythonを試してみよう</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/edit/main/docs/python/4.sequential.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/issues/new?title=Issue%20on%20page%20%2Fpython/4.sequential.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/python/4.sequential.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>シーケンス型</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">リスト型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">特定の要素へのアクセス</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">要素のスライス</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">要素の更新</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">リストへの追加</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">リストから要素を削除</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#remove">removeメソッド</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pop">popメソッド</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">別の型のオブジェクトをリスト型に変換する</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for">for文と一緒に使う</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bmi">[問題] 身長体重データを使って，BMI値と適正体重を計算して下さい．</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">辞書型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">[問題]テーブルデータから辞書を作成しよう．</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>シーケンス型<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>プログラムは「人間が嫌になってしまうような単純作業を延々と行うこと」が得意です．これまでに</p>
+<ol class="arabic simple">
+<li><p>文字列型（str）</p></li>
+<li><p>整数型（int）</p></li>
+<li><p>浮動小数点数型（float）</p></li>
+</ol>
+<p>を紹介しましたが，例えば「1年3組のすべての学生の身長，体重データ」から，学生ごとにBMIを計算したい時，どうやればいいか分かりますか？ここまでで紹介した型では複数要素を保持することができないので，40人分の変数を用意して，それぞれ処理を書くことになります．そんなことをしていたら，自分で計算するなり，Excelで計算した方が早いですね．</p>
+<p>ここでは面倒な単純作業をPythonに行わせるために，複数要素を保存できるデータ型を紹介します．</p>
+<section id="id2">
+<h2>リスト型<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>複数要素をまとめたリストを作成する型．例えば以下のように利用します．</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span>
+<span class="n">変数</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 空のリストを作る</span>
+<span class="n">変数</span> <span class="o">=</span> <span class="p">[</span><span class="n">要素0</span><span class="p">,</span> <span class="n">要素1</span><span class="p">,</span> <span class="n">要素2</span><span class="p">,</span> <span class="n">要素3</span><span class="p">,</span> <span class="n">要素4</span><span class="p">,</span> <span class="n">要素5</span><span class="p">,</span> <span class="n">要素6</span><span class="p">]</span> <span class="c1"># あらかじめ要素を渡して初期化したリストを作る</span>
+</pre></div>
+</div>
+<p>ここで，それぞれの要素の型は別々でも，揃っていても構いません．</p>
+<p>例えば先ほどの身長体重データを例に考えてみましょう．身長をheightという変数にすべて持たせてしまいたい時には，以下のように書きます．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">height</span> <span class="o">=</span> <span class="p">[</span><span class="mf">181.49154898</span><span class="p">,</span> <span class="mf">174.594337</span>  <span class="p">,</span> <span class="mf">150.78349215</span><span class="p">,</span> <span class="mf">156.45215611</span><span class="p">,</span>
+       <span class="mf">159.16359076</span><span class="p">,</span> <span class="mf">186.0955449</span> <span class="p">,</span> <span class="mf">183.4154026</span> <span class="p">,</span> <span class="mf">172.19241938</span><span class="p">,</span>
+       <span class="mf">143.09579574</span><span class="p">,</span> <span class="mf">166.58871137</span><span class="p">,</span> <span class="mf">152.86424968</span><span class="p">,</span> <span class="mf">154.69716608</span><span class="p">,</span>
+       <span class="mf">154.14376378</span><span class="p">,</span> <span class="mf">174.41741899</span><span class="p">,</span> <span class="mf">154.77675632</span><span class="p">,</span> <span class="mf">148.61230709</span><span class="p">,</span>
+       <span class="mf">174.5988262</span> <span class="p">,</span> <span class="mf">186.04120426</span><span class="p">,</span> <span class="mf">145.58260309</span><span class="p">,</span> <span class="mf">174.86335058</span><span class="p">,</span>
+       <span class="mf">162.82585791</span><span class="p">,</span> <span class="mf">168.6440591</span> <span class="p">,</span> <span class="mf">162.78898705</span><span class="p">,</span> <span class="mf">167.58953667</span><span class="p">,</span>
+       <span class="mf">156.72878777</span><span class="p">,</span> <span class="mf">165.10256566</span><span class="p">,</span> <span class="mf">152.00426113</span><span class="p">,</span> <span class="mf">159.05210476</span><span class="p">,</span>
+       <span class="mf">154.9897736</span> <span class="p">,</span> <span class="mf">145.93090124</span><span class="p">,</span> <span class="mf">151.61872105</span><span class="p">,</span> <span class="mf">167.76277588</span><span class="p">,</span>
+       <span class="mf">176.64089681</span><span class="p">,</span> <span class="mf">189.3265343</span> <span class="p">,</span> <span class="mf">173.97411515</span><span class="p">,</span> <span class="mf">166.70010256</span><span class="p">,</span>
+       <span class="mf">171.63787008</span><span class="p">,</span> <span class="mf">156.66053202</span><span class="p">,</span> <span class="mf">151.22324011</span><span class="p">,</span> <span class="mf">143.62535571</span><span class="p">]</span>
+
+<span class="n">weight</span> <span class="o">=</span> <span class="p">[</span><span class="mf">62.39879115</span><span class="p">,</span> <span class="mf">57.70648792</span><span class="p">,</span> <span class="mf">84.85042574</span><span class="p">,</span> <span class="mf">72.42281099</span><span class="p">,</span> <span class="mf">90.75139248</span><span class="p">,</span>
+       <span class="mf">68.60505313</span><span class="p">,</span> <span class="mf">67.0130241</span> <span class="p">,</span> <span class="mf">73.74472222</span><span class="p">,</span> <span class="mf">45.88724499</span><span class="p">,</span> <span class="mf">39.71282091</span><span class="p">,</span>
+       <span class="mf">97.79812938</span><span class="p">,</span> <span class="mf">77.51278572</span><span class="p">,</span> <span class="mf">98.02799002</span><span class="p">,</span> <span class="mf">52.32031888</span><span class="p">,</span> <span class="mf">77.48833046</span><span class="p">,</span>
+       <span class="mf">75.88226259</span><span class="p">,</span> <span class="mf">32.30121063</span><span class="p">,</span> <span class="mf">68.97769261</span><span class="p">,</span> <span class="mf">90.30106644</span><span class="p">,</span> <span class="mf">37.51962355</span><span class="p">,</span>
+       <span class="mf">79.70900929</span><span class="p">,</span> <span class="mf">31.87654392</span><span class="p">,</span> <span class="mf">56.95206049</span><span class="p">,</span> <span class="mf">75.31529515</span><span class="p">,</span> <span class="mf">35.69415348</span><span class="p">,</span>
+       <span class="mf">36.97097416</span><span class="p">,</span> <span class="mf">54.78909566</span><span class="p">,</span> <span class="mf">47.39797699</span><span class="p">,</span> <span class="mf">55.1677476</span> <span class="p">,</span> <span class="mf">79.70305538</span><span class="p">,</span>
+       <span class="mf">32.80857147</span><span class="p">,</span> <span class="mf">83.99631141</span><span class="p">,</span> <span class="mf">69.75460334</span><span class="p">,</span> <span class="mf">48.84786953</span><span class="p">,</span> <span class="mf">44.03951849</span><span class="p">,</span>
+       <span class="mf">65.42516493</span><span class="p">,</span> <span class="mf">51.35428547</span><span class="p">,</span> <span class="mf">65.2573042</span> <span class="p">,</span> <span class="mf">92.86989301</span><span class="p">,</span> <span class="mf">83.77754429</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>それぞれの変数をprintしてみましょう．また，<code class="docutils literal notranslate"><span class="pre">len(リスト型のオブジェクト)</span></code>とすることで要素数を確認することが可能です．これも試してみましょう．</p>
+<section id="id3">
+<h3>特定の要素へのアクセス<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>リスト型オブジェクトは，要素のインデックスを指定することで個別にアクセスすることもできます．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">height</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>152.86424968
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">height</span><span class="p">[</span><span class="mi">39</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>143.62535571
+</pre></div>
+</div>
+</div>
+</div>
+<p>インデックスは0からスタートします．</p>
+<p>マイナスの数字を使うと逆から順になります．</p>
+<p>0から39のインデックスが使えることが分かりましたが，では40以上を指定するとどうなりますか？</p>
+</section>
+<section id="id4">
+<h3>要素のスライス<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>リストの中の複数の要素にアクセスしたい場合は，<code class="docutils literal notranslate"><span class="pre">リストオブジェクト[start:end]</span></code>のようにします．
+例えば…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span> <span class="c1"># weight[:10]でも同じです．</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[62.39879115,
+ 57.70648792,
+ 84.85042574,
+ 72.42281099,
+ 90.75139248,
+ 68.60505313,
+ 67.0130241,
+ 73.74472222,
+ 45.88724499,
+ 39.71282091]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weight</span><span class="p">[</span><span class="mi">35</span><span class="p">:]</span> <span class="c1"># 二つ目の数字を指定しなければ最後の要素まで表示．</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[65.42516493, 51.35428547, 65.2573042, 92.86989301, 83.77754429]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h3>要素の更新<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>特定の要素を更新したい場合は，今までと同様に代入式 <code class="docutils literal notranslate"><span class="pre">=</span></code>を利用しましょう．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;今の状態：&quot;</span><span class="p">,</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1">#kg</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;代入後の状態：&quot;</span><span class="p">,</span> <span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>今の状態： 62.39879115
+代入後の状態： 100
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id6">
+<h3>リストへの追加<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>これまでprint関数を多用してきましたが，これ以外にもさまざまな関数がPythonにはあります．
+さらに，それぞれのデータ型（int, float, str, listなどなど）にも専用の関数が用意されています．この専用の関数のことを「メソッド」と呼びます．メソッドは以下のように利用します．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">オブジェクト</span><span class="o">.</span><span class="n">メソッド</span><span class="p">(</span><span class="n">必要なら引数</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>ここではリスト型のメソッド（append）を使って，リストへ要素の追加を行います．</p>
+<p>appendメソッドの使い方は以下の通り：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">追加したい要素</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 身長リストと体重リストに，それぞれ，150cm, 50kgの学生を追加しましょう．</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>要素はリストの一番最後に追加されます．</p>
+</section>
+<section id="id7">
+<h3>リストから要素を削除<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>リストから要素を削除するには<code class="docutils literal notranslate"><span class="pre">remove</span></code>メソッドか<code class="docutils literal notranslate"><span class="pre">pop</span></code>メソッドを利用します．</p>
+<section id="remove">
+<h4>removeメソッド<a class="headerlink" href="#remove" title="Link to this heading">#</a></h4>
+<p>使い方：</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">リストオブジェクト</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">削除したい要素</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>heightから先ほど追加した150cmの学生を削除しましょう．</p>
+</section>
+<section id="pop">
+<h4>popメソッド<a class="headerlink" href="#pop" title="Link to this heading">#</a></h4>
+<p>使い方：</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">リストオブジェクト</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">削除したい要素のインデックス</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>weightから先ほど追加した50kgの学生を削除しましょう．</p>
+</section>
+</section>
+<section id="id8">
+<h3>別の型のオブジェクトをリスト型に変換する<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">list()</span></code>関数を使うことで，別の型のオブジェクトをリスト型に変換することができます．例えば:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;あいうえお&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>あいうえお &lt;class &#39;str&#39;&gt;
+[&#39;あ&#39;, &#39;い&#39;, &#39;う&#39;, &#39;え&#39;, &#39;お&#39;] &lt;class &#39;list&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>またrange(10)をリスト型に変換するとどうなりますか？</p>
+</section>
+<section id="for">
+<h3>for文と一緒に使う<a class="headerlink" href="#for" title="Link to this heading">#</a></h3>
+<p>forはシーケンス型を一つ一つ取り出して，仮変数に代入します．シーケンス型の要素がなくなったらループ処理が終了します．これにリスト型オブジェクトを利用すると：</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">height</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>181.49154898
+174.594337
+150.78349215
+156.45215611
+159.16359076
+186.0955449
+183.4154026
+172.19241938
+143.09579574
+166.58871137
+152.86424968
+154.69716608
+154.14376378
+174.41741899
+154.77675632
+148.61230709
+174.5988262
+186.04120426
+145.58260309
+174.86335058
+162.82585791
+168.6440591
+162.78898705
+167.58953667
+156.72878777
+165.10256566
+152.00426113
+159.05210476
+154.9897736
+145.93090124
+151.61872105
+167.76277588
+176.64089681
+189.3265343
+173.97411515
+166.70010256
+171.63787008
+156.66053202
+151.22324011
+143.62535571
+</pre></div>
+</div>
+</div>
+</div>
+<p>また，要素とそのインデックスを同時に取り出すこともできます．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 181.49154898
+1 174.594337
+2 150.78349215
+3 156.45215611
+4 159.16359076
+5 186.0955449
+6 183.4154026
+7 172.19241938
+8 143.09579574
+9 166.58871137
+10 152.86424968
+11 154.69716608
+12 154.14376378
+13 174.41741899
+14 154.77675632
+15 148.61230709
+16 174.5988262
+17 186.04120426
+18 145.58260309
+19 174.86335058
+20 162.82585791
+21 168.6440591
+22 162.78898705
+23 167.58953667
+24 156.72878777
+25 165.10256566
+26 152.00426113
+27 159.05210476
+28 154.9897736
+29 145.93090124
+30 151.61872105
+31 167.76277588
+32 176.64089681
+33 189.3265343
+34 173.97411515
+35 166.70010256
+36 171.63787008
+37 156.66053202
+38 151.22324011
+39 143.62535571
+</pre></div>
+</div>
+</div>
+</div>
+<p>さらに，複数の要素を同時に取り出すには，<code class="docutils literal notranslate"><span class="pre">zip(リスト1,</span> <span class="pre">リスト2)</span></code>を使います．これを使って次の問題を解いてみましょう．</p>
+<section id="bmi">
+<h4>[問題] 身長体重データを使って，BMI値と適正体重を計算して下さい．<a class="headerlink" href="#bmi" title="Link to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[
+BMI ＝ \frac{体重[kg]}{(身長[m])^2}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+適正体重 ＝ (身長[m])^2 \times 22
+\]</div>
+<p>上から10人分だけ計算して，それぞれprintして下さい．</p>
+<p>余力がある人は，全員のBMIと適正体重をそれぞれ<code class="docutils literal notranslate"><span class="pre">bmi</span></code>変数と<code class="docutils literal notranslate"><span class="pre">normal_weight</span></code>変数にリストとして保存するように，プログラムを書き換えて下さい．</p>
+</section>
+</section>
+</section>
+<section id="id9">
+<h2>辞書型<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<p>リスト型を思い出して下さい．リストはインデックスと要素を紐付けて保存する型でした．これに対して，インデックスではなくキーとなる文字列などと要素を紐づけて保存する型が辞書型（dict）です．</p>
+<p>最も簡単な辞書の作り方は，空の辞書を作成した後に，キー（key）と要素（value）を追加していく方法でしょう．</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">変数</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">変数</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value1</span>
+<span class="n">変数</span><span class="p">[</span><span class="n">key2</span><span class="p">]</span> <span class="o">=</span> <span class="n">value2</span> 
+<span class="n">変数</span><span class="p">[</span><span class="n">key3</span><span class="p">]</span> <span class="o">=</span> <span class="n">value3</span> 
+</pre></div>
+</div>
+<p>この時に，keyは他のkeyと被らないように注意して下さい．valueについては被っても大丈夫です．またvalueにはどんな型を渡しても大丈夫です．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">sample_dict</span><span class="p">[</span><span class="s2">&quot;太郎&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;A型&quot;</span>
+<span class="n">sample_dict</span><span class="p">[</span><span class="s2">&quot;二郎&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;B型&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sample_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;太郎&#39;: &#39;A型&#39;, &#39;二郎&#39;: &#39;B型&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>↑のような形で要素を与えた状態での初期化も可能です．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_dict2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;太郎&#39;</span><span class="p">:</span> <span class="s1">&#39;A型&#39;</span><span class="p">,</span> <span class="s1">&#39;二郎&#39;</span><span class="p">:</span> <span class="s1">&#39;B型&#39;</span><span class="p">}</span>
+
+<span class="n">sample_dict</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;太郎&#39;: &#39;A型&#39;, &#39;二郎&#39;: &#39;B型&#39;}
+</pre></div>
+</div>
+</div>
+</div>
+<p>要素アクセスはリストと同様です．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_dict</span><span class="p">[</span><span class="s2">&quot;太郎&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;A型&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>では存在しないキーにアクセスするとどうなりますか？</p>
+<section id="id10">
+<h3>[問題]テーブルデータから辞書を作成しよう．<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<p><a class="reference external" href="https://chimei.jitenon.jp/jinko/ken.php?num=03">岩手県の人口と世帯数・市区町村別人口ランキング | 地名図鑑online</a>からコピペしたテーブルを以下に示します．このテーブルからデータを取り出してリストに保存するプログラムを載せたので，これを元に，「keyには市町村名，valueには人口」を持つ辞書型オブジェクトを作成して下さい．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://chimei.jitenon.jp/jinko/ken.php?num=03</span>
+<span class="n">raw_table</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;１位	盛岡市	282960人	138238戸</span>
+<span class="s2">２位	奥州市	111632人	46340戸</span>
+<span class="s2">３位	一関市	109697人	46385戸</span>
+<span class="s2">４位	花巻市	92385人	38726戸</span>
+<span class="s2">５位	北上市	92056人	40866戸</span>
+<span class="s2">６位	紫波郡	59619人	23799戸</span>
+<span class="s2">７位	滝沢市	55273人	24034戸</span>
+<span class="s2">８位	宮古市	48038人	22959戸</span>
+<span class="s2">９位	大船渡市	33540人	14765戸&quot;&quot;&quot;</span>
+
+
+<span class="n">city</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">population</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">raw_table</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span> <span class="c1"># splitlinesは文字列を一行ごとに分割してリストを作るメソッド</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">each_city</span><span class="p">,</span> <span class="n">each_population</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1"># splitは引数として与えられた文字列ごとに分割してリストを作るメソッド. \tはタブを表す．</span>
+
+    <span class="n">city</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">each_city</span><span class="p">)</span>
+    <span class="n">population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">each_population</span><span class="p">)</span>
+
+<span class="c1"># municipality:自治体</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./python"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="3.loop.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">繰り返し処理</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="5.function.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">関数</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">リスト型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">特定の要素へのアクセス</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">要素のスライス</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">要素の更新</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">リストへの追加</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">リストから要素を削除</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#remove">removeメソッド</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pop">popメソッド</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">別の型のオブジェクトをリスト型に変換する</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for">for文と一緒に使う</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bmi">[問題] 身長体重データを使って，BMI値と適正体重を計算して下さい．</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">辞書型</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">[問題]テーブルデータから辞書を作成しよう．</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Riki Murakami
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,923 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>関数 &#8212; PatternRecognitionWithPython</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"macros": {"bbN": "\\mathbb{N}", "bbR": "\\mathbb{R}", "floor": ["\\lfloor#1\\rfloor", 1], "bmat": ["\\left[\\begin{array}"], "emat": ["\\end{array}\\right]"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/5.function';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="外部モジュールの使い方" href="6.module.html" />
+    <link rel="prev" title="シーケンス型" href="4.sequential.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="PatternRecognitionWithPython - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="PatternRecognitionWithPython - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="python.myst.html">Pythonの前提知識</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.introduction.html">初めてのPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.if-else.html">条件分岐</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.loop.html">繰り返し処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.sequential.html">シーケンス型</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.module.html">外部モジュールの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7.class.html">クラス</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python BootCamp</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="PythonBootCamp.html">Python BootCamp</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="PythonBootCamp2.html">Python BootCamp 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PythonBootCamp3.html">Python BootCamp 3</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NumPy/Pandas</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis1_%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%A8%E7%B0%A1%E5%8D%98%E3%81%AA%E6%BC%94%E7%AE%97.html">np.arrayの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis2_%E8%A1%8C%E5%88%97%E8%A8%88%E7%AE%97.html">配列同士の演算</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis3_%E8%A1%8C%E5%88%97%E3%81%AE%E5%A4%89%E5%BD%A2.html">reshape</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/pandas_basis1_df%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%E8%B3%87%E6%96%99%E7%B7%A8.html">Pandas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Visualization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../vis/matplotlib_pyplot_test.html">matplotlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/pandas_plot_test.html">DataFrame.plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/plotly_cufflinks_test.html">PlotlyとCufflinks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/visualization_using_ml.html">機械学習（次元圧縮, 行列分解）を利用した可視化</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Machine Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../sklearn/scikit-learn-overview.html">Scikit-Learn overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../machinelearning/k-nn.myst.html">k近傍法(k-nearest neighbor algorithm, k-NN）</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/k-nn.html">k近傍法(k-nearest neighbor algorithm, k-NN）の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/step_by_step_k_nn.html">Step-by-step k-NN実装</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/k-Means.html">k平均法(k-Means)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LinearRegression.html">線形回帰 （Linear Regression）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LogisticRegression.html">ロジスティック回帰 (Logistic Regression)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/PCA_Principal%20Component%20Analysis.html">PCA (Principal Component Analysis; 主成分分析)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/NMF_Non-Negative%20Matrix%20Factorization.html">NMF (Non-Negative Matrix Factorization; 非負値行列因子分解)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/RF_RandomForest.html">RF (Random Forest; ランダムフォレスト)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Network</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/perceptron.html">パーセプトロン（Perceptron）</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/perceptron.myst.html">perceptron.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/mlp.html">多層パーセプトロン (MLP: Multi-Layer Perceptron)</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/matrix_ops.html">行列計算で全結合層の計算が実装できる？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/activation_functions.html">活性化関数（Activation Functions）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/mlp_iris.myst.html">[課題]MLPによるiris datasetのクラス分類プログラムのCLIアプリ化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/penguin-PyTorch.html">パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/ae.html">Auto Encoder</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../neuralnet/SOM.html">自己組織化マップ (Self-Organizing Map; SOM)</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../neuralnet/word2vec.html">Word2Vec</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/cbow.myst.html">cbow.pyのサンプルコード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../neuralnet/skip_gram.html">Skip-Gram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../neuralnet/cnn.html">Convolutional Neural Network</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/Cython_speedtest.html">Pythonを高速化するCythonを試してみよう</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/edit/main/docs/python/5.function.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/issues/new?title=Issue%20on%20page%20%2Fpython/5.function.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/python/5.function.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>関数</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">関数とは</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">関数の使い方</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">関数の作り方</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">基本的な関数</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-bmi-kg-m-2-bmicalc-bmi">[問題] <span class="math notranslate nohighlight">\(\text{BMI}=体重[kg] ÷ (身長[m])^2\)</span>を元に，身長と体重を受け取ってBMIを返す関数<code class="docutils literal notranslate"><span class="pre">calc_bmi</span></code>を作成してください．</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#n-nprintfibonacci">[発展問題]nを引数に取り，n以下のフィボナッチ数列を全てprintする関数<code class="docutils literal notranslate"><span class="pre">fibonacci</span></code>を作成してください．</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>関数<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<section id="id2">
+<h2>関数とは<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>プログラミングにおける関数とは，数学の関数に似て非なるものです．Pythonプログラムを（処理単位で）まとめたものをここでは関数と呼びます．</p>
+<blockquote>
+<div><p><img alt="" src="https://cdn-xtech.nikkei.com/atcl/learning/lecture/19/00108/00004/ph1.jpg?__scale=w:1299,h:687,q:100&amp;_sh=09e080070d" /><br />
+Pythonの関数、呼び出しと定義をマスターしよう | 日経クロステック（xTECH） <a class="reference external" href="https://xtech.nikkei.com/atcl/learning/lecture/19/00108/00004/">https://xtech.nikkei.com/atcl/learning/lecture/19/00108/00004/</a></p>
+</div></blockquote>
+<p>関数はデータを入力されて，それをもとに何かしらの処理を行って何かを出力することもできますし，入力なしに何かを行うこともできます．出力もないかもしれません．この辺りについての自由度が非常に高く，数学的な関数と同じ名前ですが，その定義まで同じであるとは言えません．<br />
+とりあえず何かの処理についてのコードをひとまとまりにして名前をつけたものを関数と呼ぶのだと思ってください．</p>
+</section>
+<section id="id3">
+<h2>関数の使い方<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>これまで使ってきたprint，typeも関数です．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;適当な文字列&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>適当な文字列
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="s2">&quot;適当なオブジェクト&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>str
+</pre></div>
+</div>
+</div>
+</div>
+<p>このように，一般的な関数には引数と呼ばれる「関数へ与えるオブジェクト」が指定されています．引数として「関数へ与えるオブジェクト」を渡すことで，関数の中ではそのオブジェクトに何かしら処理を行います．</p>
+<p>さて，関数には引数だけでなく，戻り値（返り値）と呼ばれる，「関数内での処理の結果として得られたオブジェクト」を関数の外へ出す機能も用意されています．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">return_value</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;適当なオブジェクト&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;戻り値は：&quot;</span><span class="p">,</span><span class="n">return_value</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;type関数の戻り値の型は：&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">return_value</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>--------------------
+戻り値は： &lt;class &#39;str&#39;&gt;
+type関数の戻り値の型は： &lt;class &#39;type&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>この引数と戻り値を理解すれば，関数の使い方は大体OKです．ただし，関数には「引数がない関数」や「戻り値がない関数」も存在します．注意しましょう．print関数は「引数はあるが戻り値がない関数」にあたります．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">return_value</span> <span class="o">=</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;適当なオブジェクト&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;戻り値は：&quot;</span><span class="p">,</span><span class="n">return_value</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;print関数の戻り値の型は：&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">return_value</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>適当なオブジェクト
+--------------------
+戻り値は： None
+print関数の戻り値の型は： &lt;class &#39;NoneType&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>ここで，<code class="docutils literal notranslate"><span class="pre">None</span></code>とは「何もない」ことを表す特別なpythonオブジェクトです．ここで<code class="docutils literal notranslate"><span class="pre">None</span></code>が戻ってきたということは，print関数の中では「標準出力に文字列を表示する処理」が行われていますが，「関数自体の戻り値はない」ことを表しています．</p>
+</section>
+<section id="id4">
+<h2>関数の作り方<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="id5">
+<h3>基本的な関数<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>自分で関数を作るには，以下のように書くと良いでしょう．</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">関数の名前</span><span class="p">(</span><span class="n">引数1</span><span class="p">,</span> <span class="n">引数2</span><span class="p">,</span> <span class="n">引数3</span><span class="o">=</span><span class="n">初期値</span><span class="p">):</span>
+    <span class="c1"># 何かしらのプログラム</span>
+    <span class="k">return</span> <span class="n">戻り値</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>関数名はほぼなんでもOKですが，頭文字が数字だと変数名として使えないなどの「変数名と同様の制限」があります．</p></li>
+<li><p>引数はいくらでも設定できます．</p>
+<ol class="arabic simple">
+<li><p>初期値を設定する引数は初期値の無い引数よりも後ろに設置することがルールです．</p></li>
+<li><p>引数なしでもOKです．</p></li>
+</ol>
+</li>
+<li><p>戻り値が必要な場合は<code class="docutils literal notranslate"><span class="pre">return</span></code>を関数の中に設置します．</p>
+<ol class="arabic simple">
+<li><p>戻り値なしでも構いません．</p></li>
+<li><p>returnは関数の中に何個でも設置できます．</p></li>
+</ol>
+</li>
+</ol>
+<p>これを元に，与えられた数字を二乗するだけの関数を作ってみましょう．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">nijou</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">val</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="n">tmp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>ここで，</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nijou</span></code>は「関数名」，</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>は「引数」，</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">return</span></code>は「戻り値」の宣言</p></li>
+</ol>
+<p>です．これを使って <span class="math notranslate nohighlight">\(10^2\)</span> を計算してみます．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nijou</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100
+</pre></div>
+</div>
+</div>
+</div>
+<p>関数の中で定義された<code class="docutils literal notranslate"><span class="pre">tmp</span></code>という変数は，関数の中だけで有効な引数です．関数の外では利用できません．また，引数も関数の中だけで有効な変数として機能します．関数の外で別の変数が付けられていても，関数の中では引数（ここでは<code class="docutils literal notranslate"><span class="pre">val</span></code>）として扱われます．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">nijou</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1"># print(tmp) print(val) も試してみよう．</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4
+</pre></div>
+</div>
+</div>
+</div>
+<p>変数名はできるだけ分かりやすく，読みやすいものが好まれます．例えば，</p>
+<ol class="arabic simple">
+<li><p>aやb</p></li>
+<li><p>indexとして使われるi,j</p></li>
+<li><p>値：value, val, 仮の：temp, tmp，インデックス：index, idx，カウンター：count,counter, cnt</p></li>
+</ol>
+<p>のような名前は使いやすい変数名です．これらは一つのプログラムの中で複数回使いたくなることがありますが，すでに使った変数名を再び使うと，値を上書きしてしまいプログラムがうまく動作しないかもしれません．</p>
+<p>そこでプログラムでは「変数スコープ」という機能が使われています．「関数の中で定義した変数は関数の中だけで通用する」というルールがこの「変数スコープ」です．Python以外の言語だと，for文がスコープを持ったり，他にも色々なコードブロックがスコープを持つことがあります．</p>
+<p>注意するべきこととしては，スコープの中で別のスコープを作ると，基本的には内側から外側のスコープの変数も使えてしまう点です．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">11</span>
+
+<span class="k">def</span> <span class="nf">仮の関数</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;仮の関数内からグローバル変数aを参照：&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">仮の関数2</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;仮の関数2内で変数aを定義：&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;グローバルで定義された元の変数：&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------&quot;</span><span class="p">)</span>
+<span class="n">仮の関数</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------&quot;</span><span class="p">)</span>
+<span class="n">仮の関数2</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>グローバルで定義された元の変数： 11
+-------------
+仮の関数内からグローバル変数aを参照： 11
+-------------
+仮の関数2内で変数aを定義： 10
+-------------
+11
+</pre></div>
+</div>
+</div>
+</div>
+<p>入れ構造の内側にあるスコープから，外側のスコープの変数を参照することはできますが，値を直接書き換えることはできません．以下の関数を実行してみてください．</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">仮の関数3</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">-=</span> <span class="mi">10</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;仮の関数3内で変数aを定義：&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">仮の関数3</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">-=</span> <span class="mi">10</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;仮の関数3内で変数aを定義：&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+
+<span class="n">仮の関数3</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">UnboundLocalError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">a</span> <span class="o">-=</span> <span class="mi">10</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;仮の関数3内で変数aを定義：&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">仮の関数3</span><span class="p">()</span>
+
+<span class="nn">Cell In[9], line 2,</span> in <span class="ni">仮の関数3</span><span class="nt">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">def</span> <span class="nf">仮の関数3</span><span class="p">():</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">a</span> <span class="o">-=</span> <span class="mi">10</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;仮の関数3内で変数aを定義：&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+
+<span class="ne">UnboundLocalError</span>: cannot access local variable &#39;a&#39; where it is not associated with a value
+</pre></div>
+</div>
+</div>
+</div>
+<p>また，外側のスコープで定義された変数と同じ名前を引数として利用することも可能ですが，その場合も外側のスコープの変数ではなく，関数の中だけで有効な別の変数として扱われます．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">仮の関数4</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="n">a</span><span class="o">+=</span><span class="mi">10</span>
+    <span class="k">return</span> <span class="n">a</span> 
+
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">仮の関数4</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;関数4の戻り値&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>11
+関数4の戻り値 110
+11
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">仮の関数4</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;関数4の戻り値&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>11
+関数4の戻り値 21
+11
+</pre></div>
+</div>
+</div>
+</div>
+<section id="text-bmi-kg-m-2-bmicalc-bmi">
+<h4>[問題] <span class="math notranslate nohighlight">\(\text{BMI}=体重[kg] ÷ (身長[m])^2\)</span>を元に，身長と体重を受け取ってBMIを返す関数<code class="docutils literal notranslate"><span class="pre">calc_bmi</span></code>を作成してください．<a class="headerlink" href="#text-bmi-kg-m-2-bmicalc-bmi" title="Link to this heading">#</a></h4>
+</section>
+<section id="n-nprintfibonacci">
+<h4>[発展問題]nを引数に取り，n以下のフィボナッチ数列を全てprintする関数<code class="docutils literal notranslate"><span class="pre">fibonacci</span></code>を作成してください．<a class="headerlink" href="#n-nprintfibonacci" title="Link to this heading">#</a></h4>
+<p>フィボナッチ数列とは</p>
+<blockquote>
+<div><p>《Fibonacci numbers》数学で、最初の二項が1で、第三項以降の項がすべて直前の二項の和になっている数列。すなわち、1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89…という数列のこと。イタリアの数学者レオナルド＝フィボナッチの名にちなむ。</p>
+</div></blockquote>
+<p>例えば100以下のフィボナッチ数列は：1 1 2 3 5 8 13 21 34 55 89</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+        <span class="c1">#a, b = b, a+b</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">b</span> 
+        <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">tmp</span>
+
+<span class="n">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1 1 2 3 5 8 13 21 34 55 89 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./python"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="4.sequential.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">シーケンス型</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="6.module.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">外部モジュールの使い方</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">関数とは</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">関数の使い方</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">関数の作り方</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">基本的な関数</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#text-bmi-kg-m-2-bmicalc-bmi">[問題] <span class="math notranslate nohighlight">\(\text{BMI}=体重[kg] ÷ (身長[m])^2\)</span>を元に，身長と体重を受け取ってBMIを返す関数<code class="docutils literal notranslate"><span class="pre">calc_bmi</span></code>を作成してください．</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#n-nprintfibonacci">[発展問題]nを引数に取り，n以下のフィボナッチ数列を全てprintする関数<code class="docutils literal notranslate"><span class="pre">fibonacci</span></code>を作成してください．</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Riki Murakami
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

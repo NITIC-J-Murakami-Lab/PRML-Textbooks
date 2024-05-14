@@ -1,0 +1,1316 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう &#8212; PatternRecognitionWithPython</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'deeplearning/penguin-PyTorch';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Word2Vec" href="word2vec.html" />
+    <link rel="prev" title="[課題]MLPによるiris datasetのクラス分類プログラムのCLIアプリ化" href="mlp_iris.myst.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="PatternRecognitionWithPython - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="PatternRecognitionWithPython - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../python/python.myst.html">Pythonの前提知識</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/1.introduction.html">初めてのPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/2.if-else.html">条件分岐</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/3.loop.html">繰り返し処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/4.sequential.html">シーケンス型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/5.function.html">関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/6.module.html">外部モジュールの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/7.class.html">クラス</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python BootCamp</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../python/PythonBootCamp.html">Python BootCamp</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../python/PythonBootCamp2.html">Python BootCamp 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/PythonBootCamp3.html">Python BootCamp 3</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NumPy/Pandas</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis1_%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%A8%E7%B0%A1%E5%8D%98%E3%81%AA%E6%BC%94%E7%AE%97.html">np.arrayの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis2_%E8%A1%8C%E5%88%97%E8%A8%88%E7%AE%97.html">配列同士の演算</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis3_%E8%A1%8C%E5%88%97%E3%81%AE%E5%A4%89%E5%BD%A2.html">reshape</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/pandas_basis1_df%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%E8%B3%87%E6%96%99%E7%B7%A8.html">Pandas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/pandas_basis1_df%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%E6%BC%94%E7%BF%92%E7%B7%A8.html">演習編</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Visualization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../vis/matplotlib_pyplot_test.html">matplotlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/pandas_plot_test.html">DataFrame.plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/plotly_cufflinks_test.html">PlotlyとCufflinks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Machine Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../sklearn/scikit-learn-overview.html">Scikit-Learn overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../machinelearning/k-nn.myst.html">k近傍法(k-nearest neighbor algorithm, k-NN）</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/k-nn.html">k近傍法(k-nearest neighbor algorithm, k-NN）の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/step_by_step_k_nn.html">Step-by-step k-NN実装</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LinearRegression.html">線形回帰 （Linear Regression）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LogisticRegression.html">ロジスティック回帰 (Logistic Regression)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/PCA_Principal%20Component%20Analysis.html">PCA (Principal Component Analysis; 主成分分析)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Deep Learning</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="perceptron.html">パーセプトロン（Perceptron）</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="perceptron.myst.html">perceptron.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="mlp.html">多層パーセプトロン (MLP: Multi-Layer Perceptron)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="matrix_ops.html">行列計算で全結合層の計算が実装できる？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="activation_functions.html">活性化関数（Activation Functions）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlp_iris.myst.html">[課題]MLPによるiris datasetのクラス分類プログラムのCLIアプリ化</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="word2vec.html">Word2Vec</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="cbow.myst.html">cbow.pyのサンプルコード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="skip_gram.html">Skip-Gram</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/edit/main/docs/deeplearning/penguin-PyTorch.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/issues/new?title=Issue%20on%20page%20%2Fdeeplearning/penguin-PyTorch.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/deeplearning/penguin-PyTorch.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1">SECTION 1 : 学習用データのロードとセットアップ</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1-1-data-loading">Section 1.1 Data Loading</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-2">SECTION 2 : モデルの構築と学習</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-3">SECTION 3 : モデルの評価</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#init-net">[課題1] 入力層の次元数と隠れ層の次元数とクラス数を__init__の引数で変更できるようにNetクラスを修正せよ。</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-set-seedseed1111">[課題2] 課題1で作ったクラスを使って，クラス数をそのままに隠れ層の次元数を100にして200エポック訓練せよ．また，その際のtestデータの正答率を示せ．この際、set_seedを使いSEEDを1111に固定する事．</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tanhsequentialfeature-extractor33">[課題3] ペンギンデータのクラス分類を行うニューラルネットワークを作れ。ただし、ニューラルネットワークの隠れ層は5層で、それぞれが100次元のネットワークを作成せよ。また、このニューラルネットワークの活性化関数はすべてtanhである。この隠れ層をまとめたsequentialをfeature_extractorという変数にせよ。出力層は3クラス分類を行うために次元数は3にする。</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testset-seedseed1111">[課題4] 課題3で作ったクラスを使って、200エポック訓練せよ。また、その際のtestデータの正答率を提出せよ。この際、set_seedを使いSEEDを1111に固定する事。</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pytorch">
+<h1>パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう<a class="headerlink" href="#pytorch" title="Link to this heading">#</a></h1>
+<p>ニューラルネットワークの実装のためのライブラリ「PyTorch」の使い方を，penguinデータセットのクラス分類を例に学ぼう．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SEED</span> <span class="o">=</span> <span class="mi">20220725</span>
+
+<span class="c1"># seed function for reproducibility</span>
+<span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONHASHSEED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">set_seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="section-1">
+<h2>SECTION 1 : 学習用データのロードとセットアップ<a class="headerlink" href="#section-1" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://penguinchord.com/blog/data-science/python-palmerpenguins-engineering">ペンギンデータについて</a>
+<img alt="" src="https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png" /></p></li>
+</ul>
+<p><a class="reference external" href="https://github.com/rianrajagede/penguin-python/tree/master/Datasets">オリジンデータをもとに2つのファイルに分けたデータセット</a> 。</p>
+<ul class="simple">
+<li><p>penguin-clean-train.csv = 学習用データセット、オリジナルデータから70%使用。</p></li>
+<li><p>penguin-clean-test.csv = テスト用データセット、オリジナルデータから30%抽出</p></li>
+</ul>
+<blockquote>
+<div><p>SECTION 1 : Load and setup data for training<br />
+the datasets separated in two files from originai datasets:<br />
+penguin-clean-train.csv = datasets for training purpose, 70% from the original data<br />
+penguin-clean-test.csv  = datasets for testing purpose, 30% from the original data</p>
+</div></blockquote>
+<section id="section-1-1-data-loading">
+<h3>Section 1.1 Data Loading<a class="headerlink" href="#section-1-1-data-loading" title="Link to this heading">#</a></h3>
+<p>データセットは前処理済みのものが既にあるので、これを直接利用する <a class="github reference external" href="https://github.com/rianrajagede/penguin-python/tree/master/Datasets">rianrajagede/penguin-python</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">en2ja</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;species&quot;</span><span class="p">:</span> <span class="s2">&quot;ペンギンの種類&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;island&quot;</span><span class="p">:</span> <span class="s2">&quot;生息する島&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bill_length_mm&quot;</span><span class="p">:</span> <span class="s2">&quot;クチバシの長さ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bill_depth_mm&quot;</span><span class="p">:</span><span class="s2">&quot;クチバシの厚み&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;flipper_length_mm&quot;</span><span class="p">:</span> <span class="s2">&quot;翼の長さ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;body_mass_g&quot;</span><span class="p">:</span> <span class="s2">&quot;体重&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sex&quot;</span><span class="p">:</span> <span class="s2">&quot;性別&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;調査年&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#load</span>
+
+<span class="n">dataset_url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/rianrajagede/penguin-python/master/Datasets/penguins-clean-all.csv&quot;</span>
+<span class="n">training_url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/rianrajagede/penguin-python/master/Datasets/penguins-clean-train.csv&quot;</span>
+<span class="n">test_url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/rianrajagede/penguin-python/master/Datasets/penguins-clean-test.csv&quot;</span>
+<span class="c1"># datatrain = pd.read_csv(&#39;../Datasets/penguins-clean-train.csv&#39;)</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">training_url</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(240, 5)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train_ja</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_train_ja</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">en2ja</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">df_train_ja</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+<span class="n">df_train_ja</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ペンギンの種類</th>
+      <th>クチバシの長さ</th>
+      <th>クチバシの厚み</th>
+      <th>翼の長さ</th>
+      <th>体重</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Gentoo</td>
+      <td>46.2</td>
+      <td>14.5</td>
+      <td>209</td>
+      <td>4800</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Gentoo</td>
+      <td>43.6</td>
+      <td>13.9</td>
+      <td>217</td>
+      <td>4900</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Gentoo</td>
+      <td>45.3</td>
+      <td>13.7</td>
+      <td>210</td>
+      <td>4300</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Gentoo</td>
+      <td>53.4</td>
+      <td>15.8</td>
+      <td>219</td>
+      <td>5500</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Adelie</td>
+      <td>40.6</td>
+      <td>18.8</td>
+      <td>193</td>
+      <td>3800</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>235</th>
+      <td>Gentoo</td>
+      <td>46.8</td>
+      <td>15.4</td>
+      <td>215</td>
+      <td>5150</td>
+    </tr>
+    <tr>
+      <th>236</th>
+      <td>Gentoo</td>
+      <td>46.6</td>
+      <td>14.2</td>
+      <td>210</td>
+      <td>4850</td>
+    </tr>
+    <tr>
+      <th>237</th>
+      <td>Gentoo</td>
+      <td>43.5</td>
+      <td>14.2</td>
+      <td>220</td>
+      <td>4700</td>
+    </tr>
+    <tr>
+      <th>238</th>
+      <td>Gentoo</td>
+      <td>46.9</td>
+      <td>14.6</td>
+      <td>222</td>
+      <td>4875</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>Chinstrap</td>
+      <td>50.7</td>
+      <td>19.7</td>
+      <td>203</td>
+      <td>4050</td>
+    </tr>
+  </tbody>
+</table>
+<p>240 rows × 5 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Section 1.2 Preprocessing</span>
+
+<span class="c1">#change string value to numeric</span>
+<span class="n">df_train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Adelie&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">df_train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Gentoo&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">df_train</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Chinstrap&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">)</span>
+
+<span class="c1">#change dataframe to array</span>
+<span class="n">df_array</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1">#split x and y (feature and target)</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">df_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#standardize</span>
+<span class="c1">#palmer-penguin dataset has varying scales</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="section-2">
+<h2>SECTION 2 : モデルの構築と学習<a class="headerlink" href="#section-2" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>隠れ層を1層持つ、多層パーセプトロンモデル。</p></li>
+<li><p>入力層：4ニューロン、Palmer Penguinデータセットからの特徴を表す。</p></li>
+<li><p>隠れ層：20ニューロン、ReLUで活性化</p></li>
+<li><p>出力層：3ニューロン、種の数を表す、Softmax Layer</p></li>
+<li><p>最適化器 = 確率的勾配降下法、バッチサイズなし</p></li>
+<li><p>損失関数 = カテゴリクロスエントロピー</p></li>
+<li><p>学習率 = 0.01</p></li>
+<li><p>エポック = 50</p></li>
+</ul>
+<blockquote>
+<div><p>SECTION 2 : Build and Train Model<br />
+Multilayer perceptron model, with one hidden layer.<br />
+input layer : 4 neuron, represents the feature from Palmer Penguin dataset<br />
+hidden layer : 20 neuron, activation using ReLU
+output layer : 3 neuron, represents the number of species, Softmax Layer
+optimizer = stochastic gradient descent with no batch-size<br />
+loss function = categorical cross entropy<br />
+learning rate = 0.01  #hyperparameters
+hl = 20
+lr = 0.01
+num_epoch = 100</p>
+</div></blockquote>
+<p>epoch = 50</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#hyperparameters</span>
+<span class="n">hl</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">num_epoch</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>ネットワークはnn.Sequentialを使って作るパターンと，nn.Moduleを継承したクラスを作るパターンがある．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mynet</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">,),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#build model</span>
+<span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">hl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hl</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
+<span class="c1">#choose optimizer and loss function</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;training data:&quot;</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="n">X_train</span><span class="p">),</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;test data:&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y_train</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>training data: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([240, 4]) torch.float32
+test data: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([240]) torch.int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">net</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">training</span>
+<span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">training</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
+True
+</pre></div>
+</div>
+</div>
+</div>
+<p>訓練ループ</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># logging</span>
+<span class="n">logs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:[],</span> <span class="s2">&quot;acc&quot;</span><span class="p">:[]}</span>
+
+<span class="c1">#train</span>
+<span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+  <span class="n">net</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">)</span>
+  <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">)</span>
+  <span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epoch</span><span class="p">):</span>
+
+    <span class="c1">#feedforward - backprop</span>
+    <span class="c1"># 勾配の初期化</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="c1"># フォワードプロップ。順伝搬</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+    <span class="c1"># 損失関数の計算</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="c1"># 逆伝搬して、各パラメータの勾配を求める</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="c1"># 勾配を使って学習可能パラメータの値を更新</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train</span><span class="o">==</span><span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">double</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Epoch [</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">] Loss: </span><span class="si">%.4f</span><span class="s1">   Acc: </span><span class="si">%.4f</span><span class="s1">&#39;</span>
+                   <span class="o">%</span><span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_epoch</span><span class="p">,</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">acc</span><span class="o">.</span><span class="n">item</span><span class="p">()))</span>
+
+    <span class="c1"># logging</span>
+    <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">loss</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()]</span>
+    <span class="n">logs</span><span class="p">[</span><span class="s2">&quot;acc&quot;</span><span class="p">]</span>  <span class="o">+=</span> <span class="p">[</span><span class="n">acc</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch [1/100] Loss: 1.1014   Acc: 42.9167
+Epoch [2/100] Loss: 1.0938   Acc: 44.1667
+Epoch [3/100] Loss: 1.0864   Acc: 46.2500
+Epoch [4/100] Loss: 1.0790   Acc: 49.1667
+Epoch [5/100] Loss: 1.0718   Acc: 51.6667
+Epoch [6/100] Loss: 1.0646   Acc: 52.5000
+Epoch [7/100] Loss: 1.0575   Acc: 55.4167
+Epoch [8/100] Loss: 1.0505   Acc: 55.4167
+Epoch [9/100] Loss: 1.0436   Acc: 59.1667
+Epoch [10/100] Loss: 1.0367   Acc: 60.4167
+Epoch [11/100] Loss: 1.0300   Acc: 62.5000
+Epoch [12/100] Loss: 1.0233   Acc: 66.2500
+Epoch [13/100] Loss: 1.0167   Acc: 67.5000
+Epoch [14/100] Loss: 1.0102   Acc: 68.3333
+Epoch [15/100] Loss: 1.0037   Acc: 70.4167
+Epoch [16/100] Loss: 0.9973   Acc: 71.2500
+Epoch [17/100] Loss: 0.9910   Acc: 72.9167
+Epoch [18/100] Loss: 0.9848   Acc: 73.7500
+Epoch [19/100] Loss: 0.9786   Acc: 74.1667
+Epoch [20/100] Loss: 0.9725   Acc: 75.8333
+Epoch [21/100] Loss: 0.9664   Acc: 75.8333
+Epoch [22/100] Loss: 0.9604   Acc: 76.2500
+Epoch [23/100] Loss: 0.9545   Acc: 76.2500
+Epoch [24/100] Loss: 0.9486   Acc: 76.2500
+Epoch [25/100] Loss: 0.9428   Acc: 77.0833
+Epoch [26/100] Loss: 0.9371   Acc: 77.5000
+Epoch [27/100] Loss: 0.9314   Acc: 77.9167
+Epoch [28/100] Loss: 0.9257   Acc: 77.9167
+Epoch [29/100] Loss: 0.9202   Acc: 78.3333
+Epoch [30/100] Loss: 0.9146   Acc: 78.3333
+Epoch [31/100] Loss: 0.9092   Acc: 78.3333
+Epoch [32/100] Loss: 0.9038   Acc: 78.3333
+Epoch [33/100] Loss: 0.8984   Acc: 78.3333
+Epoch [34/100] Loss: 0.8931   Acc: 78.3333
+Epoch [35/100] Loss: 0.8878   Acc: 78.3333
+Epoch [36/100] Loss: 0.8826   Acc: 78.3333
+Epoch [37/100] Loss: 0.8775   Acc: 78.3333
+Epoch [38/100] Loss: 0.8723   Acc: 78.3333
+Epoch [39/100] Loss: 0.8673   Acc: 78.7500
+Epoch [40/100] Loss: 0.8623   Acc: 78.7500
+Epoch [41/100] Loss: 0.8573   Acc: 78.7500
+Epoch [42/100] Loss: 0.8524   Acc: 78.7500
+Epoch [43/100] Loss: 0.8475   Acc: 78.7500
+Epoch [44/100] Loss: 0.8427   Acc: 78.7500
+Epoch [45/100] Loss: 0.8379   Acc: 78.7500
+Epoch [46/100] Loss: 0.8331   Acc: 79.1667
+Epoch [47/100] Loss: 0.8284   Acc: 79.1667
+Epoch [48/100] Loss: 0.8238   Acc: 79.1667
+Epoch [49/100] Loss: 0.8192   Acc: 79.1667
+Epoch [50/100] Loss: 0.8146   Acc: 79.1667
+Epoch [51/100] Loss: 0.8101   Acc: 79.5833
+Epoch [52/100] Loss: 0.8056   Acc: 79.5833
+Epoch [53/100] Loss: 0.8012   Acc: 80.0000
+Epoch [54/100] Loss: 0.7968   Acc: 80.0000
+Epoch [55/100] Loss: 0.7924   Acc: 80.0000
+Epoch [56/100] Loss: 0.7881   Acc: 80.0000
+Epoch [57/100] Loss: 0.7838   Acc: 80.0000
+Epoch [58/100] Loss: 0.7795   Acc: 80.0000
+Epoch [59/100] Loss: 0.7753   Acc: 80.0000
+Epoch [60/100] Loss: 0.7712   Acc: 80.0000
+Epoch [61/100] Loss: 0.7670   Acc: 80.0000
+Epoch [62/100] Loss: 0.7629   Acc: 80.0000
+Epoch [63/100] Loss: 0.7589   Acc: 80.0000
+Epoch [64/100] Loss: 0.7548   Acc: 80.0000
+Epoch [65/100] Loss: 0.7508   Acc: 80.0000
+Epoch [66/100] Loss: 0.7469   Acc: 80.0000
+Epoch [67/100] Loss: 0.7430   Acc: 80.0000
+Epoch [68/100] Loss: 0.7391   Acc: 80.0000
+Epoch [69/100] Loss: 0.7352   Acc: 80.0000
+Epoch [70/100] Loss: 0.7314   Acc: 80.0000
+Epoch [71/100] Loss: 0.7276   Acc: 80.0000
+Epoch [72/100] Loss: 0.7239   Acc: 80.0000
+Epoch [73/100] Loss: 0.7202   Acc: 80.0000
+Epoch [74/100] Loss: 0.7165   Acc: 80.0000
+Epoch [75/100] Loss: 0.7128   Acc: 80.0000
+Epoch [76/100] Loss: 0.7092   Acc: 80.0000
+Epoch [77/100] Loss: 0.7056   Acc: 80.0000
+Epoch [78/100] Loss: 0.7021   Acc: 80.0000
+Epoch [79/100] Loss: 0.6985   Acc: 80.0000
+Epoch [80/100] Loss: 0.6950   Acc: 80.0000
+Epoch [81/100] Loss: 0.6916   Acc: 80.0000
+Epoch [82/100] Loss: 0.6882   Acc: 80.0000
+Epoch [83/100] Loss: 0.6847   Acc: 80.0000
+Epoch [84/100] Loss: 0.6814   Acc: 80.0000
+Epoch [85/100] Loss: 0.6780   Acc: 80.0000
+Epoch [86/100] Loss: 0.6747   Acc: 80.0000
+Epoch [87/100] Loss: 0.6714   Acc: 80.0000
+Epoch [88/100] Loss: 0.6682   Acc: 80.0000
+Epoch [89/100] Loss: 0.6650   Acc: 80.0000
+Epoch [90/100] Loss: 0.6618   Acc: 80.0000
+Epoch [91/100] Loss: 0.6586   Acc: 80.0000
+Epoch [92/100] Loss: 0.6555   Acc: 80.0000
+Epoch [93/100] Loss: 0.6523   Acc: 80.0000
+Epoch [94/100] Loss: 0.6493   Acc: 80.0000
+Epoch [95/100] Loss: 0.6462   Acc: 80.0000
+Epoch [96/100] Loss: 0.6432   Acc: 80.0000
+Epoch [97/100] Loss: 0.6402   Acc: 80.0000
+Epoch [98/100] Loss: 0.6372   Acc: 80.0000
+Epoch [99/100] Loss: 0.6342   Acc: 80.0000
+Epoch [100/100] Loss: 0.6313   Acc: 80.0000
+</pre></div>
+</div>
+</div>
+</div>
+<p>学習中の損失関数のモニタリング</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">logs</span><span class="p">)[</span><span class="s2">&quot;loss&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
+</pre></div>
+</div>
+<img alt="../_images/e2aa280d3af79db393f95786516bb415eef15e598d38b084838d43976625d540.png" src="../_images/e2aa280d3af79db393f95786516bb415eef15e598d38b084838d43976625d540.png" />
+</div>
+</div>
+<p>学習中の正答率のモニタリング</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">logs</span><span class="p">)[</span><span class="s2">&quot;acc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
+</pre></div>
+</div>
+<img alt="../_images/3427b81ddebf753d1e9af994b3e4b41b8083f03a801ea95ef8a5f0a69351946f.png" src="../_images/3427b81ddebf753d1e9af994b3e4b41b8083f03a801ea95ef8a5f0a69351946f.png" />
+</div>
+</div>
+</section>
+<section id="section-3">
+<h2>SECTION 3 : モデルの評価<a class="headerlink" href="#section-3" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#load</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">test_url</span><span class="p">)</span>
+
+<span class="c1">#change string value to numeric</span>
+<span class="n">df_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Adelie&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">df_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Gentoo&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="n">df_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Chinstrap&#39;</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">)</span>
+
+<span class="c1">#change dataframe to array</span>
+<span class="n">df_test_array</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1">#split x and y (feature and target)</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">df_test_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">df_test_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#standardization</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1">#get prediction</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span><span class="o">.</span><span class="n">long</span><span class="p">()</span>
+
+<span class="c1"># 必要ならばCPUからGPUへ配列を移動</span>
+<span class="c1">#X_test = X_test.to(X_train.device)</span>
+<span class="c1">#y_test = y_test.to(y_train.device)</span>
+
+<span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+  <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+  <span class="n">y_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+<span class="c1">#テストデータに対するクラスラベルの予測</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="c1">#.softmax(1)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">predicted</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#get accuration</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Accuracy of the network </span><span class="si">%.4f</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_test</span><span class="o">==</span><span class="n">predicted</span><span class="p">)</span><span class="o">.</span><span class="n">double</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy of the network 80.3922 %
+</pre></div>
+</div>
+</div>
+</div>
+<section id="init-net">
+<h3>[課題1] 入力層の次元数と隠れ層の次元数とクラス数を__init__の引数で変更できるようにNetクラスを修正せよ。<a class="headerlink" href="#init-net" title="Link to this heading">#</a></h3>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FixedNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_class</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_class</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">num_features</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">num_class</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">fixed_net</span> <span class="o">=</span> <span class="n">FixedNet</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_class</span><span class="p">)</span>
+<span class="n">fixed_net</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>FixedNet(
+  (fc1): Linear(in_features=4, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=3, bias=True)
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="test-set-seedseed1111">
+<h3>[課題2] 課題1で作ったクラスを使って，クラス数をそのままに隠れ層の次元数を100にして200エポック訓練せよ．また，その際のtestデータの正答率を示せ．この際、set_seedを使いSEEDを1111に固定する事．<a class="headerlink" href="#test-set-seedseed1111" title="Link to this heading">#</a></h3>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">set_seed</span><span class="p">(</span><span class="mi">1111</span><span class="p">)</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">FixedNet</span><span class="p">(</span><span class="n">num_features</span><span class="p">,</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_class</span><span class="p">)</span>
+<span class="c1">#choose optimizer and loss function</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+
+<span class="c1"># 訓練のコード</span>
+
+<span class="c1"># 評価のコード</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<section id="tanhsequentialfeature-extractor33">
+<h3>[課題3] ペンギンデータのクラス分類を行うニューラルネットワークを作れ。ただし、ニューラルネットワークの隠れ層は5層で、それぞれが100次元のネットワークを作成せよ。また、このニューラルネットワークの活性化関数はすべてtanhである。この隠れ層をまとめたsequentialをfeature_extractorという変数にせよ。出力層は3クラス分類を行うために次元数は3にする。<a class="headerlink" href="#tanhsequentialfeature-extractor33" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TanhNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_class</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">),</span> <span class="c1"># 1</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">),</span> <span class="c1"># 2</span>
+          <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+          <span class="o">...</span> <span class="c1"># 3</span>
+          <span class="o">...</span> <span class="c1"># 4</span>
+          <span class="o">...</span> <span class="c1"># 5</span>
+      <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">n_class</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span>  <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
+    <span class="o">...</span> <span class="c1"># 3</span>
+    <span class="o">^</span>
+<span class="ne">SyntaxError</span>: invalid syntax. Perhaps you forgot a comma?
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">TanhNet</span><span class="p">()</span>
+<span class="c1">#a(X_train.cpu())</span>
+<span class="n">a</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TanhNet(
+  (feature_extractor): Sequential(
+    (0): Linear(in_features=4, out_features=100, bias=True)
+    (1): Tanh()
+    (2): Linear(in_features=100, out_features=100, bias=True)
+    (3): Tanh()
+  )
+  (classifier): Linear(in_features=100, out_features=3, bias=True)
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="testset-seedseed1111">
+<h3>[課題4] 課題3で作ったクラスを使って、200エポック訓練せよ。また、その際のtestデータの正答率を提出せよ。この際、set_seedを使いSEEDを1111に固定する事。<a class="headerlink" href="#testset-seedseed1111" title="Link to this heading">#</a></h3>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./deeplearning"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mlp_iris.myst.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">[課題]MLPによるiris datasetのクラス分類プログラムのCLIアプリ化</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="word2vec.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Word2Vec</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1">SECTION 1 : 学習用データのロードとセットアップ</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1-1-data-loading">Section 1.1 Data Loading</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-2">SECTION 2 : モデルの構築と学習</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#section-3">SECTION 3 : モデルの評価</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#init-net">[課題1] 入力層の次元数と隠れ層の次元数とクラス数を__init__の引数で変更できるようにNetクラスを修正せよ。</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-set-seedseed1111">[課題2] 課題1で作ったクラスを使って，クラス数をそのままに隠れ層の次元数を100にして200エポック訓練せよ．また，その際のtestデータの正答率を示せ．この際、set_seedを使いSEEDを1111に固定する事．</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tanhsequentialfeature-extractor33">[課題3] ペンギンデータのクラス分類を行うニューラルネットワークを作れ。ただし、ニューラルネットワークの隠れ層は5層で、それぞれが100次元のネットワークを作成せよ。また、このニューラルネットワークの活性化関数はすべてtanhである。この隠れ層をまとめたsequentialをfeature_extractorという変数にせよ。出力層は3クラス分類を行うために次元数は3にする。</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testset-seedseed1111">[課題4] 課題3で作ったクラスを使って、200エポック訓練せよ。また、その際のtestデータの正答率を提出せよ。この際、set_seedを使いSEEDを1111に固定する事。</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Riki Murakami
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

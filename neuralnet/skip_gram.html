@@ -1,0 +1,1521 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Skip-Gram &#8212; PatternRecognitionWithPython</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/proof.css?v=ca93fcec" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'neuralnet/skip_gram';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Convolutional Neural Network" href="cnn.html" />
+    <link rel="prev" title="cbow.pyのサンプルコード" href="cbow.myst.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="PatternRecognitionWithPython - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="PatternRecognitionWithPython - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Python</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../python/python.myst.html">Pythonの前提知識</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/1.introduction.html">初めてのPython</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/2.if-else.html">条件分岐</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/3.loop.html">繰り返し処理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/4.sequential.html">シーケンス型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/5.function.html">関数</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/6.module.html">外部モジュールの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/7.class.html">クラス</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python BootCamp</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../python/PythonBootCamp.html">Python BootCamp</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../python/PythonBootCamp2.html">Python BootCamp 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python/PythonBootCamp3.html">Python BootCamp 3</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">NumPy/Pandas</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis1_%E5%88%9D%E6%9C%9F%E5%8C%96%E3%81%A8%E7%B0%A1%E5%8D%98%E3%81%AA%E6%BC%94%E7%AE%97.html">np.arrayの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis2_%E8%A1%8C%E5%88%97%E8%A8%88%E7%AE%97.html">配列同士の演算</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/numpy_basis3_%E8%A1%8C%E5%88%97%E3%81%AE%E5%A4%89%E5%BD%A2.html">reshape</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../numpy/pandas_basis1_df%E3%81%AE%E4%BD%9C%E6%88%90%E3%81%A8%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%E8%B3%87%E6%96%99%E7%B7%A8.html">Pandas</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Visualization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../vis/matplotlib_pyplot_test.html">matplotlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/pandas_plot_test.html">DataFrame.plot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/plotly_cufflinks_test.html">PlotlyとCufflinks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vis/visualization_using_ml.html">機械学習（次元圧縮, 行列分解）を利用した可視化</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Machine Learning</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../sklearn/scikit-learn-overview.html">Scikit-Learn overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../machinelearning/k-nn.myst.html">k近傍法(k-nearest neighbor algorithm, k-NN）</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/k-nn.html">k近傍法(k-nearest neighbor algorithm, k-NN）の実装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../machinelearning/step_by_step_k_nn.html">Step-by-step k-NN実装</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/k-Means.html">k平均法(k-Means)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LinearRegression.html">線形回帰 （Linear Regression）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/LogisticRegression.html">ロジスティック回帰 (Logistic Regression)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/PCA_Principal%20Component%20Analysis.html">PCA (Principal Component Analysis; 主成分分析)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/NMF_Non-Negative%20Matrix%20Factorization.html">NMF (Non-Negative Matrix Factorization; 非負値行列因子分解)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../machinelearning/RF_RandomForest.html">RF (Random Forest; ランダムフォレスト)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Neural Network</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="perceptron.html">パーセプトロン（Perceptron）</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="perceptron.myst.html">perceptron.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="mlp.html">多層パーセプトロン (MLP: Multi-Layer Perceptron)</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="matrix_ops.html">行列計算で全結合層の計算が実装できる？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="activation_functions.html">活性化関数（Activation Functions）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlp_iris.myst.html">[課題]MLPによるiris datasetのクラス分類プログラムのCLIアプリ化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="penguin-PyTorch.html">パルマーペンギンデータセットを例にPyTorchの使い方を学ぼう</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ae.html">Auto Encoder</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SOM.html">自己組織化マップ (Self-Organizing Map; SOM)</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="word2vec.html">Word2Vec</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cbow.myst.html">cbow.pyのサンプルコード</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Skip-Gram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cnn.html">Convolutional Neural Network</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python Tips</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tips/Cython_speedtest.html">Pythonを高速化するCythonを試してみよう</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/edit/main/docs/neuralnet/skip_gram.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/issues/new?title=Issue%20on%20page%20%2Fneuralnet/skip_gram.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/neuralnet/skip_gram.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Skip-Gram</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skip-gram-py">[発展課題]skip_gram.py</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">実装</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">実行結果</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">実行</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">(簡易的な)Skip-Gram実装のヒント</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">データの読み込み</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">形態素解析</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#janome">形態素解析器 janome</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">janomeを使った語彙辞書作成</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">クラスの作成</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">損失関数の作成</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trainer">trainerの準備と訓練</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">類似単語検索</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="skip-gram">
+<h1>Skip-Gram<a class="headerlink" href="#skip-gram" title="Link to this heading">#</a></h1>
+<section id="skip-gram-py">
+<h2>[発展課題]skip_gram.py<a class="headerlink" href="#skip-gram-py" title="Link to this heading">#</a></h2>
+<p>(簡易的な)Skip-Gramを実装し，max_epochs=100, minibatch_size=512として訓練し，「サッカー」，「日本」，「女王」，「機械学習」について類似単語を類似度の高い順に上位5個表示するプログラムを作成してください．</p>
+<ul class="simple">
+<li><p>cbow.pyを参考にしてください．</p></li>
+<li><p>学習にはja.text8を利用してください．</p></li>
+</ul>
+<p>雛形:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SkipGram</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<section id="id1">
+<h3>実装<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="dropdown admonition">
+<p class="admonition-title"><a class="reference external" href="http://skipgram.py">skipgram.py</a></p>
+<script src="https://gist.github.com/rsimd/ba9c259fee9f0490bb09bf1d6c72e0bb.js"></script>
+</div>
+</section>
+<section id="id2">
+<h3>実行結果<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="usage">
+<h4>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h4>
+<p>argparserのdescriptionやhelpに説明を書き込んで，<code class="docutils literal notranslate"><span class="pre">--help</span></code> オプションで使い方が表示できるようにしてください．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(datasci) mriki@RikinoMac _prml % python skipgram.py -h
+usage: skipgram.py [-h] [--learning_rate LEARNING_RATE] [--batch_size BATCH_SIZE] [--embedding_dim EMBEDDING_DIM] [--seed SEED] [--max_epochs MAX_EPOCHS] [--char_limit CHAR_LIMIT] [--device DEVICE] [--data_path DATA_PATH] [--save_path SAVE_PATH] [--window_size WINDOW_SIZE] [--query QUERY] [--topn TOPN]
+
+Skip-Gramの訓練をja.text8で行う
+
+options:
+  -h, --help            show this help message and exit
+  --learning_rate LEARNING_RATE
+  --batch_size BATCH_SIZE
+  --embedding_dim EMBEDDING_DIM
+  --seed SEED
+  --max_epochs MAX_EPOCHS
+  --char_limit CHAR_LIMIT
+                        ja.text8の先頭から何文字を利用するか．Noneの場合は全てを使う． ex. 1_000_000
+  --device DEVICE
+  --data_path DATA_PATH
+                        訓練用コーパスの保存場所
+  --save_path SAVE_PATH
+                        学習済みモデルのファイル名．すでに存在していた場合はそれを読み込んで利用する
+  --window_size WINDOW_SIZE
+  --query QUERY         文字列を渡すと類似する単語をtopn個検索する
+  --topn TOPN           検索単語数
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>実行<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<p>初回学習時：</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>datasci<span class="o">)</span><span class="w"> </span>mriki@RikinoMac<span class="w"> </span>_prml<span class="w"> </span>%<span class="w"> </span>python<span class="w"> </span>skipgram.py<span class="w"> </span>--char_limit<span class="w"> </span><span class="m">1000000</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">7012</span><span class="w"> </span>--save_path<span class="w"> </span>./skipgram.pkl<span class="w"> </span>--max_epochs<span class="w"> </span><span class="m">2</span>
+全文書の文字数が46507793あり，その内1000000だけを利用します．
+前処理...
+363003it<span class="w"> </span><span class="o">[</span><span class="m">00</span>:16,<span class="w"> </span><span class="m">21819</span>.80it/s<span class="o">]</span>
+<span class="m">100</span>%<span class="p">|</span>███████████████████████<span class="p">|</span><span class="w"> </span><span class="m">80264</span>/80264<span class="w"> </span><span class="o">[</span><span class="m">00</span>:00&lt;<span class="m">00</span>:00,<span class="w"> </span><span class="m">900528</span>.08it/s<span class="o">]</span>
+contextsのshape:<span class="w"> </span><span class="o">(</span><span class="m">80264</span>,<span class="w"> </span><span class="m">17871</span><span class="o">)</span>
+訓練開始...
+<span class="w">  </span>epoch<span class="w">    </span>train_loss<span class="w">    </span>train_ppl<span class="w">    </span>valid_loss<span class="w">    </span>valid_ppl<span class="w">      </span>dur
+-------<span class="w">  </span>------------<span class="w">  </span>-----------<span class="w">  </span>------------<span class="w">  </span>-----------<span class="w">  </span>-------
+<span class="w">      </span><span class="m">1</span><span class="w">        </span><span class="m">9</span>.8043<span class="w">   </span><span class="m">18111</span>.2683<span class="w">       </span><span class="m">10</span>.1251<span class="w">   </span><span class="m">24961</span>.8040<span class="w">  </span><span class="m">14</span>.5564
+<span class="w">      </span><span class="m">2</span><span class="w">        </span><span class="m">8</span>.4743<span class="w">    </span><span class="m">4789</span>.8352<span class="w">       </span><span class="m">10</span>.6640<span class="w">   </span><span class="m">42786</span>.7327<span class="w">  </span><span class="m">14</span>.5319
+</pre></div>
+</div>
+<p>学習済みの場合：</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>datasci<span class="o">)</span><span class="w"> </span>mriki@RikinoMac<span class="w"> </span>_prml<span class="w"> </span>%<span class="w"> </span>python<span class="w"> </span>skipgram.py<span class="w"> </span>--char_limit<span class="w"> </span><span class="m">1000000</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">7012</span><span class="w"> </span>--save_path<span class="w"> </span>./skipgram.pkl<span class="w"> </span>--max_epochs<span class="w"> </span><span class="m">2</span>
+./skipgram.pklから学習済みモデルを読み込みます...
+</pre></div>
+</div>
+<p>学習済みでクエリを検索する場合：</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">(</span>datasci<span class="o">)</span><span class="w"> </span>mriki@RikinoMac<span class="w"> </span>_prml<span class="w"> </span>%<span class="w"> </span>python<span class="w"> </span>skipgram.py<span class="w"> </span>--save_path<span class="w"> </span>./skipgram.pkl<span class="w"> </span>--query<span class="w"> </span>日本
+./skipgram.pklから学習済みモデルを読み込みます...
+&gt;&gt;&gt;<span class="w"> </span>日本
+<span class="m">1</span>:古代<span class="w">  </span><span class="m">0</span>.9472917318344116
+<span class="m">2</span>:文明<span class="w">  </span><span class="m">0</span>.9328379034996033
+<span class="m">3</span>:社会<span class="w">  </span><span class="m">0</span>.931919515132904
+<span class="m">4</span>:文化<span class="w">  </span><span class="m">0</span>.9224883317947388
+<span class="m">5</span>:天皇<span class="w">  </span><span class="m">0</span>.9139895439147949
+<span class="o">(</span>datasci<span class="o">)</span><span class="w"> </span>mriki@RikinoMac<span class="w"> </span>_prml<span class="w"> </span>%<span class="w"> </span>python<span class="w"> </span>skipgram.py<span class="w"> </span>--save_path<span class="w"> </span>./skipgram.pkl<span class="w"> </span>--query<span class="w"> </span>ロボット
+./skipgram.pklから学習済みモデルを読み込みます...
+&gt;&gt;&gt;<span class="w"> </span>ロボット
+<span class="m">1</span>:ロボティックス<span class="w">        </span><span class="m">0</span>.8361095190048218
+<span class="m">2</span>:ステーション<span class="w">  </span><span class="m">0</span>.8090811967849731
+<span class="m">3</span>:ぼう<span class="w">  </span><span class="m">0</span>.8085721135139465
+<span class="m">4</span>:ロケット<span class="w">      </span><span class="m">0</span>.7877843976020813
+<span class="m">5</span>:地球<span class="w">  </span><span class="m">0</span>.7545166611671448
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="id4">
+<h2>(簡易的な)Skip-Gram実装のヒント<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>このノートは <span class="xref myst">Skip-Gram実装課題</span> のヒントになるように書かれています．</p>
+</div>
+<p>CBoWと遂になる単語埋め込みベクトル作成手法である <strong>Skip-Gram</strong> を実装します．ここでは，Negative Samplingのような技術を使わず，出力層でsoftmax関数を利用することで実装を簡単にしています．そのため計算コストが膨大になる傾向があり，大規模なコーパスに適用することはお勧めしません．</p>
+<p>Skip-Gramの計算コストの大きさには出力層のSoftmax活性化関数が大きな影響を与えます．そのため，高速化を行うためにはSoftmaxを <strong>Negative Sampling</strong> と呼ばれるアルゴリズムで代用することになります．これについては<a class="reference external" href="https://rf00.hatenablog.com/entry/2019/03/17/112317">このブログ</a>が実装の助けになります．また，直接Skip-Gramを紹介しているわけではないのですが，CBoWの説明の中でこれを説明している<a class="reference external" href="https://www.amazon.co.jp/%E3%82%BC%E3%83%AD%E3%81%8B%E3%82%89%E4%BD%9C%E3%82%8BDeep-Learning-%E2%80%95%E8%87%AA%E7%84%B6%E8%A8%80%E8%AA%9E%E5%87%A6%E7%90%86%E7%B7%A8-%E6%96%8E%E8%97%A4-%E5%BA%B7%E6%AF%85/dp/4873118360">ゼロから作るDeep Learning ❷ ―自然言語処理編</a>も非常に参考になるでしょう．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># packageのimport</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">math</span> 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">tqdm.std</span> <span class="kn">import</span> <span class="n">trange</span><span class="p">,</span><span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">lil_matrix</span>
+
+<span class="c1"># pytorch関連のimport</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span> 
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span> 
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span> 
+<span class="kn">import</span> <span class="nn">skorch</span>
+<span class="kn">from</span> <span class="nn">skorch</span> <span class="kn">import</span> <span class="n">NeuralNetClassifier</span><span class="p">,</span> <span class="n">NeuralNetRegressor</span>
+<span class="kn">from</span> <span class="nn">skorch.callbacks</span> <span class="kn">import</span> <span class="n">Callback</span><span class="p">,</span> <span class="n">EpochScoring</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="kn">from</span> <span class="nn">janome.tokenizer</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h2>データの読み込み<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>コーパスにはja.text8のサブセットを利用します．発展課題に取り組む場合も，指定されているハイパーパラメータやコーパスのサイズが実行困難である場合は適宜修正してください．ただし，その場合はskip_gram.pyの先頭行に，docstringを用意してその旨を書いてください．あるいはCLIのオプションにしてもいいかもしれません．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./input/ja.text8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">text8</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">text8</span><span class="p">[:</span><span class="mi">200</span><span class="p">])</span>
+
+<span class="c1">#LIMIT = math.floor(len(text8)*0.1)</span>
+<span class="n">LIMIT</span> <span class="o">=</span> <span class="mi">100_0000</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LIMIT</span><span class="si">}</span><span class="s2">/ </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">text8</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">text8</span> <span class="o">=</span> <span class="n">text8</span><span class="p">[:</span><span class="n">LIMIT</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ちょん 掛け （ ちょん がけ 、 丁 斧 掛け ・ 手斧 掛け と も 表記 ） と は 、 相撲 の 決まり 手 の ひとつ で ある 。 自分 の 右 （ 左 ） 足 の 踵 を 相手 の 右 （ 左 ） 足 の 踵 に 掛け 、 後方 に 捻っ て 倒す 技 。 手斧 （ ちょう な ） を かける 仕草 に 似 て いる こと から 、 ちょう な が 訛っ て ちょん 掛け と なっ 
+1000000/ 46507793
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id6">
+<h2>形態素解析<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<p>コーパス内の単語（トークン）全てを利用すると語彙が多くなりすぎるので，ここでは名詞（それも一般名詞と固有名詞）のみを利用します．そのために形態素解析を行う必要があるので，python製の形態素解析器であるjanomeを利用しています．形態素解析器はこれ以外にもMecabなどが有名です．</p>
+<section id="janome">
+<h3>形態素解析器 janome<a class="headerlink" href="#janome" title="Link to this heading">#</a></h3>
+<p>ja.text8の一部に品詞分解を行なった結果を以下に示します．</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>ja.text8は予め分かち書きされているため，以下の処理が正しく動作している保証はありません．</p>
+</div>
+</aside>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">()</span>
+<span class="n">sample_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text8</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">sample_text</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">part_of_speech</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ちょん 	 [&#39;名詞&#39;, &#39;一般&#39;, &#39;*&#39;, &#39;*&#39;]
+掛け 	 [&#39;名詞&#39;, &#39;接尾&#39;, &#39;一般&#39;, &#39;*&#39;]
+（ 	 [&#39;記号&#39;, &#39;括弧開&#39;, &#39;*&#39;, &#39;*&#39;]
+ちょん 	 [&#39;名詞&#39;, &#39;一般&#39;, &#39;*&#39;, &#39;*&#39;]
+がけ 	 [&#39;名詞&#39;, &#39;接尾&#39;, &#39;一般&#39;, &#39;*&#39;]
+、 	 [&#39;記号&#39;, &#39;読点&#39;, &#39;*&#39;, &#39;*&#39;]
+丁 	 [&#39;名詞&#39;, &#39;固有名詞&#39;, &#39;人名&#39;, &#39;姓&#39;]
+斧 	 [&#39;名詞&#39;, &#39;一般&#39;, &#39;*&#39;, &#39;*&#39;]
+掛け 	 [&#39;名詞&#39;, &#39;接尾&#39;, &#39;一般&#39;, &#39;*&#39;]
+・ 	 [&#39;記号&#39;, &#39;一般&#39;, &#39;*&#39;, &#39;*&#39;]
+手斧 	 [&#39;名詞&#39;, &#39;一般&#39;, &#39;*&#39;, &#39;*&#39;]
+掛け 	 [&#39;名詞&#39;, &#39;接尾&#39;, &#39;一般&#39;, &#39;*&#39;]
+と 	 [&#39;助詞&#39;, &#39;格助詞&#39;, &#39;引用&#39;, &#39;*&#39;]
+も 	 [&#39;助詞&#39;, &#39;係助詞&#39;, &#39;*&#39;, &#39;*&#39;]
+表記 	 [&#39;名詞&#39;, &#39;サ変接続&#39;, &#39;*&#39;, &#39;*&#39;]
+） 	 [&#39;記号&#39;, &#39;括弧閉&#39;, &#39;*&#39;, &#39;*&#39;]
+と 	 [&#39;助詞&#39;, &#39;格助詞&#39;, &#39;引用&#39;, &#39;*&#39;]
+は 	 [&#39;助詞&#39;, &#39;係助詞&#39;, &#39;*&#39;, &#39;*&#39;]
+、 	 [&#39;記号&#39;, &#39;読点&#39;, &#39;*&#39;, &#39;*&#39;]
+相撲 	 [&#39;名詞&#39;, &#39;一般&#39;, &#39;*&#39;, &#39;*&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id7">
+<h3>janomeを使った語彙辞書作成<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>活用する語彙をまとめた辞書（word2id, id2word）を作成します．この実装はダーティなので，実際に自然言語処理を行う場合は参考にしないでください．</p>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">my_analyzer</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="c1">#text = code_regex.sub(&#39;&#39;, text)</span>
+    <span class="c1">#tokens = text.split()</span>
+    <span class="c1">#tokens = filter(lambda token: re.search(r&#39;[ぁ-ん]+|[ァ-ヴー]+|[一-龠]+&#39;, token), tokens)</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">text</span><span class="p">)):</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">part_of_speech</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;名詞&quot;</span> <span class="o">==</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;一般&quot;</span> <span class="o">==</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;固有名詞&quot;</span> <span class="o">==</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">surface</span><span class="p">)</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">token</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[ぁ-ん]+|[ァ-ヴー]+|[一-龠]+&#39;</span><span class="p">,</span> <span class="n">token</span><span class="p">),</span> <span class="n">tokens</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tokens</span> 
+
+<span class="k">def</span> <span class="nf">build_contexts_and_target</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="n">contexts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vocab</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">_window_size</span> <span class="o">=</span> <span class="n">window_size</span><span class="o">//</span><span class="mi">2</span>
+    <span class="c1"># 文ごとに分割</span>
+    <span class="n">preprocessed_corpus</span> <span class="o">=</span> <span class="n">corpus</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="c1"># posを見て単語ごとに分割</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">my_analyzer</span><span class="p">(</span><span class="n">preprocessed_corpus</span><span class="p">))</span>
+
+    <span class="c1"># 新しい語彙を追加</span>
+    <span class="n">vocab</span> <span class="o">=</span> <span class="n">vocab</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+    <span class="c1"># スライディングウィンドウ</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">_window_size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span><span class="o">-</span><span class="n">_window_size</span><span class="p">):</span>
+        <span class="c1"># ウィンドウの真ん中をtargetにする</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1"># 真ん中以外の単語をcontextsへ</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">_window_size</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">+=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">_window_size</span><span class="p">]</span>
+        <span class="n">contexts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="c1"># 辞書作成</span>
+    <span class="n">id2word</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span>
+    <span class="n">word2id</span> <span class="o">=</span> <span class="p">{</span><span class="n">word</span><span class="p">:</span><span class="nb">id</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span><span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">id2word</span><span class="p">)}</span>
+    <span class="n">vocab_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">word2id</span><span class="p">)</span>
+
+
+    <span class="c1"># contextsとtargetを単語id配列へ置き換え</span>
+    <span class="n">contexts_id_list</span> <span class="o">=</span> <span class="p">[[</span><span class="n">word2id</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">contexts</span><span class="p">]</span>
+    <span class="n">target_id_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">word2id</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">target</span><span class="p">]</span>
+
+
+    <span class="n">contexts</span> <span class="o">=</span> <span class="n">lil_matrix</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">contexts_id_list</span><span class="p">),</span> <span class="n">vocab_size</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">_contexts_id_list</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">contexts_id_list</span><span class="p">):</span>
+        <span class="c1">#tmp = np.eye(vocab_size)[np.array(_contexts_id_list)]</span>
+        <span class="k">for</span> <span class="n">word_id</span> <span class="ow">in</span> <span class="n">_contexts_id_list</span><span class="p">:</span>
+            <span class="n">contexts</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">word_id</span><span class="p">]</span> <span class="o">+=</span><span class="mf">1.</span>
+
+    <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_id_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">contexts</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">target</span><span class="p">,</span> <span class="n">word2id</span><span class="p">,</span> <span class="n">id2word</span>
+
+<span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="n">contexts</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">word2id</span><span class="p">,</span> <span class="n">id2word</span> <span class="o">=</span> <span class="n">build_contexts_and_target</span><span class="p">(</span><span class="n">text8</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="n">WINDOW_SIZE</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;contextsのshape: </span><span class="si">{</span><span class="n">contexts</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0it [00:00, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2408it [00:00, 20185.23it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6408it [00:00, 30572.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9536it [00:00, 29118.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>13707it [00:00, 33525.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17110it [00:00, 31419.37it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>21040it [00:00, 33186.89it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>24396it [00:00, 31153.31it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>28365it [00:00, 33393.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31749it [00:01, 31817.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>35324it [00:01, 32822.53it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>38641it [00:01, 30460.77it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>42663it [00:01, 32892.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>46006it [00:01, 31021.34it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>50275it [00:01, 30115.58it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>54610it [00:01, 33158.39it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>58005it [00:01, 31820.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>62042it [00:01, 33960.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>65502it [00:02, 31964.47it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>69362it [00:02, 33580.34it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>72777it [00:02, 31888.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>76702it [00:02, 33751.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>80129it [00:02, 31364.92it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>84267it [00:02, 33866.11it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>87720it [00:02, 31729.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>92128it [00:02, 34712.41it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>95669it [00:02, 32480.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>99808it [00:03, 34573.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>103332it [00:03, 31788.62it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>106867it [00:03, 30048.10it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>110986it [00:03, 32555.69it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>114321it [00:03, 30496.54it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>118179it [00:03, 32551.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>121510it [00:03, 30206.28it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>125610it [00:03, 32553.11it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>128939it [00:04, 30772.27it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>133218it [00:04, 33974.12it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>136698it [00:04, 31284.43it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>140894it [00:04, 30127.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>145034it [00:04, 32686.92it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>148401it [00:04, 30810.00it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>152349it [00:04, 32500.66it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>155669it [00:04, 31018.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>159902it [00:04, 33819.49it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>163351it [00:05, 32175.46it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>167280it [00:05, 33877.43it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>170721it [00:05, 32507.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>174502it [00:05, 33720.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>177912it [00:05, 31712.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>181865it [00:05, 30236.66it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>186724it [00:05, 34846.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>190313it [00:05, 32495.60it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>194336it [00:06, 34367.23it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>197861it [00:06, 31630.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>201601it [00:06, 32740.74it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>204950it [00:06, 29567.81it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>208900it [00:06, 31766.88it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>212171it [00:06, 30136.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>216924it [00:06, 34185.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>220429it [00:06, 32691.13it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>224304it [00:06, 34280.26it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>227795it [00:07, 32610.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>231585it [00:07, 33624.70it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>234991it [00:07, 31886.61it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>239318it [00:07, 30901.63it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>243652it [00:07, 33688.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>247089it [00:07, 32334.04it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>251248it [00:07, 34499.32it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>254754it [00:07, 32948.85it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>259206it [00:08, 35543.33it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>262808it [00:08, 33271.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>266677it [00:08, 34679.72it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>270196it [00:08, 32537.45it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>274194it [00:08, 34285.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>277675it [00:08, 32691.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>281649it [00:08, 30881.40it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>285955it [00:08, 33719.08it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>289405it [00:08, 31042.06it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>293410it [00:09, 33079.47it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>296800it [00:09, 31882.19it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>300857it [00:09, 34189.20it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>304343it [00:09, 32281.22it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>308238it [00:09, 34063.00it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>311705it [00:09, 31869.50it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>315615it [00:09, 33756.86it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>319053it [00:09, 31669.14it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>322975it [00:09, 30572.83it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>327130it [00:10, 33270.78it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>330534it [00:10, 31605.96it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>334783it [00:10, 34098.65it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>338257it [00:10, 32336.84it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>342846it [00:10, 35619.84it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>346473it [00:10, 32713.09it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>349982it [00:10, 30712.76it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>354026it [00:10, 33161.52it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>357429it [00:11, 32527.73it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>361440it [00:11, 33850.71it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>363003it [00:11, 32511.36it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                                                                                                                                                                                                                                                                                      | 0/80264 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 80264/80264 [00:00&lt;00:00, 1139932.20it/s]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>contextsのshape: (80264, 17871)
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>クラスの作成<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>Skip-gramをnn.Moduleのサブクラスとして実装します．</p>
+<p><img alt="" src="https://cdn-ak.f.st-hatena.com/images/fotolife/r/rf00/20190316/20190316165423.png" /></p>
+<p>クラスの実装には上のskip-gramアーキテクチャ図を参考にしてください．高速化のテクニックなどは不要です．（もちろん実装できる人は実装してもOK）</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SkipGram</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id9">
+<h2>損失関数の作成<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<p>Skip-Gramはクラス分類の体裁をとっているので，損失関数にはCross Entropyを用います．ただしPyTorchで用意されているnn.CrossEntropyを用いることは（おそらく）できないので，自作しましょう．</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>条件：</p>
+<ul class="simple">
+<li><p>batch_size=128, vocab_size=11342のとき，以下が損失関数に入力されると仮定して実装してください．</p>
+<ul>
+<li><p>SkipGramがforwardメソッドから出力するtensor．shapeは「torch.Size([128, 11342])」，</p></li>
+<li><p>正解データとして利用するtensor．shapeは「torch.Size([128, 11342])」</p></li>
+</ul>
+</li>
+<li><p>callbackにおいて，ここで実装したcross entropyを使ってperplexityを計算します．</p></li>
+</ul>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BowCrossEntropy</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inputはSkip-gramの出力です．</span>
+<span class="sd">        targetは予測したいcontextsです．</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="trainer">
+<h2>trainerの準備と訓練<a class="headerlink" href="#trainer" title="Link to this heading">#</a></h2>
+<p>ここまでの実装が終わったら，あとは訓練用のプログラムを書くだけです．この解説ではskorchを利用して楽をします．Skip-Gramはクラス分類の体裁を取っていると言いましたが，出力はcategoricalではなくmultinomialです．つまり <strong>一つのデータに対して正解ラベルが複数あります</strong> ．これはskorchの<code class="docutils literal notranslate"><span class="pre">NeuralNetClassifier</span></code>では上手く扱えないので，<code class="docutils literal notranslate"><span class="pre">NeuralNetRegressor</span></code> を使っています．</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>NeuralNetClassifierは主に1データ1ラベルの場合に利用します．今回の例でも使えないわけではないのですが，標準で設定された「正答率を表示するコールバック」が動作してしまうので利用を見送りました．</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EpochScoring(lambda</span> <span class="pre">net,X=None,y=None:</span> <span class="pre">np.exp(net.history_[-1,</span> <span class="pre">&quot;valid_loss&quot;]),</span> <span class="pre">name=&quot;valid_ppl&quot;),</span> </code>はエポックの終わりに呼び出されるコールバック関数の雛形である<code class="docutils literal notranslate"><span class="pre">EpochScoring</span></code>を利用して，Perplexityを計算します．</p></li>
+<li><p>targetもcontextsもnp.ndarrayのままでfitに渡します．</p>
+<ul>
+<li><p>trainerが中でdatasetやdataloaderを用意してくれます．</p></li>
+<li><p>contextsはscipy.sparse.lil_matrix or scipy.sparse.csr_matrixになっているので，<code class="docutils literal notranslate"><span class="pre">toarray</span></code>メソッドでnp.ndarrayに戻しています．</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>今回は実装の簡単さを優先したので，メモリ効率が非常に悪い実装になっていることに注意してください．RAM 16GB程度あれば動作するはずです．</p>
+<p>contexts配列のshapeが(80264, 17871)であり，dtype=float32である場合，</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span> 
+<span class="n">K</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">K</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;csr_matrix: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">contexts</span><span class="p">)</span><span class="si">}</span><span class="s2"> B&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;np.ndarray: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">contexts</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span><span class="o">/</span><span class="n">M</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>contexts変数に紐づくオブジェクトの使用メモリは以下の通り：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">csr_matrix</span><span class="p">:</span> <span class="mi">48</span> <span class="n">B</span>
+<span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span> <span class="mf">5471.794036865234</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>通常の配列で保持すると，shape[0]*shape[1]に比例してメモリを消費します．BoWのような要素がほぼほぼ0で一部が0以外の行列を疎行列と呼びますが，疎行列に特化した型であるcsr_matrixやlil_matrixを使うと，0以外の要素の値とインデックスのみを保持する設計になっているのでメモリ消費量が劇的に減ります．</p>
+</aside>
+<div class="cell tag_hide-output docutils container">
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span> <span class="o">=</span> <span class="n">NeuralNetRegressor</span><span class="p">(</span>
+    <span class="n">SkipGram</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word2id</span><span class="p">),</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+    <span class="n">criterion</span><span class="o">=</span><span class="n">BowCrossEntropy</span><span class="p">,</span>
+    <span class="n">max_epochs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">EpochScoring</span><span class="p">(</span><span class="k">lambda</span> <span class="n">net</span><span class="p">,</span><span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">history_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;valid_loss&quot;</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;valid_ppl&quot;</span><span class="p">),</span> 
+        <span class="n">EpochScoring</span><span class="p">(</span><span class="k">lambda</span> <span class="n">net</span><span class="p">,</span><span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">history_</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;train_loss&quot;</span><span class="p">]),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;train_ppl&quot;</span><span class="p">,</span> <span class="n">on_train</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span>
+    <span class="p">],</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="c1"># 適宜変更</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">contexts</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">15</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">trainer</span> <span class="o">=</span> <span class="n">NeuralNetRegressor</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">SkipGram</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">word2id</span><span class="p">),</span> <span class="mi">50</span><span class="p">),</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">optimizer</span><span class="o">=</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="c1"># 適宜変更</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">15</span> <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">contexts</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/skorch/regressor.py:82,</span> in <span class="ni">NeuralNetRegressor.fit</span><span class="nt">(self, X, y, **fit_params)</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;See ``NeuralNet.fit``.</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span><span class="sd"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span><span class="sd"> In contrast to ``NeuralNet.fit``, ``y`` is non-optional to</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span><span class="sd"> </span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span> <span class="c1"># pylint: disable=useless-super-delegation</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span> <span class="c1"># this is actually a pylint bug:</span>
+<span class="g g-Whitespace">     </span><span class="mi">81</span> <span class="c1"># https://github.com/PyCQA/pylint/issues/1085</span>
+<span class="ne">---&gt; </span><span class="mi">82</span> <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">NeuralNetRegressor</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/skorch/net.py:1317,</span> in <span class="ni">NeuralNet.fit</span><span class="nt">(self, X, y, **fit_params)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1285</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Initialize and fit the module.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1286</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">1287</span><span class="sd"> If the module was already initialized, by calling fit, the</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1314</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">1315</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1316</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">warm_start</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized_</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1317</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1319</span> <span class="bp">self</span><span class="o">.</span><span class="n">partial_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_params</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1320</span> <span class="k">return</span> <span class="bp">self</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/skorch/net.py:905,</span> in <span class="ni">NeuralNet.initialize</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">903</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_module</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">904</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_criterion</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">905</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_optimizer</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">906</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_history</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">908</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/skorch/net.py:876,</span> in <span class="ni">NeuralNet._initialize_optimizer</span><span class="nt">(self, reason)</span>
+<span class="g g-Whitespace">    </span><span class="mi">873</span>         <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_reinit_msg</span><span class="p">(</span><span class="s2">&quot;optimizer&quot;</span><span class="p">,</span> <span class="n">triggered_directly</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>     <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">876</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_optimizer</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">878</span> <span class="c1"># register the virtual params for all optimizers</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimizers</span><span class="p">:</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/skorch/net.py:642,</span> in <span class="ni">NeuralNet.initialize_optimizer</span><span class="nt">(self, triggered_directly)</span>
+<span class="g g-Whitespace">    </span><span class="mi">638</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params_for_optimizer</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">639</span>     <span class="s1">&#39;optimizer&#39;</span><span class="p">,</span> <span class="n">named_parameters</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">641</span> <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
+<span class="ne">--&gt; </span><span class="mi">642</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">643</span> <span class="k">return</span> <span class="bp">self</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/torch/optim/adam.py:45,</span> in <span class="ni">Adam.__init__</span><span class="nt">(self, params, lr, betas, eps, weight_decay, amsgrad, foreach, maximize, capturable, differentiable, fused)</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid weight_decay value: </span><span class="si">{</span><span class="n">weight_decay</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="n">defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="n">betas</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span>                 <span class="n">weight_decay</span><span class="o">=</span><span class="n">weight_decay</span><span class="p">,</span> <span class="n">amsgrad</span><span class="o">=</span><span class="n">amsgrad</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span>                 <span class="n">maximize</span><span class="o">=</span><span class="n">maximize</span><span class="p">,</span> <span class="n">foreach</span><span class="o">=</span><span class="n">foreach</span><span class="p">,</span> <span class="n">capturable</span><span class="o">=</span><span class="n">capturable</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span>                 <span class="n">differentiable</span><span class="o">=</span><span class="n">differentiable</span><span class="p">,</span> <span class="n">fused</span><span class="o">=</span><span class="n">fused</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">45</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">defaults</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">47</span> <span class="k">if</span> <span class="n">fused</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">48</span>     <span class="k">if</span> <span class="n">differentiable</span><span class="p">:</span>
+
+<span class="nn">File ~/workspace/prpy/.venv/lib/python3.11/site-packages/torch/optim/optimizer.py:279,</span> in <span class="ni">Optimizer.__init__</span><span class="nt">(self, params, defaults)</span>
+<span class="g g-Whitespace">    </span><span class="mi">277</span> <span class="n">param_groups</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">278</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">param_groups</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">279</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;optimizer got an empty parameter list&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">280</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_groups</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">281</span>     <span class="n">param_groups</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">param_groups</span><span class="p">}]</span>
+
+<span class="ne">ValueError</span>: optimizer got an empty parameter list
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<section id="id10">
+<h2>類似単語検索<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>cbowと同様に単語埋め込みベクトルを使って，類似単語の検索を行います．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_similar_words</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">word2id</span><span class="o">=</span><span class="n">word2id</span><span class="p">,</span> <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;単語埋め込みベクトルを使って似た単語を検索する</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        query (str): 類似単語を検索したい単語</span>
+<span class="sd">        topn (int, optional): 検索結果の表示個数. Defaults to 5.</span>
+<span class="sd">        word2id (dict[str,int], optional): 単語→単語idの辞書. Defaults to word2id.</span>
+<span class="sd">        word_embeddings (np.ndarray, optional): 単語埋め込み行列．必ず(語彙数x埋め込み次元数)の行列であること. Defaults to word_embeddings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">id</span><span class="o">=</span><span class="n">word2id</span><span class="p">[</span><span class="n">query</span><span class="p">]</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">word_embeddings</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">word_embeddings</span><span class="p">,</span><span class="nb">ord</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="c1"># {(V,L).T / (V)}.T = (V,L)</span>
+    <span class="n">target_vector</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+    <span class="n">cossim</span> <span class="o">=</span> <span class="n">E</span> <span class="o">@</span> <span class="n">target_vector</span> <span class="c1"># (V,L)@(L)=(V)</span>
+    <span class="n">sorted_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">cossim</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="n">topn</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># 最も似たベクトルは自分自身なので先頭を除外</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt;&gt;&gt; </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">_id2word</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">word2id</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_index</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rank</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">_id2word</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\t</span><span class="si">{</span><span class="n">cossim</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">word_embeddings</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">module_</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;ロボット&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; ロボット
+1:ユニバーサル 	0.898608386516571
+2:ポルト 	0.7893995642662048
+3:ロボティックス 	0.763614296913147
+4:テラ 	0.742680013179779
+5:関節 	0.7259170413017273
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;サッカー&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;日本&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;女王&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+<span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;機械学習&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; サッカー
+1:リーグ 	0.734089195728302
+2:専業 	0.7245967388153076
+3:ヴァンフォーレ 	0.6850863695144653
+4:選手 	0.6845436692237854
+5:アルビレックス 	0.6741206645965576
+&gt;&gt;&gt; 日本
+1:ほん 	0.6705817580223083
+2:米国 	0.6255179047584534
+3:王者 	0.6063108444213867
+4:社団 	0.5765134692192078
+5:蓄音機 	0.5684884786605835
+&gt;&gt;&gt; 女王
+1:ヴィクトリアシリーズ 	0.6750556826591492
+2:後塵 	0.649889349937439
+3:ティアラカップ 	0.641579806804657
+4:ボウラー 	0.6231715083122253
+5:シェクター 	0.6060587763786316
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;日本&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;女王&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">get_similar_words</span><span class="p">(</span><span class="s2">&quot;機械学習&quot;</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="p">)</span>
+
+<span class="nn">Cell In[9], line 10,</span> in <span class="ni">get_similar_words</span><span class="nt">(query, word_embeddings, topn, word2id)</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">def</span> <span class="nf">get_similar_words</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">word_embeddings</span><span class="p">,</span> <span class="n">topn</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">word2id</span><span class="o">=</span><span class="n">word2id</span><span class="p">,</span> <span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;単語埋め込みベクトルを使って似た単語を検索する</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span><span class="sd"> </span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span><span class="sd">     Args:</span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span><span class="sd">         word_embeddings (np.ndarray, optional): 単語埋め込み行列．必ず(語彙数x埋め込み次元数)の行列であること. Defaults to word_embeddings.</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">---&gt; </span><span class="mi">10</span>     <span class="nb">id</span><span class="o">=</span><span class="n">word2id</span><span class="p">[</span><span class="n">query</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">word_embeddings</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">word_embeddings</span><span class="p">,</span><span class="nb">ord</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="c1"># {(V,L).T / (V)}.T = (V,L)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">target_vector</span> <span class="o">=</span> <span class="n">E</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+
+<span class="ne">KeyError</span>: &#39;機械学習&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>今回の解説ではja.text8のサブセットを利用しているせいで，この単語埋め込みがカバーしている語彙に「機械学習」は含まれていないようです．</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./neuralnet"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cbow.myst.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">cbow.pyのサンプルコード</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="cnn.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Convolutional Neural Network</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skip-gram-py">[発展課題]skip_gram.py</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">実装</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">実行結果</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">実行</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">(簡易的な)Skip-Gram実装のヒント</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">データの読み込み</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">形態素解析</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#janome">形態素解析器 janome</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">janomeを使った語彙辞書作成</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">クラスの作成</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">損失関数の作成</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trainer">trainerの準備と訓練</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">類似単語検索</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Riki Murakami
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
