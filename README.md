@@ -4,6 +4,17 @@ This cookiecutter creates a simple boilerplate for a Jupyter Book.
 
 ## Usage
 
+### 重要なコマンド．
+
+```sh
+# jupyterbookのコンパイル
+rye run jb build ./prpy 
+
+# github pagesへのリリース
+ghp-import -n -p -f ./prpy/_build/html/ 
+```
+
+
 ### Building the book
 
 If you'd like to develop and/or build the PatternRecognitionWithPython book, you should:
