@@ -482,6 +482,12 @@ document.write(`
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">クラス変数</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#staticmethod">staticmethod</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classmethod">classmethod</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">[問題] 通常のメソッドの中でクラス変数を更新した場合，どのような挙動になるのか確認してみてください．</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -611,6 +617,11 @@ document.write(`
 </div>
 </div>
 </div>
+<p>メソッドはクラスに束縛されていることを除けば，関数と全く同じです．普通のメソッドは第一引数の<code class="docutils literal notranslate"><span class="pre">self</span></code>を必ず取るので，</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">variable</span> <span class="o">=</span> <span class="s2">&quot;hoge&quot;</span>
+</pre></div>
+</div>
+<p>のように，いずれかのメソッドの中でインスタンス変数を追加した場合，他のメソッドの中でも<code class="docutils literal notranslate"><span class="pre">self.variable</span></code>を参照することができます．普通の関数との違いはこれだけです．</p>
 <section id="hyper-beam">
 <h4>[問題]「hyper_beam」をメソッドとして実装しなさい．<a class="headerlink" href="#hyper-beam" title="Link to this heading">#</a></h4>
 <p>hyper_beamは「自分のmp <span class="math notranslate nohighlight">\(\times\)</span> 自分のattack - 相手のmp <span class="math notranslate nohighlight">\(\times\)</span> 相手のdefence」の分だけ相手にダメージを与える攻撃とします．</p>
@@ -733,6 +744,183 @@ document.write(`
 </section>
 </section>
 </section>
+<section id="id7">
+<h2>クラス変数<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<p>インスタンス変数<code class="docutils literal notranslate"><span class="pre">self.variable</span></code>は，インスタンス毎に値を変えることができました．これに対して，同じクラスから生成されれば，どのインスタンスであっても同じ値をとってほしい変数がある場合，クラス変数として定義します．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;クラス変数&quot;</span> <span class="c1"># クラス変数はここに定義します．</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;インスタンス変数&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+
+<span class="n">instance1</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="s2">&quot;インスタンス変数1&quot;</span><span class="p">)</span>
+<span class="n">instance2</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="s2">&quot;インスタンス変数2&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">instance1</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">instance1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">instance2</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">instance2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>クラス変数
+インスタンス変数1
+クラス変数
+インスタンス変数2
+</pre></div>
+</div>
+</div>
+</div>
+<p>クラス変数は<code class="docutils literal notranslate"><span class="pre">クラス.クラス変数</span></code>に値を代入することで，更新することが可能です．更新するとどうなるか確認してみてください．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Test.a = &quot;クラス変数2&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">instance1</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">instance1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">instance2</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">instance2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>クラス変数
+インスタンス変数1
+クラス変数
+インスタンス変数2
+</pre></div>
+</div>
+</div>
+</div>
+<p>クラス変数への代入を行うと，そのクラスから作られた全てのインスタンスが持つクラス変数も更新されます．</p>
+</section>
+<section id="staticmethod">
+<h2>staticmethod<a class="headerlink" href="#staticmethod" title="Link to this heading">#</a></h2>
+<p>staticmethodは，selfを受け取らないメソッドです．これは以下のような場合に使うと良いでしょう．</p>
+<ol class="arabic simple">
+<li><p>関数として定義しても良いけど，クラスの中に入れておいた方が収まりがいい場合</p></li>
+<li><p><a class="reference external" href="https://qiita.com/msrks/items/fdc9afd12effc2cba1bc">継承クラスで動作が変わらない時</a></p></li>
+</ol>
+<p>実際に使う場合には，以下のように，「メソッドの宣言の前の行に<code class="docutils literal notranslate"><span class="pre">&#64;staticmethod</span></code>をつける」ことで行います．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test2</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;クラス変数&quot;</span> <span class="c1"># クラス変数はここに定義します．</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;インスタンス変数&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">test_static</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;適当な文字列&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">test_static2</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="n">instance3</span> <span class="o">=</span> <span class="n">Test2</span><span class="p">()</span>
+<span class="n">instance3</span><span class="o">.</span><span class="n">test_static</span><span class="p">()</span>
+<span class="n">instance3</span><span class="o">.</span><span class="n">test_static2</span><span class="p">(</span><span class="s2">&quot;適当&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>適当な文字列
+適当
+</pre></div>
+</div>
+</div>
+</div>
+<p>メソッド，関数の上に<code class="docutils literal notranslate"><span class="pre">&#64;hogehoge</span></code>と宣言することで関数の挙動を変えることができます．これを <strong>デコレータ</strong> と呼びます．<code class="docutils literal notranslate"><span class="pre">&#64;staticmethod</span></code>以外にもたくさんのデコレータがありますし，自分でデコレータを定義することも可能です．</p>
+</section>
+<section id="classmethod">
+<h2>classmethod<a class="headerlink" href="#classmethod" title="Link to this heading">#</a></h2>
+<p>classmethodは，第一引数にインスタンス(self)の代わりにクラス自体(cls)を受け取るメソッドです．これは以下のような場合に使うと良いでしょう．</p>
+<ol class="arabic simple">
+<li><p>クラス変数にだけアクセスする時</p></li>
+<li><p>継承クラスで動作を変えたい時</p></li>
+</ol>
+<p>実際に使う場合には，以下のように，「メソッドの宣言の前の行に<code class="docutils literal notranslate"><span class="pre">&#64;classmethod</span></code>をつける」ことで行います．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Test3</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;クラス変数&quot;</span> <span class="c1"># クラス変数はここに定義します．</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;インスタンス変数&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">test_static</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;適当な文字列&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">test_static2</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test_classmethod</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">update_classvariable</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_a</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">new_a</span>
+
+    
+
+<span class="n">instance4</span> <span class="o">=</span> <span class="n">Test3</span><span class="p">()</span>
+<span class="n">instance5</span> <span class="o">=</span> <span class="n">Test3</span><span class="p">()</span>
+<span class="n">instance4</span><span class="o">.</span><span class="n">test_classmethod</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;__main__.Test3&#39;&gt;
+クラス変数
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">28</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="n">instance4</span> <span class="o">=</span> <span class="n">Test3</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="n">instance5</span> <span class="o">=</span> <span class="n">Test3</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">28</span> <span class="n">instance4</span><span class="o">.</span><span class="n">test_classmethod</span><span class="p">()</span>
+
+<span class="nn">Cell In[12], line 18,</span> in <span class="ni">Test3.test_classmethod</span><span class="nt">(cls)</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">18</span> <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="ne">AttributeError</span>: type object &#39;Test3&#39; has no attribute &#39;x&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cls</span></code>はインスタンスではなくクラスが入っているため，インスタンス変数<code class="docutils literal notranslate"><span class="pre">x</span></code>を呼び出すことはできません．</p>
+<p>また，<code class="docutils literal notranslate"><span class="pre">cls.a</span></code>に代入することで，クラス変数の値を更新することも可能です．</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">instance4</span><span class="o">.</span><span class="n">update_classvariable</span><span class="p">(</span><span class="s2">&quot;新しい値&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">instance4</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">instance5</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>新しい値
+新しい値
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id8">
+<h3>[問題] 通常のメソッドの中でクラス変数を更新した場合，どのような挙動になるのか確認してみてください．<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -810,6 +998,12 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#humanelf">[問題]Humanクラスの子クラスとしてElfクラスを作成してください．</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">クラス変数</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#staticmethod">staticmethod</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classmethod">classmethod</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">[問題] 通常のメソッドの中でクラス変数を更新した場合，どのような挙動になるのか確認してみてください．</a></li>
 </ul>
 </li>
 </ul>
