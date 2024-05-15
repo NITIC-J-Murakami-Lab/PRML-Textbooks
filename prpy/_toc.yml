@@ -7,33 +7,32 @@ parts:
   - caption: Python
     chapters:
     - file: python/python.myst.md
-    - file: python/1.introduction
-    - file: python/2.if-else
-    - file: python/3.loop
-    - file: python/4.sequential
-    - file: python/5.function
-    - file: python/6.module
-    - file: python/7.class
-  - caption: Python BootCamp
-    chapters:
-    - file: python/PythonBootCamp
-    - file: python/PythonBootCamp2
-    - file: python/PythonBootCamp3
-  - caption: NumPy/Pandas
-    chapters:
-    - file: numpy/numpy_basis1_初期化と簡単な演算
-    - file: numpy/numpy_basis2_行列計算
-    - file: numpy/numpy_basis3_行列の変形
-    - file: numpy/pandas_basis1_dfの作成と基本操作-資料編
-    sections:
+      sections:
+      - file: python/1.introduction
+      - file: python/2.if-else
+      - file: python/3.loop
+      - file: python/4.sequential
+      - file: python/5.function
+      - file: python/6.module
+      - file: python/7.class
+      - file: python/PythonBootCamp
+      - file: python/PythonBootCamp2
+      - file: python/PythonBootCamp3
+    - file: numpy/numpy.myst.md
+      sections:
+      - file: numpy/numpy_basis1_初期化と簡単な演算
+      - file: numpy/numpy_basis2_行列計算
+      - file: numpy/numpy_basis3_行列の変形
+      - file: numpy/pandas_basis1_dfの作成と基本操作-資料編
       - file: numpy/pandas_basis1_dfの作成と基本操作-演習編
-  - caption: Visualization
-    chapters:
-    - file: vis/matplotlib_pyplot_test
-    - file: vis/seaborn_test
-    - file: vis/pandas_plot_test
-    - file: vis/plotly_cufflinks_test
-    - file: vis/visualization_using_ml
+    - file: vis/vis.myst.md
+      sections:
+      - file: vis/matplotlib_pyplot_test
+      - file: vis/seaborn_test
+      - file: vis/pandas_plot_test
+      - file: vis/plotly_cufflinks_test
+      - file: vis/visualization_using_ml
+    - file: tips/Cython_speedtest
   - caption: Machine Learning
     chapters:
     - file: sklearn/scikit-learn-overview.ipynb
@@ -69,6 +68,3 @@ parts:
         - file: neuralnet/cbow.myst.md
         - file: neuralnet/skip_gram
     - file: neuralnet/cnn
-  - caption: Python Tips
-    chapters:
-    - file: tips/Cython_speedtest
