@@ -1,6 +1,7 @@
-# PatternRecognitionWithPython
+# PRML-Textbooks
 
-This cookiecutter creates a simple boilerplate for a Jupyter Book.
+![](./prpy/logo.png)
+https://nitic-j-murakami-lab.github.io/PRML-Textbooks/
 
 ## Usage
 
