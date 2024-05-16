@@ -306,6 +306,37 @@
 
 
 
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/NITIC-J-Murakami-Lab/PRML-Textbooks/blob/main/docs/neuralnet/cnn.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
 <div class="dropdown dropdown-source-buttons">
   <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
     <i class="fab fa-github"></i>
@@ -868,13 +899,13 @@ a_{i,j}^{(k)} = \sum_{s=1}^{m}\sum_{t=1}^{n}w_{s,t}^{(k)}x_{i+s,j+t}+b^{(k)}
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>img: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([1, 1, 28, 28]) torch.float32
 label: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([1]) torch.int64
-	 tensor([0])
+	 tensor([5])
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x373759a90&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x35000aa10&gt;
 </pre></div>
 </div>
-<img alt="../_images/e983b0ae55cdd2958525d22554ce3ab9c1b02345260a8dfa5ed378c3ea8a8a0f.png" src="../_images/e983b0ae55cdd2958525d22554ce3ab9c1b02345260a8dfa5ed378c3ea8a8a0f.png" />
+<img alt="../_images/8064b2be1d00961d4e1d86cc9126ecb818be0329605fea408060007f6833c64e.png" src="../_images/8064b2be1d00961d4e1d86cc9126ecb818be0329605fea408060007f6833c64e.png" />
 </div>
 </div>
 <p>0~9の数字があるので，全部で10クラスの分類を行います．</p>
@@ -1026,7 +1057,9 @@ torch.Size([64, 1600])
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([64, 4, 15, 15]) -&gt; torch.Size([64, 10])
-torch.Size([64, 3, 53, 53]) -&gt; torch.Size([64, 10])
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([64, 3, 53, 53]) -&gt; torch.Size([64, 10])
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mriki/workspace/prpy/.venv/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
@@ -1109,7 +1142,10 @@ Sequential(
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  epoch    train_loss    valid_acc    valid_loss      dur
 -------  ------------  -----------  ------------  -------
-      1        <span class=" -Color -Color-Cyan">0.9388</span>       <span class=" -Color -Color-Green">0.9185</span>        <span class=" -Color -Color-Magenta">0.2646</span>  15.8292
+      1        <span class=" -Color -Color-Cyan">2.3074</span>       <span class=" -Color -Color-Green">0.1044</span>        <span class=" -Color -Color-Magenta">2.3016</span>  13.7084
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      2        <span class=" -Color -Color-Cyan">2.3019</span>       0.1044        2.3016  14.2569
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;skorch.classifier.NeuralNetClassifier&#39;&gt;[initialized](
