@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Python BootCamp &#8212; PatternRecognitionWithPython</title>
+    <title>Python BootCamp: アルゴリズムの実装 &#8212; PatternRecognitionWithPython</title>
   
   
   
@@ -190,10 +190,8 @@
 <li class="toctree-l2"><a class="reference internal" href="5.function.html">関数</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.module.html">外部モジュールの使い方</a></li>
 <li class="toctree-l2"><a class="reference internal" href="7.class.html">クラス</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Python BootCamp</a></li>
-
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Python BootCamp: アルゴリズムの実装</a></li>
 <li class="toctree-l2"><a class="reference internal" href="PythonBootCamp2.html">Python BootCamp 2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="PythonBootCamp3.html">Python BootCamp 3</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../numpy/numpy.myst.html">NumPyの基本的な使い方</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -459,7 +457,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Python BootCamp</h1>
+    <h1>Python BootCamp: アルゴリズムの実装</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -469,31 +467,18 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Python BootCamp</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fizzbuzz">「fizzbuzzを行う関数を実装しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">「フィボナッチ数列を100桁目まで返す関数を実装しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ab">「aからbまでの和を計算する関数を実装しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">「階乗を計算する関数を実装しよう」</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fizzbuzz">[問題] fizzbuzz</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[問題] フィボナッチ数列</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">[問題] 合計</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">[問題] 階乗</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">[問題] ユークリッドの互除法</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">[問題] 数字列の反転</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">[問題] 回文判定</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter">[問題] filter関数実装の準備</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">[問題] filter関数の実装</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#np-median">[問題] 統計的代表値計算の再現 － 中央値 np.median</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistics-mode">[問題] 統計的代表値計算の再現 － 最頻値: statistics.mode</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">「最大公約数を求める関数を実装しよう」</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">「数字を逆順にしよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">「与えられた文書中の任意の文字列の出現回数を数える関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hoge-txt">「hoge.txtを読み込む関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">「文字列をテキストファイルとして保存する関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">「受け取った文字列が回文か否かを判別する関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">「六面のサイコロを再現した関数を作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">「面の数を変えられるサイコロを実装した関数を作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">「歪なサイコロを再現した関数を作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">「歪なサイコロの出目をでやすさの順に並べよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">「歪なサイコロの出やすさを10000回試行して確かめてみよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">「サイコロの出やすさを棒グラフで表してみよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">「乱数でサンプルデータを作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">「サンプルデータを可視化してみよう」</a></li>
-</ul>
-</li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -505,9 +490,10 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="python-bootcamp">
-<h1>Python BootCamp<a class="headerlink" href="#python-bootcamp" title="Link to this heading">#</a></h1>
+<h1>Python BootCamp: アルゴリズムの実装<a class="headerlink" href="#python-bootcamp" title="Link to this heading">#</a></h1>
 <section id="fizzbuzz">
-<h2>「fizzbuzzを行う関数を実装しよう」<a class="headerlink" href="#fizzbuzz" title="Link to this heading">#</a></h2>
+<h2>[問題] fizzbuzz<a class="headerlink" href="#fizzbuzz" title="Link to this heading">#</a></h2>
+<p>「fizzbuzzを行う関数を実装しよう」</p>
 <p>fizzbuzzを行う関数を実装しましょう。
 Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia.org/wiki/Fizz_Buzz">wikiを参照</a>してください。</p>
 <p>関数の雛形として、以下を用意しました。</p>
@@ -539,9 +525,27 @@ Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia
 </div>
 </div>
 </div>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fizzbuzz</span><span class="p">(</span><span class="n">max_number</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_number</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fizzbuzz&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fizz&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;buzz&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+
+<span class="n">fizzbuzz</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </section>
 <section id="id1">
-<h2>「フィボナッチ数列を100桁目まで返す関数を実装しよう」<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2>[問題] フィボナッチ数列<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>「フィボナッチ数列を100桁目まで返す関数を実装しよう」</p>
 <p>フィボナッチ数列を列挙する関数を作りましょう。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fib_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
@@ -554,9 +558,25 @@ Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia
 </div>
 </div>
 </div>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibo</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">fibo_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">fibo_i</span> <span class="o">=</span> <span class="n">fibo_list</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">fibo_list</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">fibo_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fibo_i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fibo_list</span>
+        
+<span class="nb">print</span><span class="p">(</span><span class="n">fibo</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
 </section>
-<section id="ab">
-<h2>「aからbまでの和を計算する関数を実装しよう」<a class="headerlink" href="#ab" title="Link to this heading">#</a></h2>
+<section id="id2">
+<h2>[問題] 合計<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>「aからbまでの和を計算する関数を実装しよう」</p>
 <p><span class="math notranslate nohighlight">\(a=5, b=10\)</span> ならば</p>
 <div class="math notranslate nohighlight">
 \[
@@ -576,10 +596,25 @@ Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia
 </div>
 </div>
 </div>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mysum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="n">b</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="n">num</span>
+        <span class="k">return</span> <span class="n">total</span>
+
+<span class="n">mysum</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </section>
-<section id="id2">
-<h2>「階乗を計算する関数を実装しよう」<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
-<p><a class="reference external" href="https://ja.wikipedia.org/wiki/%E9%9A%8E%E4%B9%97">階乗とは</a></p>
+<section id="id3">
+<h2>[問題] 階乗<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>「階乗を計算する関数を実装しよう」… <a class="reference external" href="https://ja.wikipedia.org/wiki/%E9%9A%8E%E4%B9%97">階乗とは</a></p>
 <p>階乗を実装する関数を作成しましょう。</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">target_number</span><span class="p">):</span>
     <span class="n">result</span> <span class="o">=</span> <span class="mi">1</span>
@@ -596,16 +631,24 @@ Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia
 </div>
 </div>
 </div>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="id3">
-<h1>「最大公約数を求める関数を実装しよう」<a class="headerlink" href="#id3" title="Link to this heading">#</a></h1>
-<p>ユークリッドの互除法を使って、２つの数字から最大公約数を求める関数を作成しましょう！</p>
-<p>ただし、これは非常に簡単なコードになります。ですので、ユークリッドの互除法について知りたい場合は<a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%83%A6%E3%83%BC%E3%82%AF%E3%83%AA%E3%83%83%E3%83%89%E3%81%AE%E4%BA%92%E9%99%A4%E6%B3%95">このページ</a>以外のみから理解して、プログラムを実装してください。</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean_algorithm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-    <span class="k">pass</span>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fact</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">fact</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fact</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+</section>
+<section id="id4">
+<h2>[問題] ユークリッドの互除法<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>「最大公約数を求める関数を実装しよう」</p>
+<p>ユークリッドの互除法を使って、２つの数字から最大公約数を求める関数を作成しましょう！</p>
+<p>ユークリッドの互除法について知りたい場合は<a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%83%A6%E3%83%BC%E3%82%AF%E3%83%AA%E3%83%83%E3%83%89%E3%81%AE%E4%BA%92%E9%99%A4%E6%B3%95">このページ</a>のみを読んでアルゴリズムを理解し、プログラムを実装してください。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean_algorithm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
@@ -614,9 +657,25 @@ Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia
 </div>
 </div>
 </div>
-<section id="id4">
-<h2>「数字を逆順にしよう」<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
-<p>与えられた数字を逆に並べ替える関数を作成して下さい。</p>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean_algorithm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>
+        <span class="c1">#a = b</span>
+        <span class="c1">#b = c</span>
+        <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span><span class="n">c</span>
+    <span class="k">return</span> <span class="n">b</span>
+    
+<span class="n">euclidean_algorithm</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id5">
+<h2>[問題] 数字列の反転<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>「数字を逆順にしよう」
+与えられた数字を逆に並べ替える関数を作成して下さい。</p>
 <p>例：4365-&gt;5634</p>
 <p>以降、問題文の下に関数の雛形が与えられた場合はそれを改変して答えを作成してください。<br />
 また、作成した関数の実行結果まで示してください。</p>
@@ -628,193 +687,78 @@ Fizz Buzzについては<a class="reference external" href="https://ja.wikipedia
 </div>
 </div>
 </div>
-</section>
-<section id="id5">
-<h2>「与えられた文書中の任意の文字列の出現回数を数える関数を作成しよう」<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
-<p>与えられた文書に任意の文字列が何個出現するのか数える関数を作成して下さい。</p>
-<p>例：一寸法師の歌詞中に「一寸法師」という文字列は何回出現するか</p>
-<div class="cell tag_hide-input docutils container">
-<details class="hide above-input">
-<summary aria-label="Toggle hidden content">
-<span class="collapsed">Show code cell source</span>
-<span class="expanded">Hide code cell source</span>
-</summary>
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ref http://www.worldfolksong.com/songbook/japan/issun-boshi.htm</span>
-<span class="n">sample_docs</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">指にたりない一寸法師</span>
-<span class="s2">小さいからだに大きな望み</span>
-<span class="s2">お椀の舟に箸のかい</span>
-<span class="s2">京へはるばるのぼりゆく</span>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">reversed_int</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-<span class="s2">打出の小槌京は三条の大臣どのに</span>
-<span class="s2">抱えられたる一寸法師</span>
-<span class="s2">法師法師とお気に入り</span>
-<span class="s2">姫のお伴で清水へ</span>
-
-<span class="s2">さても帰りの清水寺に</span>
-<span class="s2">鬼が一匹現れ出でて</span>
-<span class="s2">食ってかかればその口へ</span>
-<span class="s2">法師たちまち踊りこむ</span>
-
-<span class="s2">針の刀を逆手にもって</span>
-<span class="s2">チクリチクリと腹つけば</span>
-<span class="s2">鬼は法師を吐きだして</span>
-<span class="s2">一生けんめい逃げていく</span>
-
-<span class="s2">鬼が忘れた打ち出の小槌</span>
-<span class="s2">打てばふしぎや一寸法師</span>
-<span class="s2">ひと打ちごとに背がのびて</span>
-<span class="s2">今は立派な大男</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">;</span>
+<span class="n">reversed_int</span><span class="p">(</span><span class="mi">4365</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-</details>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">keyword_counter</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">sample_docs</span><span class="p">):</span>
-    <span class="o">...</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="hoge-txt">
-<h2>「hoge.txtを読み込む関数を作成しよう」<a class="headerlink" href="#hoge-txt" title="Link to this heading">#</a></h2>
-<p>任意のテキストファイルを読み込んで、テキストファイル内に書かれた内容を文字列型オブジェクトとして返す関数を作成しましょう。</p>
-<p>この関数はファイルパスを受け取り、読み込んだファイル内に記述された内容を文字列として返す機能を実装します。</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">read_textfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;ファイルを読み込んで文字列を返す</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">contents</span>
-</pre></div>
-</div>
 </div>
 </div>
 </section>
 <section id="id6">
-<h2>「文字列をテキストファイルとして保存する関数を作成しよう」<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
-<p>任意の文字列型オブジェクトと、保存先のパスを受け取り、文字列をファイルに書き込む（ファイルに保存する）関数を作成してください。</p>
-<p>返り値はなくて構いません。保存が終わったらファイルの保存先を標準出力にprintしてください。<br />
-printの形式は「文字列を/your/path/text.txtに保存しました。」という形式にしてください。</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">write_textfile</span><span class="p">(</span><span class="n">path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
-    <span class="k">pass</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id7">
-<h2>「受け取った文字列が回文か否かを判別する関数を作成しよう」<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<h2>[問題] 回文判定<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<p>「受け取った文字列が回文か否かを判別する関数を作成しよう」</p>
 <p>うけとった文字列が回文か否かを判別する関数を作成してください。</p>
-<p>ただしこの時、関数が受け取る文字列は句読点や記号を含まないものと仮定します。（記号などが含まれる場合については考えなくても良い）</p>
-<p>回分であればTrue, 回文でなければFalseを返り値として返してください。</p>
+<p>ただしこの時、関数が受け取る文字列は句読点や記号を含まないものと仮定します。（記号などが含まれる場合については考えなくても良い）<br />
+回分であればTrue, 回文でなければFalseを返り値として返してください。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">palindrome_checker</span><span class="p">(</span><span class="n">sent</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
     <span class="o">...</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id8">
-<h2>「六面のサイコロを再現した関数を作ろう」<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-</pre></div>
-</div>
-<p>を使って六面（1～6）のサイコロを実装した関数を作りましょう。<br />
-この関数は引数を受け取らず、返り値は面の数です。</p>
-<p>例：</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;dice()</span>
-<span class="go">3</span>
-</pre></div>
-</div>
-</section>
-<section id="id9">
-<h2>「面の数を変えられるサイコロを実装した関数を作ろう」<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
-<p>先程は六面に限定していましたが、今度は面の数を自由に変えられるようにしましょう。</p>
-<p>目の数はn_rollで決定します。<br />
-それ以外は先程の関数と同様にしましょう。</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mutable_dice</span><span class="p">(</span><span class="n">n_roll</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
-    <span class="o">...</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="id10">
-<h2>「歪なサイコロを再現した関数を作ろう」<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
-<blockquote>
-<div><p>歪なサイコロがあります。<br />
-このサイコロは歪なので、それぞれの面がでる確率は等しくはありません。</p>
-</div></blockquote>
-<p>このサイコロを実装しましょう。<br />
-このサイコロ関数は出目の出やすさの確率分布を受け取ります。<br />
-例として[0.1, 0.4, 0.23, 0.17, 0.08, 0.02]という確率分布を受け取る場合、</p>
-<ul class="simple">
-<li><p>1の面は0.1</p></li>
-<li><p>2の面は0.4</p></li>
-<li><p>…</p></li>
-<li><p>6の面は0.02</p></li>
-</ul>
-<p>の割合でサイコロの目が出ます。</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_prob</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.17</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">distorted_dice</span><span class="p">(</span><span class="n">prob</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;歪なサイコロの関数。引数としてサイコロの出目の「出やすさ」を表す確率分布を受け取り、一回試行して出た目の数字を返す。</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># numは出目</span>
-    <span class="k">return</span> <span class="n">num</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;たけやぶやけた&quot;</span><span class="p">,</span> <span class="n">palindrome_checker</span><span class="p">(</span><span class="s2">&quot;たけやぶやけた&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;たけやぶやけたかな&quot;</span><span class="p">,</span> <span class="n">palindrome_checker</span><span class="p">(</span><span class="s2">&quot;たけやぶやけたかな&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>たけやぶやけた None
+たけやぶやけたかな None
 </pre></div>
 </div>
 </div>
 </div>
-</section>
-<section id="id11">
-<h2>「歪なサイコロの出目をでやすさの順に並べよう」<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
-<p>sample_probを元に、keyを「出目の番号」、値を「出る確率」として辞書を作ってください。</p>
-<p>そして、辞書.values(), 辞書.keys(),辞書.values()などのメソッドと、sorted関数を使い、<br />
-でやすさの順に出目の番号を並べたリストを作成してみましょう。</p>
-</section>
-<section id="id12">
-<h2>「歪なサイコロの出やすさを10000回試行して確かめてみよう」<a class="headerlink" href="#id12" title="Link to this heading">#</a></h2>
-<p>3で作った歪なサイコロ。sample_probの確率が本当にその通り出目に反映されているのか、10000回関数を実行して確かめてみましょう。</p>
-<p>サイコロを投げて出目を見る作業を、任意の回数繰り返して、各面の出た回数をリストにして返す関数を作成してみましょう。</p>
-<p>また、その関数を使って実際に10000回試行してみてください。</p>
-</section>
-<section id="id13">
-<h2>「サイコロの出やすさを棒グラフで表してみよう」<a class="headerlink" href="#id13" title="Link to this heading">#</a></h2>
-<p>matplotlib.pyplotの中にbarという関数があります。これを使って先程5で得たリストを棒グラフにしてみて下さい。</p>
-<p>参考: <a class="reference external" href="http://pythondatascience.plavox.info/matplotlib/%E6%A3%92%E3%82%B0%E3%83%A9%E3%83%95">http://pythondatascience.plavox.info/matplotlib/棒グラフ</a></p>
-<aside class="margin sidebar">
-<p class="sidebar-title"></p>
-<p>ちなみに、jupyter notebookでグラフを表示するためのipython magicとして、上記の</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">palindrome_checker</span><span class="p">(</span><span class="n">sent</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+    <span class="n">reversed_sent</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">sent</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">sent</span> <span class="o">==</span> <span class="n">reversed_sent</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span> 
+    
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;たけやぶやけた&quot;</span><span class="p">,</span> <span class="n">palindrome_checker</span><span class="p">(</span><span class="s2">&quot;たけやぶやけた&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;たけやぶやけたかな&quot;</span><span class="p">,</span> <span class="n">palindrome_checker</span><span class="p">(</span><span class="s2">&quot;たけやぶやけたかな&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>または</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">notebook</span>
-</pre></div>
 </div>
-<p>などがあります。</p>
-<p>これをjupyter notebookの上で実行すると、notebookの上にグラフを表示できるようになります。</p>
-</aside>
+</section>
+<section id="filter">
+<h2>[問題] filter関数実装の準備<a class="headerlink" href="#filter" title="Link to this heading">#</a></h2>
+<p>以下の作りかけの関数mod_filterを元に、関数の第一引数Xから第二引数yで割り切れる値だけを抽出してリストとして返す関数を完成させよ。</p>
+<p>条件：</p>
+<ol class="arabic simple">
+<li><p>引数Xは一次元配列。各要素には数字が入っている。</p></li>
+<li><p>yは数字。intでもfloatでもいいがここではintにしておく。</p></li>
+</ol>
+<p>実装のヒント</p>
+<ol class="arabic simple">
+<li><p>forループでXの中身を取り出していき、それぞれyで割り切れるか確認していく。</p></li>
+<li><p>mod_filterの返り値resultはlist型でなければならない。</p></li>
+</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mod_filter</span><span class="p">(</span><span class="n">X</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">list</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">return</span> <span class="n">result</span>
 
-<span class="o">...</span>
+<span class="c1"># *** test ***</span>
+<span class="n">sample_vector</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">mod_filter</span><span class="p">(</span><span class="n">sample_vector</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -824,63 +768,122 @@ printの形式は「文字列を/your/path/text.txtに保存しました。」�
 </div>
 </div>
 </div>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mod_filter</span><span class="p">(</span><span class="n">X</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="c1"># *** test ***</span>
+<span class="n">sample_vector</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">mod_filter</span><span class="p">(</span><span class="n">sample_vector</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </section>
-<section id="id14">
-<h2>「乱数でサンプルデータを作ろう」<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
-<p>ランダムに0～1の範囲から取り出された乱数を20個まとめたリストを作りましょう。</p>
-<p>ここで「ランダムに0～1の範囲から取り出された乱数」とは__「 <span class="math notranslate nohighlight">\(0 \leq x \leq 1\)</span>の範囲の一様乱数からサンプリングされた数字」__を指します。</p>
-<p>randomモジュールを使って一様乱数を使う方法を以下に示します。</p>
+<section id="id7">
+<h2>[問題] filter関数の実装<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<p>以下に示す未完成の関数_filterを元に、関数の第__2__引数Xの中から第__1__引数で指定された関数の返り値がTrueになるものだけを抽出してリストとして返す関数を完成させよ。</p>
+<p>条件：</p>
+<ul class="simple">
+<li><p>引数Xは一次元配列。要素はすべて文字列。</p></li>
+<li><p>funcは関数。lamdba式などで定義される。</p></li>
+</ul>
+<p>実装のヒント：</p>
+<ol class="arabic simple">
+<li><p>基本はmod_filterと同じ。</p></li>
+<li><p>引数funcに渡される関数は、値を一つ受け取ったら、それが何かの条件にあっていればTrue,それ以外ならFalseを返すような関数。例えば以下の関数eval_fnならば、単語の文字数が3以上のものだけを取り出すフィルターになる。</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">eval_fn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">token</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">token</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">3</span>
+</pre></div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span><span class="nb">list</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">return</span> <span class="n">result</span>
 
-<span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># *** test ***</span>
+<span class="n">sample_text</span> <span class="o">=</span> <span class="s2">&quot;k-means clustering is a method of vector quantization, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean (cluster centers or cluster centroid), serving as a prototype of the cluster.&quot;</span>
+<span class="n">sample_words</span> <span class="o">=</span> <span class="n">sample_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="n">_filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">token</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">token</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sample_words</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.3618160558225786
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ellipsis
 </pre></div>
 </div>
 </div>
 </div>
-<aside class="margin sidebar">
-<p class="sidebar-title"></p>
-<p>※random.uniform(最小値,最大値)です。</p>
-</aside>
-<p>では課題を解くために、以下の関数を完成させてください。</p>
-<p>完成したらこれを実行してsample_list変数に返り値を入れてください。</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_list_generator</span><span class="p">(</span><span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">list</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    min_valは乱数の最小値</span>
-<span class="sd">    max_valは乱数の最大値</span>
-<span class="sd">    sample_sizeはサンプルリストのサイズ</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sample_list</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># とりあえずからのリストを作成</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sample_size</span><span class="p">):</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span><span class="p">)</span> <span class="c1"># 第一引数～第２引数の間からランダムに数字を取り出す関数</span>
-      <span class="n">sample_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># appendはlistに要素を追加するメソッド</span>
-    <span class="k">return</span> <span class="n">sample_list</span> <span class="c1"># :list</span>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span>
+<span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span><span class="nb">list</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="c1"># *** test ***</span>
+<span class="n">sample_text</span> <span class="o">=</span> <span class="s2">&quot;k-means clustering is a method of vector quantization, originally from signal processing, that aims to partition n observations into k clusters in which each observation belongs to the cluster with the nearest mean (cluster centers or cluster centroid), serving as a prototype of the cluster.&quot;</span>
+<span class="n">sample_words</span> <span class="o">=</span> <span class="n">sample_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="n">_filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">token</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">token</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sample_words</span><span class="p">)</span>
 </pre></div>
-</div>
 </div>
 </div>
 </section>
-<section id="id15">
-<h2>「サンプルデータを可視化してみよう」<a class="headerlink" href="#id15" title="Link to this heading">#</a></h2>
-<p>「乱数でサンプルデータを作ろう」で作ったサンプルデータをmatplotlibで可視化してみましょう。</p>
-<p>matplotlibライブラリはPythonの最も有名な可視化ツールです。</p>
-<p><code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>でmatplotlibの中のpyplotモジュールを呼び出します。<br />
-<code class="docutils literal notranslate"><span class="pre">as</span> <span class="pre">plt</span></code>でこれにpltというあだ名をつけています。<br />
-以降は<code class="docutils literal notranslate"><span class="pre">plt.なんとか</span></code> で<code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>の中身にアクセスできます。</p>
-<p>ではこれを使って、先程のサンプルデータを棒グラフで表してみてください。</p>
+<section id="np-median">
+<h2>[問題] 統計的代表値計算の再現 － 中央値 np.median<a class="headerlink" href="#np-median" title="Link to this heading">#</a></h2>
+<p>以下に示すnp.medianに習い、ベクトルAの中央値を求めるpure python関数_medianを作成せよ。</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 棒グラフを作る機能 plt.bar()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_median</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="statistics-mode">
+<h2>[問題] 統計的代表値計算の再現 － 最頻値: statistics.mode<a class="headerlink" href="#statistics-mode" title="Link to this heading">#</a></h2>
+<p>statistics.modeに習い、ベクトルAの中央値を求めるpure python関数_modeを作成せよ。</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statistics</span>
+<span class="n">statistics</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="dropdown hint admonition">
+<p class="admonition-title">回答例</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_mode</span><span class="p">():</span>
+    <span class="o">...</span>
+</pre></div>
 </div>
 </div>
 </section>
@@ -950,31 +953,18 @@ printの形式は「文字列を/your/path/text.txtに保存しました。」�
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Python BootCamp</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fizzbuzz">「fizzbuzzを行う関数を実装しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">「フィボナッチ数列を100桁目まで返す関数を実装しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ab">「aからbまでの和を計算する関数を実装しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">「階乗を計算する関数を実装しよう」</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fizzbuzz">[問題] fizzbuzz</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">[問題] フィボナッチ数列</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">[問題] 合計</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">[問題] 階乗</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">[問題] ユークリッドの互除法</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">[問題] 数字列の反転</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">[問題] 回文判定</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter">[問題] filter関数実装の準備</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">[問題] filter関数の実装</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#np-median">[問題] 統計的代表値計算の再現 － 中央値 np.median</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistics-mode">[問題] 統計的代表値計算の再現 － 最頻値: statistics.mode</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">「最大公約数を求める関数を実装しよう」</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">「数字を逆順にしよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">「与えられた文書中の任意の文字列の出現回数を数える関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hoge-txt">「hoge.txtを読み込む関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">「文字列をテキストファイルとして保存する関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">「受け取った文字列が回文か否かを判別する関数を作成しよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">「六面のサイコロを再現した関数を作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">「面の数を変えられるサイコロを実装した関数を作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">「歪なサイコロを再現した関数を作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">「歪なサイコロの出目をでやすさの順に並べよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">「歪なサイコロの出やすさを10000回試行して確かめてみよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">「サイコロの出やすさを棒グラフで表してみよう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">「乱数でサンプルデータを作ろう」</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">「サンプルデータを可視化してみよう」</a></li>
-</ul>
-</li>
-</ul>
-
   </nav></div>
 
 </div></div>
