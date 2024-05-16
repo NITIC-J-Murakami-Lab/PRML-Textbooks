@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Convolutional Neural Network &#8212; PatternRecognitionWithPython</title>
+    <title>Convolutional Neural Network &#8212; PRML-Textbooks</title>
   
   
   
@@ -153,8 +153,8 @@
       
     
     
-    <img src="../_static/logo.png" class="logo__image only-light" alt="PatternRecognitionWithPython - Home"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="PatternRecognitionWithPython - Home"/>`);</script>
+    <img src="../_static/logo.png" class="logo__image only-light" alt="PRML-Textbooks - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="PRML-Textbooks - Home"/>`);</script>
   
   
 </a></div>
@@ -175,7 +175,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="../intro.html">
-                    Welcome to your Jupyter Book
+                    PRML-Textbooks
                 </a>
             </li>
         </ul>
@@ -314,7 +314,7 @@
       
       
       
-      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython" target="_blank"
+      <li><a href="https://github.com/NITIC-J-Murakami-Lab/PRML-Textbooks" target="_blank"
    class="btn btn-sm btn-source-repository-button dropdown-item"
    title="Source repository"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -331,7 +331,7 @@
       
       
       
-      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/edit/main/docs/neuralnet/cnn.ipynb" target="_blank"
+      <li><a href="https://github.com/NITIC-J-Murakami-Lab/PRML-Textbooks/edit/main/docs/neuralnet/cnn.ipynb" target="_blank"
    class="btn btn-sm btn-source-edit-button dropdown-item"
    title="Suggest edit"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -348,7 +348,7 @@
       
       
       
-      <li><a href="https://github.com/rsimd/PatternRecognitionWithPython/issues/new?title=Issue%20on%20page%20%2Fneuralnet/cnn.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/NITIC-J-Murakami-Lab/PRML-Textbooks/issues/new?title=Issue%20on%20page%20%2Fneuralnet/cnn.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -868,13 +868,13 @@ a_{i,j}^{(k)} = \sum_{s=1}^{m}\sum_{t=1}^{n}w_{s,t}^{(k)}x_{i+s,j+t}+b^{(k)}
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>img: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([1, 1, 28, 28]) torch.float32
 label: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([1]) torch.int64
-	 tensor([4])
+	 tensor([0])
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x37a6d2a10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x373759a90&gt;
 </pre></div>
 </div>
-<img alt="../_images/08796a1ea3852a34500116c41a6690772732d131f3116e71ce3535907368384a.png" src="../_images/08796a1ea3852a34500116c41a6690772732d131f3116e71ce3535907368384a.png" />
+<img alt="../_images/e983b0ae55cdd2958525d22554ce3ab9c1b02345260a8dfa5ed378c3ea8a8a0f.png" src="../_images/e983b0ae55cdd2958525d22554ce3ab9c1b02345260a8dfa5ed378c3ea8a8a0f.png" />
 </div>
 </div>
 <p>0~9の数字があるので，全部で10クラスの分類を行います．</p>
@@ -1109,7 +1109,7 @@ Sequential(
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  epoch    train_loss    valid_acc    valid_loss      dur
 -------  ------------  -----------  ------------  -------
-      1        <span class=" -Color -Color-Cyan">0.6809</span>       <span class=" -Color -Color-Green">0.9429</span>        <span class=" -Color -Color-Magenta">0.1883</span>  16.1415
+      1        <span class=" -Color -Color-Cyan">0.9388</span>       <span class=" -Color -Color-Green">0.9185</span>        <span class=" -Color -Color-Magenta">0.2646</span>  15.8292
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;skorch.classifier.NeuralNetClassifier&#39;&gt;[initialized](
