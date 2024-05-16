@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="ja" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
@@ -42,7 +42,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/documentation_options.js?v=1cf7f4d9"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,6 +52,7 @@
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -60,12 +61,12 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'vis/matplotlib_pyplot_test';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="DataFrame.plot" href="pandas_plot_test.html" />
     <link rel="prev" title="可視化用ライブラリ" href="vis.myst.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:language" content="ja"/>
   </head>
   
   
@@ -161,9 +162,9 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn navbar-btn search-button-field search-button__button" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
+    <span class="search-button__default-text">検索</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
    </button>
  `);
@@ -313,7 +314,7 @@
       
       
       
-      <li><a href="https://colab.research.google.com/github/NITIC-J-Murakami-Lab/PRML-Textbooks/blob/main/docs/vis/matplotlib_pyplot_test.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/NITIC-J-Murakami-Lab/PRML-Textbooks/blob/main/prpy/vis/matplotlib_pyplot_test.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onColab"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -346,7 +347,7 @@
       
       <li><a href="https://github.com/NITIC-J-Murakami-Lab/PRML-Textbooks" target="_blank"
    class="btn btn-sm btn-source-repository-button dropdown-item"
-   title="Source repository"
+   title="ソースリポジトリ"
    data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
@@ -361,26 +362,9 @@
       
       
       
-      <li><a href="https://github.com/NITIC-J-Murakami-Lab/PRML-Textbooks/edit/main/docs/vis/matplotlib_pyplot_test.ipynb" target="_blank"
-   class="btn btn-sm btn-source-edit-button dropdown-item"
-   title="Suggest edit"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="btn__text-container">Suggest edit</span>
-</a>
-</li>
-      
-      
-      
-      
       <li><a href="https://github.com/NITIC-J-Murakami-Lab/PRML-Textbooks/issues/new?title=Issue%20on%20page%20%2Fvis/matplotlib_pyplot_test.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
+   title="問題を報告"
    data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
@@ -401,7 +385,7 @@
 
 
 <div class="dropdown dropdown-download-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="このページをダウンロード">
     <i class="fas fa-download"></i>
   </button>
   <ul class="dropdown-menu">
@@ -410,7 +394,7 @@
       
       <li><a href="../_sources/vis/matplotlib_pyplot_test.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
-   title="Download source file"
+   title="ソースファイルをダウンロード"
    data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
@@ -428,7 +412,7 @@
       <li>
 <button onclick="window.print()"
   class="btn btn-sm btn-download-pdf-button dropdown-item"
-  title="Print to PDF"
+  title="PDFに印刷"
   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
@@ -448,7 +432,7 @@
 
 <button onclick="toggleFullScreen()"
   class="btn btn-sm btn-fullscreen-button"
-  title="Fullscreen mode"
+  title="全画面モード"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
   
@@ -474,7 +458,7 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="検索" aria-label="検索" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
@@ -498,7 +482,7 @@ document.write(`
         <div id="jb-print-toc">
             
             <div>
-                <h2> Contents </h2>
+                <h2> 目次 </h2>
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
@@ -559,10 +543,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x10c556c90&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x10d721090&gt;]
 </pre></div>
 </div>
-<img alt="../_images/8971621785be7bc93618381be60814657b32abec363a813c215238ebc4b0211e.png" src="../_images/8971621785be7bc93618381be60814657b32abec363a813c215238ebc4b0211e.png" />
+<img alt="../_images/7fbb20bcfe7267339beb6e812ff028da154bbbfc7f125af66274fc76328b1556.png" src="../_images/7fbb20bcfe7267339beb6e812ff028da154bbbfc7f125af66274fc76328b1556.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -581,10 +565,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x10f9da3d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11b699ad0&gt;
 </pre></div>
 </div>
-<img alt="../_images/8ad7278a0ab7738adf7c48255750834d69013202225273471378a8684d452a81.png" src="../_images/8ad7278a0ab7738adf7c48255750834d69013202225273471378a8684d452a81.png" />
+<img alt="../_images/0fe306809f7786dcf9392a20258d277654fd208060cbd085ef171d60fac80967.png" src="../_images/0fe306809f7786dcf9392a20258d277654fd208060cbd085ef171d60fac80967.png" />
 </div>
 </div>
 </section>
@@ -605,7 +589,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x10fa5a550&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11c0337d0&gt;
 </pre></div>
 </div>
 <img alt="../_images/5d9e4977d1620a281ec3d08c6a76602db9dca85837d13662ebd1fa1cf4f5c592.png" src="../_images/5d9e4977d1620a281ec3d08c6a76602db9dca85837d13662ebd1fa1cf4f5c592.png" />
@@ -623,10 +607,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x10facdb50&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x11c014890&gt;
 </pre></div>
 </div>
-<img alt="../_images/e4834d741c5467a3cbf1afdbdc76852e24ddc0bc691ef89aee90911d372d1771.png" src="../_images/e4834d741c5467a3cbf1afdbdc76852e24ddc0bc691ef89aee90911d372d1771.png" />
+<img alt="../_images/57f66846e74d1c2abebef74810bb8cebc0fda18ebbc7e3160b98040f6dbedccc.png" src="../_images/57f66846e74d1c2abebef74810bb8cebc0fda18ebbc7e3160b98040f6dbedccc.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -642,10 +626,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x10fb84250&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x11c176bd0&gt;
 </pre></div>
 </div>
-<img alt="../_images/f4f3a1f6fa67d5d165c3b62585a0d9c4073653d4b3b83faa86627744e6cd279c.png" src="../_images/f4f3a1f6fa67d5d165c3b62585a0d9c4073653d4b3b83faa86627744e6cd279c.png" />
+<img alt="../_images/221cd45d542f0d914a8439094bb5ec440bb02221d679651dd22380ce37b7845c.png" src="../_images/221cd45d542f0d914a8439094bb5ec440bb02221d679651dd22380ce37b7845c.png" />
 </div>
 </div>
 </section>
@@ -661,12 +645,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>([&lt;matplotlib.patches.Wedge at 0x10fbdf5d0&gt;,
-  &lt;matplotlib.patches.Wedge at 0x10fbe8350&gt;,
-  &lt;matplotlib.patches.Wedge at 0x10fbe9550&gt;,
-  &lt;matplotlib.patches.Wedge at 0x10fbeac10&gt;,
-  &lt;matplotlib.patches.Wedge at 0x10fbfc2d0&gt;,
-  &lt;matplotlib.patches.Wedge at 0x10fbfd990&gt;],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>([&lt;matplotlib.patches.Wedge at 0x11c0a1bd0&gt;,
+  &lt;matplotlib.patches.Wedge at 0x11c1e5050&gt;,
+  &lt;matplotlib.patches.Wedge at 0x11c1e63d0&gt;,
+  &lt;matplotlib.patches.Wedge at 0x11c1e7790&gt;,
+  &lt;matplotlib.patches.Wedge at 0x11c1ecd50&gt;,
+  &lt;matplotlib.patches.Wedge at 0x11c1ee150&gt;],
  [Text(0.7778174593052024, 0.7778174593052023, &#39;A&#39;),
   Text(-0.42095177560159874, 1.0162674857624154, &#39;B&#39;),
   Text(-0.9379041861706844, 0.5747484124062514, &#39;C&#39;),
@@ -716,7 +700,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x10fc8c810&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11c0b3710&gt;
 </pre></div>
 </div>
 <img alt="../_images/e9af1d9a44d7c8b86add89eedfcc5211daa32b58180aec36b0d61297b7a661f7.png" src="../_images/e9af1d9a44d7c8b86add89eedfcc5211daa32b58180aec36b0d61297b7a661f7.png" />
@@ -737,7 +721,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x10fe2c3d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11c41b950&gt;
 </pre></div>
 </div>
 <img alt="../_images/89ca4a3b3d1b8a5f0e4864bb977656e85270c867e6c7a709627365ff02da1b8d.png" src="../_images/89ca4a3b3d1b8a5f0e4864bb977656e85270c867e6c7a709627365ff02da1b8d.png" />
@@ -769,7 +753,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x10ff9ae10&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11c5bbf90&gt;
 </pre></div>
 </div>
 <img alt="../_images/c8dee0fa43c5042ca6c16427a353c477c474a9b23c427f0fb2beecf59f7eec4c.png" src="../_images/c8dee0fa43c5042ca6c16427a353c477c474a9b23c427f0fb2beecf59f7eec4c.png" />
@@ -803,10 +787,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11c13a8d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x11c6badd0&gt;
 </pre></div>
 </div>
-<img alt="../_images/b7b73124200da84467bd3c51cf3f0bc5c0080d051e3d7a38def9d2b7c4108932.png" src="../_images/b7b73124200da84467bd3c51cf3f0bc5c0080d051e3d7a38def9d2b7c4108932.png" />
+<img alt="../_images/6a29cc51af238f9ef5a26992a18df54b725c5b89c4082dfd97ec25f42e37eb22.png" src="../_images/6a29cc51af238f9ef5a26992a18df54b725c5b89c4082dfd97ec25f42e37eb22.png" />
 </div>
 </div>
 </section>
@@ -1823,7 +1807,7 @@ if (IPython.notebook.kernel !== null) {
         mpl.mpl_figure_comm
     );
 }
-</script><div class="output text_html"><div id='6d39ca3b-c243-4620-90df-5bef71cd9298'></div></div></div>
+</script><div class="output text_html"><div id='744ac769-d286-4995-91dd-4b9a6923ecad'></div></div></div>
 </div>
 <p>作成されたanim.gifを表示してみる．<br />
 <img alt="" src="../_images/anim1.gif" /></p>
@@ -1924,7 +1908,7 @@ if (IPython.notebook.kernel !== null) {
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-subtitle">前へ</p>
         <p class="prev-next-title">可視化用ライブラリ</p>
       </div>
     </a>
@@ -1932,7 +1916,7 @@ if (IPython.notebook.kernel !== null) {
        href="pandas_plot_test.html"
        title="next page">
       <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-subtitle">次へ</p>
         <p class="prev-next-title">DataFrame.plot</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
@@ -1949,7 +1933,7 @@ if (IPython.notebook.kernel !== null) {
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
+    <i class="fa-solid fa-list"></i> 目次
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
@@ -1981,7 +1965,7 @@ if (IPython.notebook.kernel !== null) {
   <div class="footer-item">
     
 <p class="component-author">
-By Riki Murakami
+著者 Riki Murakami
 </p>
 
   </div>
