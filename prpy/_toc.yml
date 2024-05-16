@@ -15,9 +15,15 @@ parts:
       - file: python/5.function
       - file: python/6.module
       - file: python/7.class
-      - file: python/PythonBootCamp
-      - file: python/PythonBootCamp2
-      - file: python/PythonBootCamp3
+      #- file: python/PythonBootCamp
+      #- file: python/PythonBootCamp2
+    - file: algo/algo.md
+      sections:
+      - file: algo/fizzbuzz
+      - file: algo/fibonacci_sequence
+      - file: algo/factorial
+      - file: algo/euclidean_algorithm
+      - file: algo/palindrome_checker
     - file: numpy/numpy.myst.md
       sections:
       - file: numpy/numpy_basis1_初期化と簡単な演算
