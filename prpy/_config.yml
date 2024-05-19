@@ -41,7 +41,7 @@ html:
 
 sphinx:
   config:
-    language: ja
+    #language: ja
     bibtex_reference_style: author_year
     #bibtex_bibfiles: "ref.bib"
     mathjax_config:
