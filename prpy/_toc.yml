@@ -24,7 +24,6 @@ parts:
       - file: algo/factorial
       - file: algo/euclidean_algorithm
       - file: algo/palindrome_checker
-      - file: algo/singlylinkedlist
     - file: numpy/numpy.myst.md
       sections:
       - file: numpy/numpy_basis1_初期化と簡単な演算
