@@ -734,7 +734,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 動作チェック</span>
-<span class="n">linkedlist</span> <span class="o">=</span> <span class="n">LinkedList</span><span class="p">()</span>
+<span class="n">linkedlist</span> <span class="o">=</span> <span class="n">SinglyLinkedList</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">linkedlist</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
@@ -756,15 +756,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># 動作チェック</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">linkedlist</span> <span class="o">=</span> <span class="n">LinkedList</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="nb">print</span><span class="p">(</span><span class="n">linkedlist</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-
-<span class="ne">NameError</span>: name &#39;LinkedList&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>...
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+0, 1, 2, 4, 5, 6, 7, 8, 9
+1, 2, 4, 5, 6, 7, 8, 9
+1, 2, 4, 5, 6, 7, 8
+1, 2, 4, 5, 6, 7, 8, 9
 </pre></div>
 </div>
 </div>
@@ -772,7 +769,7 @@ document.write(`
 <p>リストに存在しない要素を削除しようとすると，エラーが発生するはずです．</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linkedlist</span> <span class="o">=</span> <span class="n">LinkedList</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linkedlist</span> <span class="o">=</span> <span class="n">SinglyLinkedList</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">linkedlist</span><span class="p">)</span>
 <span class="n">linkedlist</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -784,17 +781,17 @@ document.write(`
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">85</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">linkedlist</span> <span class="o">=</span> <span class="n">LinkedList</span><span class="p">()</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">linkedlist</span> <span class="o">=</span> <span class="n">SinglyLinkedList</span><span class="p">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="nb">print</span><span class="p">(</span><span class="n">linkedlist</span><span class="p">)</span>
 <span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">linkedlist</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="nn">Cell In[76], line 57,</span> in <span class="ni">LinkedList.remove</span><span class="nt">(self, data)</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span>     <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">next</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span> <span class="c1"># リスト内に削除対象が存在しなかった場合</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">57</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LinkedList.remove(data): data not in LinkedList&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">58</span> <span class="k">return</span> <span class="bp">self</span>
+<span class="nn">Cell In[3], line 47,</span> in <span class="ni">SinglyLinkedList.remove</span><span class="nt">(self, data)</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">next</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span> <span class="c1"># リスト内に削除対象が存在しなかった場合</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">47</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LinkedList.remove(data): data not in LinkedList&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">48</span> <span class="k">return</span> <span class="bp">self</span>
 
 <span class="ne">ValueError</span>: LinkedList.remove(data): data not in LinkedList
 </pre></div>

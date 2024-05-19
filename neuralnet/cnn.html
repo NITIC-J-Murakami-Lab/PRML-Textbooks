@@ -883,13 +883,13 @@ a_{i,j}^{(k)} = \sum_{s=1}^{m}\sum_{t=1}^{n}w_{s,t}^{(k)}x_{i+s,j+t}+b^{(k)}
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>img: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([1, 1, 28, 28]) torch.float32
 label: &lt;class &#39;torch.Tensor&#39;&gt; torch.Size([1]) torch.int64
-	 tensor([4])
+	 tensor([2])
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x3795d6390&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage at 0x379e66a10&gt;
 </pre></div>
 </div>
-<img alt="../_images/bcb4016adad4827707263e1881085cc58bae16ae3f82b514dc6d5f9ee23d0a42.png" src="../_images/bcb4016adad4827707263e1881085cc58bae16ae3f82b514dc6d5f9ee23d0a42.png" />
+<img alt="../_images/14af315a0e0d8efcfc00322447c4d9c8a1d94e016797b0638dc192b415549959.png" src="../_images/14af315a0e0d8efcfc00322447c4d9c8a1d94e016797b0638dc192b415549959.png" />
 </div>
 </div>
 <p>0~9の数字があるので，全部で10クラスの分類を行います．</p>
@@ -1041,7 +1041,9 @@ torch.Size([64, 1600])
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([64, 4, 15, 15]) -&gt; torch.Size([64, 10])
-torch.Size([64, 3, 53, 53]) -&gt; torch.Size([64, 10])
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch.Size([64, 3, 53, 53]) -&gt; torch.Size([64, 10])
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mriki/workspace/prpy/.venv/lib/python3.11/site-packages/torch/nn/modules/lazy.py:181: UserWarning: Lazy modules are a new feature under heavy development so changes to the API or functionality can happen at any moment.
@@ -1124,7 +1126,7 @@ Sequential(
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  epoch    train_loss    valid_acc    valid_loss      dur
 -------  ------------  -----------  ------------  -------
-      1        <span class=" -Color -Color-Cyan">0.4754</span>       <span class=" -Color -Color-Green">0.9433</span>        <span class=" -Color -Color-Magenta">0.1928</span>  16.7628
+      1        <span class=" -Color -Color-Cyan">0.4125</span>       <span class=" -Color -Color-Green">0.9513</span>        <span class=" -Color -Color-Magenta">0.1610</span>  15.1576
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;skorch.classifier.NeuralNetClassifier&#39;&gt;[initialized](

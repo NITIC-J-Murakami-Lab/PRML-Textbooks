@@ -18,36 +18,28 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-# 動作チェック
-linkedlist = LinkedList()
+linkedlist = SinglyLinkedList()
 print(linkedlist)
-
-for i in range(10):
-    linkedlist.append(i)
-print(linkedlist)
-
-linkedlist.remove(3)
-print(linkedlist)
-
-linkedlist.remove(0)
-print(linkedlist)
-
-linkedlist.remove(9)
-print(linkedlist)
-
-linkedlist.append(9)
-print(linkedlist)
-
+linkedlist.remove(1)
 ------------------
 
+----- stdout -----
+...
+------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-Cell [0;32mIn[4], line 2[0m
-[1;32m      1[0m [38;5;66;03m# 動作チェック[39;00m
-[0;32m----> 2[0m linkedlist [38;5;241m=[39m [43mLinkedList[49m()
-[1;32m      3[0m [38;5;28mprint[39m(linkedlist)
-[1;32m      5[0m [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m [38;5;28mrange[39m([38;5;241m10[39m):
+[0;31mValueError[0m                                Traceback (most recent call last)
+Cell [0;32mIn[5], line 3[0m
+[1;32m      1[0m linkedlist [38;5;241m=[39m SinglyLinkedList()
+[1;32m      2[0m [38;5;28mprint[39m(linkedlist)
+[0;32m----> 3[0m [43mlinkedlist[49m[38;5;241;43m.[39;49m[43mremove[49m[43m([49m[38;5;241;43m1[39;49m[43m)[49m
 
-[0;31mNameError[0m: name 'LinkedList' is not defined
+Cell [0;32mIn[3], line 47[0m, in [0;36mSinglyLinkedList.remove[0;34m(self, data)[0m
+[1;32m     43[0m     current [38;5;241m=[39m current[38;5;241m.[39mnext
+[1;32m     45[0m [38;5;66;03m# リスト内に削除対象が存在しなかった場合[39;00m
+[1;32m     46[0m [38;5;28;01melse[39;00m:
+[0;32m---> 47[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124m"[39m[38;5;124mLinkedList.remove(data): data not in LinkedList[39m[38;5;124m"[39m)
+[1;32m     48[0m [38;5;28;01mreturn[39;00m [38;5;28mself[39m
+
+[0;31mValueError[0m: LinkedList.remove(data): data not in LinkedList
 
