@@ -493,10 +493,13 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import">パッケージのimport</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">サンプルデータ系列の作成</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">距離行列の作成</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dtw">コスト行列の作成とDTW距離</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dtw">コスト行列の作成とDTW距離</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">この関数の細かい説明</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warping-path">波形同士のアライメント（warping path）</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">プログラムの全体像</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">参考文献</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">プログラムの全体像</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">参考文献</a></li>
 </ul>
             </nav>
         </div>
@@ -582,7 +585,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/5d55213154a37badb1efd19a2f9438a6b1684f97481167ee921a80af78975f05.png" src="../_images/5d55213154a37badb1efd19a2f9438a6b1684f97481167ee921a80af78975f05.png" />
+<img alt="../_images/f5ca63fcfe279924643cc11be1da1fbc7b754b81824c95654a397a146bd40bb5.png" src="../_images/f5ca63fcfe279924643cc11be1da1fbc7b754b81824c95654a397a146bd40bb5.png" />
 </div>
 </div>
 </section>
@@ -605,13 +608,13 @@ D(s_i,t_j) = |s_i-t_j|
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[0.         0.0155105  0.00267277 ... 0.02426574 0.02351541 0.04029861]
- [0.1354685  0.15097899 0.13279573 ... 0.11120276 0.1589839  0.1757671 ]
- [0.12239561 0.10688511 0.12506838 ... 0.14666135 0.0988802  0.082097  ]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[0.         0.01711757 0.02893678 ... 0.04951679 0.07565899 0.07002577]
+ [0.02438822 0.00727065 0.053325   ... 0.07390501 0.10004721 0.09441399]
+ [0.00435574 0.01276182 0.03329253 ... 0.05387253 0.08001473 0.07438151]
  ...
- [0.12216661 0.10665611 0.12483937 ... 0.14643235 0.0986512  0.081868  ]
- [0.04808625 0.06359675 0.04541348 ... 0.02382051 0.07160166 0.08838485]
- [0.0341709  0.0496814  0.03149813 ... 0.00990516 0.05768631 0.0744695 ]]
+ [0.21059276 0.22771032 0.18165597 ... 0.16107597 0.13493377 0.14056699]
+ [0.01231739 0.02943496 0.01661939 ... 0.03719939 0.0633416  0.05770837]
+ [0.06555691 0.08267448 0.03662013 ... 0.01604013 0.01010207 0.00446885]]
 (50, 70)
 </pre></div>
 </div>
@@ -621,8 +624,9 @@ D(s_i,t_j) = |s_i-t_j|
 <section id="dtw">
 <h2>コスト行列の作成とDTW距離<a class="headerlink" href="#dtw" title="Link to this heading">#</a></h2>
 <p>DTWでは，最終的に二つの系列の距離を求めます．この過程で<span class="math notranslate nohighlight">\((s_0, t_0)\)</span>を始点，<span class="math notranslate nohighlight">\((s_{|S|},t_{|T|})\)</span>を終点に，この二点をつなげるコストの低いパスを見つけます．このコストを作成する関数を作成しましょう．</p>
-<div class="{admonition}【コスト行列作成のための前提条件】 docutils">
-<p>:class: note</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>【コスト行列作成のための前提条件】</p>
 <ul class="simple">
 <li><p>cost行列は<span class="math notranslate nohighlight">\(|S|\times|T|\)</span>の行列になります．</p></li>
 <li><p>cost行列の各要素は，<strong>値が小さい方が良い</strong> ので，初期化の際には inf で埋めます．</p></li>
@@ -630,6 +634,44 @@ D(s_i,t_j) = |s_i-t_j|
 <li><p>「終点のコスト」はDTWにおいて系列<span class="math notranslate nohighlight">\(S\)</span>と<span class="math notranslate nohighlight">\(T\)</span>の距離を表します．</p></li>
 </ul>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">):</span>
+    <span class="c1"># initialization</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+    <span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># udpate dtw cost matrix</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">_window</span> <span class="o">=</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">_window</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cost</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">cost</span>
+
+<span class="n">dtw_score</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dtw_score</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.9862043384581893
+[[0.         0.01711757 0.04605435 ... 3.51918243 3.59484142 3.66486718]
+ [0.02438822 0.00727065 0.06059566 ... 3.51885969 3.6189069  3.6892554 ]
+ [0.02874396 0.02003248 0.04056318 ... 3.47892402 3.55893875 3.63332026]
+ ...
+ [2.41778965 2.43490721 2.31618662 ... 2.95016932 2.92402711 2.94669423]
+ [2.43010704 2.4472246  2.33280601 ... 2.98736871 2.98736871 2.98173549]
+ [2.49566395 2.51278152 2.36942614 ... 2.99339721 2.99747078 2.98620434]]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id3">
+<h3>この関数の細かい説明<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <p>距離行列を作成します．</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">):</span>
     <span class="c1"># initialization</span>
@@ -660,48 +702,14 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 </div>
 <p>このプログラムだと条件分けしていないので，continue後の初回にcost[-1,1],cost[0,0],cost[-1,0]を探索することになってしまいます．costは今見ている<span class="math notranslate nohighlight">\((i,j)\)</span>地点以前の近傍をもとに計算するはずなので，このプログラムは不必要な所の値をチェックしていることになります．しかし，これら三つのコストは初期状態では必ずinfを持っているので，問題はありません．</p>
 <p>「終点のコスト」はDTWにおいて系列<span class="math notranslate nohighlight">\(S\)</span>と<span class="math notranslate nohighlight">\(T\)</span>の距離を表します．</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">):</span>
-    <span class="c1"># initialization</span>
-    <span class="n">D</span> <span class="o">=</span> <span class="n">distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
-    <span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># udpate dtw cost matrix</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="n">_window</span> <span class="o">=</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">_window</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">cost</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">cost</span>
-
-<span class="n">dtw_score</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">dtw_score</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.8542729803361633
-[[0.         0.0155105  0.01818326 ... 3.79948131 3.82299672 3.86329532]
- [0.1354685  0.15097899 0.14830623 ... 3.88117139 3.95846521 3.99876382]
- [0.25786411 0.24235361 0.2733746  ... 3.91662998 3.98005159 4.04056222]
- ...
- [2.01421243 1.96768094 1.935157   ... 2.99090004 2.94526908 2.97841721]
- [2.06229868 2.03127768 1.98057048 ... 2.74994787 2.82154953 2.90993438]
- [2.09646958 2.08095908 2.01206861 ... 2.72211717 2.77980348 2.85427298]]
-</pre></div>
-</div>
-</div>
-</div>
+</section>
 </section>
 <section id="warping-path">
 <h2>波形同士のアライメント（warping path）<a class="headerlink" href="#warping-path" title="Link to this heading">#</a></h2>
 <p>ここで作成したコスト行列から，<span class="math notranslate nohighlight">\((0,0)\)</span>地点から<span class="math notranslate nohighlight">\((|S|,|T|)\)</span>地点までの最短経路を見つけることができます．</p>
-<div class="{admonition}【最短経路を見つけるためのルール】 docutils">
-<p>:class: note</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>【最短経路を見つけるためのルール】</p>
 <ol class="arabic simple">
 <li><p><span class="math notranslate nohighlight">\((i,j)\)</span>は<span class="math notranslate nohighlight">\((0,0)\)</span>からスタートします．</p></li>
 <li><p><span class="math notranslate nohighlight">\((i,j)\)</span>から次の場所に移動する場所は<span class="math notranslate nohighlight">\((i+1,j)\)</span>，<span class="math notranslate nohighlight">\((i,j+1)\)</span>，<span class="math notranslate nohighlight">\((i+1,j+1)\)</span>の3点の内でコストが最小のものにします．</p></li>
@@ -752,20 +760,18 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
 </pre></div>
 </div>
-<img alt="../_images/7ee5af1b3b828307c46c4b3e9cc7c20649b3dd080869dca2d9d2dce708444aba.png" src="../_images/7ee5af1b3b828307c46c4b3e9cc7c20649b3dd080869dca2d9d2dce708444aba.png" />
+<img alt="../_images/e66f77ce2d56c0b19cb253b51ff940245ae1c9bb12130baac13d35517841f363.png" src="../_images/e66f77ce2d56c0b19cb253b51ff940245ae1c9bb12130baac13d35517841f363.png" />
 </div>
 </div>
 <p>ここまで「最短経路」と呼んでいたものは，波形同士のアライメント（warping path）が描く経路のことです．</p>
-<div class="{hint}アライメント docutils">
 <blockquote>
 <div><p>アライメントもしくはアラインメント（英: alignment）は、並べる、整列、比較などの意味。転じて以下の意味で使用する。</p>
 <p>引用：<a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%A9%E3%82%A4%E3%83%A1%E3%83%B3%E3%83%88">アライメント - Wikipedia</a></p>
 </div></blockquote>
-</div>
 <p>二つの系列データが同じ系列長でない場合は単純に同じ地点同士の距離を計算するだけでは系列同士の距離を求めることはできませんでした．そのために，二つの系列データのどことどこの距離を計算すればいいのかを決める必要がありました．これがここでアライメントと呼ばれているものです．</p>
 </section>
-<section id="id3">
-<h2>プログラムの全体像<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<section id="id4">
+<h2>プログラムの全体像<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">distance</span><span class="p">):</span>
@@ -826,12 +832,12 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
 </pre></div>
 </div>
-<img alt="../_images/97d2964cf7f8dfe18ad67eec42d75a8fce636a90cc96162da2941261dffea38c.png" src="../_images/97d2964cf7f8dfe18ad67eec42d75a8fce636a90cc96162da2941261dffea38c.png" />
+<img alt="../_images/09270631c9a2a3f44d04bfb231528e0cd9cef1660e411af95012a905738d74e4.png" src="../_images/09270631c9a2a3f44d04bfb231528e0cd9cef1660e411af95012a905738d74e4.png" />
 </div>
 </div>
 </section>
-<section id="id4">
-<h2>参考文献<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="id5">
+<h2>参考文献<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p><a class="reference external" href="https://haripo.com/articles/2017/dynamic-time-warping">Dynamic Time Warping（動的時間伸縮法）</a></p></li>
 </ol>
@@ -905,10 +911,13 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import">パッケージのimport</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">サンプルデータ系列の作成</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">距離行列の作成</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dtw">コスト行列の作成とDTW距離</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dtw">コスト行列の作成とDTW距離</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">この関数の細かい説明</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warping-path">波形同士のアライメント（warping path）</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">プログラムの全体像</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">参考文献</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">プログラムの全体像</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">参考文献</a></li>
 </ul>
   </nav></div>
 
