@@ -197,6 +197,8 @@
 <li class="toctree-l2"><a class="reference internal" href="euclidean_algorithm.html">[問題] ユークリッドの互除法</a></li>
 <li class="toctree-l2"><a class="reference internal" href="palindrome_checker.html">[問題] 回文判定</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlylinkedlist.html">単方向連結リスト（singly linked list）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gradient_descent.html">勾配降下法 (Gradient Descent)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dtw.html">動的時間伸縮法 (Dynamic Time Warping, DTW)</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../numpy/numpy.myst.html">NumPyの基本的な使い方</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -463,7 +465,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -479,6 +483,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">実装例</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -518,9 +530,20 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="dropdown hint admonition">
-<p class="admonition-title">回答例</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibo</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<section id="id2">
+<h2>実装例<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>答えを見る前に自分で実装してみよう</p>
+</aside>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fibo</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">fibo_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
@@ -533,6 +556,20 @@ document.write(`
 </pre></div>
 </div>
 </div>
+</details>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1, 1, 2, 3, 5, 8, 13, 21, 34]
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -590,7 +627,20 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">実装例</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

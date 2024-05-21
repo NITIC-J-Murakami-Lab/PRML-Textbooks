@@ -197,6 +197,8 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">[問題] ユークリッドの互除法</a></li>
 <li class="toctree-l2"><a class="reference internal" href="palindrome_checker.html">[問題] 回文判定</a></li>
 <li class="toctree-l2"><a class="reference internal" href="singlylinkedlist.html">単方向連結リスト（singly linked list）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gradient_descent.html">勾配降下法 (Gradient Descent)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dtw.html">動的時間伸縮法 (Dynamic Time Warping, DTW)</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../numpy/numpy.myst.html">NumPyの基本的な使い方</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -463,7 +465,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -479,6 +483,14 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">実装例</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -491,8 +503,18 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="id1">
 <h1>[問題] ユークリッドの互除法<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
 <p>「最大公約数を求める関数を実装しよう」</p>
-<p>ユークリッドの互除法を使って、２つの数字から最大公約数を求める関数を作成しましょう！</p>
-<p>ユークリッドの互除法について知りたい場合は<a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%83%A6%E3%83%BC%E3%82%AF%E3%83%AA%E3%83%83%E3%83%89%E3%81%AE%E4%BA%92%E9%99%A4%E6%B3%95">このページ</a>のみを読んでアルゴリズムを理解し、プログラムを実装してください。</p>
+<p>ユークリッドの互除法を使って、２つの数字の最大公約数を求める関数を作成しましょう！</p>
+<div class="{admonition}【ユークリッドの互除法】 docutils">
+<p>:class: note</p>
+<p>ユークリッドの互除法は，二つの自然数の最大公約数を求める方法で，「世界最古のアルゴリズム」として知られています．</p>
+<p>【手順】</p>
+<ol class="arabic simple">
+<li><p>2つの自然数(a&gt;b)のうち、大きい数aを小さい数bで割る</p></li>
+<li><p>前の手順の除数bを前の手順の余りで割る</p></li>
+<li><p>これを余りが 0 となるまで繰り返す</p></li>
+<li><p>余りが 0 のときの除数が最大公約数</p></li>
+</ol>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean_algorithm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
@@ -515,20 +537,44 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="dropdown hint admonition">
-<p class="admonition-title">回答例</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean_algorithm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<section id="id2">
+<h2>実装例<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>答えを見る前に自分で実装してみよう</p>
+</aside>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euclidean_algorithm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">while</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>
-        <span class="c1">#a = b</span>
-        <span class="c1">#b = c</span>
         <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span><span class="n">c</span>
     <span class="k">return</span> <span class="n">b</span>
+
     
-<span class="n">euclidean_algorithm</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">euclidean_algorithm</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</details>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>28
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -586,7 +632,20 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">実装例</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

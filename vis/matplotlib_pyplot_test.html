@@ -197,6 +197,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../algo/euclidean_algorithm.html">[問題] ユークリッドの互除法</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algo/palindrome_checker.html">[問題] 回文判定</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../algo/singlylinkedlist.html">単方向連結リスト（singly linked list）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algo/gradient_descent.html">勾配降下法 (Gradient Descent)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../algo/dtw.html">動的時間伸縮法 (Dynamic Time Warping, DTW)</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../numpy/numpy.myst.html">NumPyの基本的な使い方</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -543,10 +545,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x1275f7090&gt;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x139681e10&gt;]
 </pre></div>
 </div>
-<img alt="../_images/a9f65fadc54201a2aeced22a0dfdd0317c96ffd685486dc669fb9d323d1fb576.png" src="../_images/a9f65fadc54201a2aeced22a0dfdd0317c96ffd685486dc669fb9d323d1fb576.png" />
+<img alt="../_images/4122abf4e78a2d73dd9bed4c0c2ec89cf2cbbe4a53e67e825487b2ea731f1e3a.png" src="../_images/4122abf4e78a2d73dd9bed4c0c2ec89cf2cbbe4a53e67e825487b2ea731f1e3a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -565,10 +567,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x12777c0d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1397c6550&gt;
 </pre></div>
 </div>
-<img alt="../_images/d9f76ed5713e7a4fe45ebdd1b99a51b95a719f3a923b842e617011f29d826dca.png" src="../_images/d9f76ed5713e7a4fe45ebdd1b99a51b95a719f3a923b842e617011f29d826dca.png" />
+<img alt="../_images/f6ab480819dda7b2e35039ec8849e3798b04698fc6ad13d41bf16d67e69961ca.png" src="../_images/f6ab480819dda7b2e35039ec8849e3798b04698fc6ad13d41bf16d67e69961ca.png" />
 </div>
 </div>
 </section>
@@ -589,7 +591,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1277ab710&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1397b1390&gt;
 </pre></div>
 </div>
 <img alt="../_images/5d9e4977d1620a281ec3d08c6a76602db9dca85837d13662ebd1fa1cf4f5c592.png" src="../_images/5d9e4977d1620a281ec3d08c6a76602db9dca85837d13662ebd1fa1cf4f5c592.png" />
@@ -607,10 +609,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x1328a4290&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x1396818d0&gt;
 </pre></div>
 </div>
-<img alt="../_images/f8d1e60f2779e9005ebf4442556f81b4336ce1ff851128f995647b08b27463c0.png" src="../_images/f8d1e60f2779e9005ebf4442556f81b4336ce1ff851128f995647b08b27463c0.png" />
+<img alt="../_images/f48b11e7ef22df998e39e2f93e2854e9ff014fd31cb639094769b87629b2939a.png" src="../_images/f48b11e7ef22df998e39e2f93e2854e9ff014fd31cb639094769b87629b2939a.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -626,10 +628,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x132d78890&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection at 0x13967d590&gt;
 </pre></div>
 </div>
-<img alt="../_images/3f0f65927931b3a62322d38ec57d614b20c9ae8cbd50858f872324e6fffe899f.png" src="../_images/3f0f65927931b3a62322d38ec57d614b20c9ae8cbd50858f872324e6fffe899f.png" />
+<img alt="../_images/0b112c9b248b1e1a92233f56df34bfc293200e323acc29cd1d485886dc71e6b6.png" src="../_images/0b112c9b248b1e1a92233f56df34bfc293200e323acc29cd1d485886dc71e6b6.png" />
 </div>
 </div>
 </section>
@@ -645,12 +647,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>([&lt;matplotlib.patches.Wedge at 0x1275016d0&gt;,
-  &lt;matplotlib.patches.Wedge at 0x132ddc450&gt;,
-  &lt;matplotlib.patches.Wedge at 0x132ddd590&gt;,
-  &lt;matplotlib.patches.Wedge at 0x132ddea90&gt;,
-  &lt;matplotlib.patches.Wedge at 0x132ddfe50&gt;,
-  &lt;matplotlib.patches.Wedge at 0x132de9210&gt;],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>([&lt;matplotlib.patches.Wedge at 0x1398c9b50&gt;,
+  &lt;matplotlib.patches.Wedge at 0x1398dea10&gt;,
+  &lt;matplotlib.patches.Wedge at 0x1399de090&gt;,
+  &lt;matplotlib.patches.Wedge at 0x1399df450&gt;,
+  &lt;matplotlib.patches.Wedge at 0x1399e8a10&gt;,
+  &lt;matplotlib.patches.Wedge at 0x1399ea010&gt;],
  [Text(0.7778174593052024, 0.7778174593052023, &#39;A&#39;),
   Text(-0.42095177560159874, 1.0162674857624154, &#39;B&#39;),
   Text(-0.9379041861706844, 0.5747484124062514, &#39;C&#39;),
@@ -700,7 +702,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x132f3c950&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x13975eb50&gt;
 </pre></div>
 </div>
 <img alt="../_images/e9af1d9a44d7c8b86add89eedfcc5211daa32b58180aec36b0d61297b7a661f7.png" src="../_images/e9af1d9a44d7c8b86add89eedfcc5211daa32b58180aec36b0d61297b7a661f7.png" />
@@ -721,7 +723,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x13385f0d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x139b27cd0&gt;
 </pre></div>
 </div>
 <img alt="../_images/89ca4a3b3d1b8a5f0e4864bb977656e85270c867e6c7a709627365ff02da1b8d.png" src="../_images/89ca4a3b3d1b8a5f0e4864bb977656e85270c867e6c7a709627365ff02da1b8d.png" />
@@ -753,7 +755,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1339850d0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x139bb0390&gt;
 </pre></div>
 </div>
 <img alt="../_images/c8dee0fa43c5042ca6c16427a353c477c474a9b23c427f0fb2beecf59f7eec4c.png" src="../_images/c8dee0fa43c5042ca6c16427a353c477c474a9b23c427f0fb2beecf59f7eec4c.png" />
@@ -787,10 +789,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x1339e7710&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x13ab78390&gt;
 </pre></div>
 </div>
-<img alt="../_images/9e81eb4e49c4ac3b58575a1c2209ab915f4e66c107e1c9949617cf09aabefc52.png" src="../_images/9e81eb4e49c4ac3b58575a1c2209ab915f4e66c107e1c9949617cf09aabefc52.png" />
+<img alt="../_images/61da4751c8ae887713159f7655e9f491f6c51f8cc5f60c626d4374bacc9cb6d4.png" src="../_images/61da4751c8ae887713159f7655e9f491f6c51f8cc5f60c626d4374bacc9cb6d4.png" />
 </div>
 </div>
 </section>
@@ -1807,7 +1809,7 @@ if (IPython.notebook.kernel !== null) {
         mpl.mpl_figure_comm
     );
 }
-</script><div class="output text_html"><div id='1763a84f-0274-476d-86c6-4e94722d3901'></div></div></div>
+</script><div class="output text_html"><div id='8a221e88-bd93-4e9e-9316-9e0aafdd853c'></div></div></div>
 </div>
 <p>作成されたanim.gifを表示してみる．<br />
 <img alt="" src="../_images/anim1.gif" /></p>
