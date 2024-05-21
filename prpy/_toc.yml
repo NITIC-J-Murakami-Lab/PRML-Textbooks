@@ -25,6 +25,8 @@ parts:
       - file: algo/euclidean_algorithm
       - file: algo/palindrome_checker
       - file: algo/singlylinkedlist
+      - file: algo/gradient_descent
+      - file: algo/dtw
     - file: numpy/numpy.myst.md
       sections:
       - file: numpy/numpy_basis1_初期化と簡単な演算
