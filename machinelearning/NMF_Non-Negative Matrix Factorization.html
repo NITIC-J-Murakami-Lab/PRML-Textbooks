@@ -520,12 +520,12 @@ document.write(`
 <ol class="arabic simple">
 <li><p>乗法更新式</p>
 <ul class="simple">
-<li><p>損失関数として定義するユークリッド距離やIダイバージェンスを，パラメタ更新の度に小さくするような更新式を利用します．これは数学的に損失関数が単調減少することが証明されています．<span id="id1">[<a class="reference internal" href="../neuralnet/word2vec.html#id24" title="D D Lee and H S Seung. Learning the parts of objects by non-negative matrix factorization. Nature, 401(6755):788–791, October 1999. doi:10.1038/44565.">Lee and Seung, 1999</a>, <a class="reference internal" href="../neuralnet/word2vec.html#id26" title="Daniel Lee and H Sebastian Seung. Algorithms for non-negative matrix factorization. In T Leen, T Dietterich, and V Tresp, editors, Advances in Neural Information Processing Systems, volume 13. MIT Press, 2000.">Lee and Seung, 2000</a>]</span></p></li>
+<li><p>損失関数として定義するユークリッド距離やIダイバージェンスを，パラメタ更新の度に小さくするような更新式を利用します．これは数学的に損失関数が単調減少することが証明されています．<span id="id1">[<a class="reference internal" href="../neuralnet/word2vec.html#id25" title="D D Lee and H S Seung. Learning the parts of objects by non-negative matrix factorization. Nature, 401(6755):788–791, October 1999. doi:10.1038/44565.">Lee and Seung, 1999</a>, <a class="reference internal" href="../neuralnet/word2vec.html#id27" title="Daniel Lee and H Sebastian Seung. Algorithms for non-negative matrix factorization. In T Leen, T Dietterich, and V Tresp, editors, Advances in Neural Information Processing Systems, volume 13. MIT Press, 2000.">Lee and Seung, 2000</a>]</span></p></li>
 </ul>
 </li>
 <li><p>勾配法</p>
 <ul class="simple">
-<li><p>Neural Netの訓練でも利用されるアルゴリズムです．そのまま使うと<span class="math notranslate nohighlight">\(W\)</span>や<span class="math notranslate nohighlight">\(H\)</span>には0未満の値が含まれてしまうので，0未満になる場合は0で置き換えるような処理を追加して利用します．収束するとは限りませんが，実装は簡単です．<span id="id2">[<a class="reference internal" href="#id9" title="Chih-Jen Lin. Projected gradient methods for nonnegative matrix factorization. Neural Comput., 19(10):2756–2779, October 2007. doi:10.1162/neco.2007.19.10.2756.">Lin, 2007</a>]</span></p></li>
+<li><p>Neural Netの訓練でも利用されるアルゴリズムです．そのまま使うと<span class="math notranslate nohighlight">\(W\)</span>や<span class="math notranslate nohighlight">\(H\)</span>には0未満の値が含まれてしまうので，0未満になる場合は0で置き換えるような処理を追加して利用します．収束するとは限りませんが，実装は簡単です．<span id="id2">[<a class="reference internal" href="#id10" title="Chih-Jen Lin. Projected gradient methods for nonnegative matrix factorization. Neural Comput., 19(10):2756–2779, October 2007. doi:10.1162/neco.2007.19.10.2756.">Lin, 2007</a>]</span></p></li>
 </ul>
 </li>
 </ol>
@@ -745,15 +745,15 @@ document.write(`
 <h3>論文等<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <div class="docutils container" id="id6">
 <div role="list" class="citation-list">
-<div class="citation" id="id10" role="doc-biblioentry">
+<div class="citation" id="id11" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">LS99</a><span class="fn-bracket">]</span></span>
 <p>D D Lee and H S Seung. Learning the parts of objects by non-negative matrix factorization. <em>Nature</em>, 401(6755):788–791, October 1999. <a class="reference external" href="https://doi.org/10.1038/44565">doi:10.1038/44565</a>.</p>
 </div>
-<div class="citation" id="id12" role="doc-biblioentry">
+<div class="citation" id="id13" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">LS00</a><span class="fn-bracket">]</span></span>
 <p>Daniel Lee and H Sebastian Seung. Algorithms for non-negative matrix factorization. In T Leen, T Dietterich, and V Tresp, editors, <em>Advances in Neural Information Processing Systems</em>, volume 13. MIT Press, 2000.</p>
 </div>
-<div class="citation" id="id9" role="doc-biblioentry">
+<div class="citation" id="id10" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">Lin07</a><span class="fn-bracket">]</span></span>
 <p>Chih-Jen Lin. Projected gradient methods for nonnegative matrix factorization. <em>Neural Comput.</em>, 19(10):2756–2779, October 2007. <a class="reference external" href="https://doi.org/10.1162/neco.2007.19.10.2756">doi:10.1162/neco.2007.19.10.2756</a>.</p>
 </div>

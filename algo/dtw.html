@@ -520,16 +520,52 @@ document.write(`
 <img alt="" src="https://rtavenar.github.io/blog/fig/dtw_path_matrix.svg" /></p>
 <p>出典：<a class="reference external" href="https://rtavenar.github.io/blog/dtw.html">An introduction to Dynamic Time Warping | Romain Tavenard</a></p>
 </div></blockquote>
-<blockquote>
-<div><p>DTWについては歴史が古く様々な記事でわかりやすく説明されています．簡単に説明すると，以下のステップで構成されるアルゴリズムである．</p>
+<div class="note admonition">
+<p class="admonition-title">DTWの計算方法</p>
 <ol class="arabic simple">
-<li><p>2つの時系列データ<span class="math notranslate nohighlight">\(X = \{x_0, x_1, .., x_m\}\)</span>,と<span class="math notranslate nohighlight">\(Y = \{y_0, y_1, .., y_n\}\)</span>を用意する．</p></li>
-<li><p>各点について総当たりで距離(2乗誤差や絶対誤差など)を計算し、行が<span class="math notranslate nohighlight">\(X\)</span>，列が<span class="math notranslate nohighlight">\(Y\)</span>，要素が点同士の距離となる行列<span class="math notranslate nohighlight">\(D\)</span>を作成する．</p></li>
-<li><p><span class="math notranslate nohighlight">\(D[0][0]\)</span>から<span class="math notranslate nohighlight">\(D[m][n]\)</span>までのパスの内，通る行列の要素の合計が最小となるパス(=Warping Path)を探索する．その最小となるパスの要素の合計がDTW距離である．</p></li>
+<li><p>2 つの時系列の各点の距離(データの次元にもよるが、今回は絶対値)を計算した(コスト)行列を作成</p></li>
 </ol>
-<p>これを実現するために動的計画法を用いて計算すると効率が良いアルゴリズムである．この場合この場合<span class="math notranslate nohighlight">\(D[m][n]\)</span>の要素がDTW距離である．</p>
-<p>引用：<a class="reference external" href="https://qiita.com/KaijiS/items/13ffda7f2490ed879e52">Go言語で動的時間伸縮法(Dynamic-Time-Warping)を実装しpython3から呼び出せるようにした #Python3 - Qiita</a></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp; \text { time series } T: t_0, t_1, \ldots, t_N, \\
+&amp; \text { time series } S: s_0, s_1, \ldots, s_M \text {, } \\
+&amp; \boldsymbol{W}:=(\delta(i, j)) \\
+&amp; \text { where } \delta\left(t_i, s_j\right):=\left|t_i-s_j\right|, i \in\{0,1, \ldots, N\}, j \in\{0,1, \ldots, M\} \\
+&amp;
+\end{aligned}
+\end{split}\]</div>
+<ol class="arabic simple" start="2">
+<li><p>この行列上を <span class="math notranslate nohighlight">\((0,0)\)</span> から <span class="math notranslate nohighlight">\((\mathrm{N}, \mathrm{M})\)</span> を通るパスで単調性増加性を満たすものを考える。</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{r}
+\text { path } \tau: \tau(0)=(0,0), \tau(1), \ldots, \tau(p)=\left(p_i, p_j\right), \ldots, \tau(K), \\
+\text { where } p_i \in\{0,1, \ldots, N\}, p_j \in\{0,1, \ldots, M\} .
+\end{array}
+\end{split}\]</div>
+<p>特に、このpath <span class="math notranslate nohighlight">\(\tau\)</span> で単調性増加性を満たすようなものを考える。</p>
+<div class="math notranslate nohighlight">
+\[
+\tau(p) \leq \tau(q) \Longleftrightarrow{ }^{\text {def }} p_i \leq q_i \text { or } p_j \leq q_j \text {. if } p \leq q \text {, then } \tau(p) \leq \tau(q) .
+\]</div>
+<ol class="arabic simple" start="3">
+<li><p>この pathが通る行列 <span class="math notranslate nohighlight">\(\boldsymbol{W}\)</span> の要素の和で最少となる値をDTWのコストとする。</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\operatorname{cost}(\tau) &amp; :=\sum_p \delta\left(p_i, p_j\right) \\
+\operatorname{Dist}(T, S) &amp; :=\min _\tau \operatorname{cost}(\tau)
+\end{aligned}
+\end{split}\]</div>
+<blockquote>
+<div><p>引用：<a class="reference external" href="https://qiita.com/tee_shizuoka/items/2ac9e6eda39664ca8345">時系列データを比較する方法-Derivative DTW, DTW- #Python - Qiita | &#64;tee_shizuoka</a></p>
 </div></blockquote>
+</div>
+<div class="note admonition">
+<p class="admonition-title">疑似コード</p>
 <p>このDTWについてはWikipediaにわかりやすい疑似コードが載っています．</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">DTWDistance</span><span class="p">(</span><span class="n">s</span><span class="o">:</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="p">[</span><span class="mf">1.</span><span class="p">.</span><span class="n">n</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="o">:</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="p">[</span><span class="mf">1.</span><span class="p">.</span><span class="n">m</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nl">DTW</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="p">[</span><span class="mf">0.</span><span class="p">.</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mf">0.</span><span class="p">.</span><span class="n">m</span><span class="p">]</span>
@@ -553,13 +589,13 @@ document.write(`
 <blockquote>
 <div><p>出典：<a class="reference external" href="https://en.wikipedia.org/wiki/Dynamic_time_warping">Dynamic time warping - Wikipedia</a></p>
 </div></blockquote>
+</div>
 <p>今回はこれをPythonで実装してみましょう．</p>
 <section id="import">
 <h2>パッケージのimport<a class="headerlink" href="#import" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> 
 <span class="kn">import</span> <span class="nn">matplotlib_fontja</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -573,19 +609,23 @@ document.write(`
 <p>DTWは二つの系列データの系列長（長さ）が同じでない場合でも計算することができるので，ここでは別々の長さの系列データを適当に作成します．</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">20</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SEED</span> <span class="o">=</span> <span class="mi">2024_05_22</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">len_S</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">len_S</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">len_S</span><span class="p">))</span> 
+<span class="n">len_T</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">len_T</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">len_T</span><span class="p">))</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;二つの系列データ&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">S</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">S</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;系列$S$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">T</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;系列$T$&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f5ca63fcfe279924643cc11be1da1fbc7b754b81824c95654a397a146bd40bb5.png" src="../_images/f5ca63fcfe279924643cc11be1da1fbc7b754b81824c95654a397a146bd40bb5.png" />
+<img alt="../_images/fa0b67aee886d9be1fad17252b26ce5506034762e3813fb635f8d894c4839ce4.png" src="../_images/fa0b67aee886d9be1fad17252b26ce5506034762e3813fb635f8d894c4839ce4.png" />
 </div>
 </div>
 </section>
@@ -602,20 +642,20 @@ D(s_i,t_j) = |s_i-t_j|
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">distance</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">seq1</span><span class="p">,</span><span class="n">seq2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">seq1</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">seq2</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">D</span><span class="o">:=</span><span class="n">distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">D</span><span class="o">:=</span><span class="n">distance</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">T</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[0.         0.01711757 0.02893678 ... 0.04951679 0.07565899 0.07002577]
- [0.02438822 0.00727065 0.053325   ... 0.07390501 0.10004721 0.09441399]
- [0.00435574 0.01276182 0.03329253 ... 0.05387253 0.08001473 0.07438151]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[0.06366165 0.04932427 0.00278626 ... 0.07983255 0.01176223 0.00286044]
+ [0.1752891  0.16095172 0.11441371 ... 0.0317949  0.09986522 0.11448789]
+ [0.06316494 0.07750232 0.12404033 ... 0.20665914 0.13858882 0.12396615]
  ...
- [0.21059276 0.22771032 0.18165597 ... 0.16107597 0.13493377 0.14056699]
- [0.01231739 0.02943496 0.01661939 ... 0.03719939 0.0633416  0.05770837]
- [0.06555691 0.08267448 0.03662013 ... 0.01604013 0.01010207 0.00446885]]
-(50, 70)
+ [0.34873005 0.33439267 0.28785466 ... 0.20523585 0.27330617 0.28792884]
+ [0.03413731 0.01979993 0.02673809 ... 0.10935689 0.04128657 0.02666391]
+ [0.06568638 0.051349   0.00481099 ... 0.07780782 0.0097375  0.00488517]]
+(50, 80)
 </pre></div>
 </div>
 </div>
@@ -624,9 +664,8 @@ D(s_i,t_j) = |s_i-t_j|
 <section id="dtw">
 <h2>コスト行列の作成とDTW距離<a class="headerlink" href="#dtw" title="Link to this heading">#</a></h2>
 <p>DTWでは，最終的に二つの系列の距離を求めます．この過程で<span class="math notranslate nohighlight">\((s_0, t_0)\)</span>を始点，<span class="math notranslate nohighlight">\((s_{|S|},t_{|T|})\)</span>を終点に，この二点をつなげるコストの低いパスを見つけます．このコストを作成する関数を作成しましょう．</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>【コスト行列作成のための前提条件】</p>
+<div class="note admonition">
+<p class="admonition-title">コスト行列作成のための前提条件</p>
 <ul class="simple">
 <li><p>cost行列は<span class="math notranslate nohighlight">\(|S|\times|T|\)</span>の行列になります．</p></li>
 <li><p>cost行列の各要素は，<strong>値が小さい方が良い</strong> ので，初期化の際には inf で埋めます．</p></li>
@@ -650,7 +689,7 @@ D(s_i,t_j) = |s_i-t_j|
             <span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">_window</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cost</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">cost</span>
 
-<span class="n">dtw_score</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">dtw_score</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">dtw_score</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
@@ -658,14 +697,14 @@ D(s_i,t_j) = |s_i-t_j|
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.9862043384581893
-[[0.         0.01711757 0.04605435 ... 3.51918243 3.59484142 3.66486718]
- [0.02438822 0.00727065 0.06059566 ... 3.51885969 3.6189069  3.6892554 ]
- [0.02874396 0.02003248 0.04056318 ... 3.47892402 3.55893875 3.63332026]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.3086055971097115
+[[0.06366165 0.11298592 0.11577218 ... 4.27986265 4.29162488 4.29448532]
+ [0.23895075 0.22461337 0.22739963 ... 4.20949171 4.30935694 4.40611277]
+ [0.30211569 0.30211569 0.3486537  ... 4.2813787  4.34808053 4.43332309]
  ...
- [2.41778965 2.43490721 2.31618662 ... 2.95016932 2.92402711 2.94669423]
- [2.43010704 2.4472246  2.33280601 ... 2.98736871 2.98736871 2.98173549]
- [2.49566395 2.51278152 2.36942614 ... 2.99339721 2.99747078 2.98620434]]
+ [3.51312953 3.59099378 3.07635315 ... 3.26243385 3.39803999 3.43980682]
+ [3.47394413 3.49374406 3.10309123 ... 3.37179075 3.30372043 3.33038433]
+ [3.39607071 3.44741972 3.10790223 ... 3.39246199 3.31345792 3.3086056 ]]
 </pre></div>
 </div>
 </div>
@@ -707,9 +746,8 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 <section id="warping-path">
 <h2>波形同士のアライメント（warping path）<a class="headerlink" href="#warping-path" title="Link to this heading">#</a></h2>
 <p>ここで作成したコスト行列から，<span class="math notranslate nohighlight">\((0,0)\)</span>地点から<span class="math notranslate nohighlight">\((|S|,|T|)\)</span>地点までの最短経路を見つけることができます．</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>【最短経路を見つけるためのルール】</p>
+<div class="note admonition">
+<p class="admonition-title">最短経路を見つけるためのルール</p>
 <ol class="arabic simple">
 <li><p><span class="math notranslate nohighlight">\((i,j)\)</span>は<span class="math notranslate nohighlight">\((0,0)\)</span>からスタートします．</p></li>
 <li><p><span class="math notranslate nohighlight">\((i,j)\)</span>から次の場所に移動する場所は<span class="math notranslate nohighlight">\((i+1,j)\)</span>，<span class="math notranslate nohighlight">\((i,j+1)\)</span>，<span class="math notranslate nohighlight">\((i+1,j+1)\)</span>の3点の内でコストが最小のものにします．</p></li>
@@ -727,7 +765,7 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
     <span class="c1"># update path matrix</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
     <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-
+    <span class="n">s_size</span><span class="p">,</span><span class="n">t_size</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">_window</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>
@@ -742,11 +780,11 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
             <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">_cost</span>
         <span class="c1"># breaking</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">s_size</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span><span class="n">t_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="k">break</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="n">s_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">:]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">:]</span>
-        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span><span class="n">t_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">:,</span><span class="n">j</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">path</span>
 
@@ -760,7 +798,7 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
 </pre></div>
 </div>
-<img alt="../_images/e66f77ce2d56c0b19cb253b51ff940245ae1c9bb12130baac13d35517841f363.png" src="../_images/e66f77ce2d56c0b19cb253b51ff940245ae1c9bb12130baac13d35517841f363.png" />
+<img alt="../_images/12202c6f0dbd3e0c2934693a603adfdbdab6a29cadb731cc934f2d9180aa0be0.png" src="../_images/12202c6f0dbd3e0c2934693a603adfdbdab6a29cadb731cc934f2d9180aa0be0.png" />
 </div>
 </div>
 <p>ここまで「最短経路」と呼んでいたものは，波形同士のアライメント（warping path）が描く経路のことです．</p>
@@ -792,7 +830,7 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
     <span class="c1"># update path matrix</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
     <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-
+    <span class="n">s_size</span><span class="p">,</span><span class="n">t_size</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
     <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">_window</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>
@@ -807,20 +845,24 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
             <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">_cost</span>
         <span class="c1"># breaking</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">s_size</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span><span class="n">t_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="k">break</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="n">s_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">:]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">:]</span>
-        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span><span class="n">t_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">path</span><span class="p">[</span><span class="n">i</span><span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">:,</span><span class="n">j</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">path</span>
 
 <span class="c1"># 適当な系列データを二つ用意</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">20</span><span class="p">))</span>
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">2024_05_22_2</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">len_S</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">len_T</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">S</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">len_S</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">len_S</span><span class="p">))</span> 
+<span class="n">T</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">len_T</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span> <span class="n">len_T</span><span class="p">))</span>
 
 <span class="c1"># DTWの計算</span>
-<span class="n">dtw_score</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">dtw_score</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
 
 <span class="c1"># 最短経路を表示</span>
 <span class="n">path</span> <span class="o">=</span> <span class="n">get_path</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
@@ -832,14 +874,20 @@ cost行列の各要素は，<strong>値が小さい方が良い</strong> ので�
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
 </pre></div>
 </div>
-<img alt="../_images/09270631c9a2a3f44d04bfb231528e0cd9cef1660e411af95012a905738d74e4.png" src="../_images/09270631c9a2a3f44d04bfb231528e0cd9cef1660e411af95012a905738d74e4.png" />
+<img alt="../_images/0abe2288953edfe61fe90c514c34c6cd20ecd4e7f793ce7cc74edb2c1351b235.png" src="../_images/0abe2288953edfe61fe90c514c34c6cd20ecd4e7f793ce7cc74edb2c1351b235.png" />
 </div>
 </div>
 </section>
 <section id="id5">
 <h2>参考文献<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p><a class="reference external" href="https://haripo.com/articles/2017/dynamic-time-warping">Dynamic Time Warping（動的時間伸縮法）</a></p></li>
+<li><p><a class="reference external" href="https://haripo.com/articles/2017/dynamic-time-warping">Dynamic Time Warping（動的時間伸縮法）- haripo.com</a></p></li>
+<li><p><a class="reference external" href="https://qiita.com/KaijiS/items/13ffda7f2490ed879e52">Go言語で動的時間伸縮法(Dynamic-Time-Warping)を実装しpython3から呼び出せるようにした #Python3 - Qiita</a></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Dynamic_time_warping">Dynamic time warping - Wikipedia</a></p></li>
+<li><p><a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%A9%E3%82%A4%E3%83%A1%E3%83%B3%E3%83%88">アライメント - Wikipedia</a></p></li>
+<li><p><a class="reference external" href="https://qiita.com/tee_shizuoka/items/2ac9e6eda39664ca8345">時系列データを比較する方法-Derivative DTW, DTW- #Python - Qiita | &#64;tee_shizuoka</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=7sWtbayTUA0&amp;amp;ab_channel=K_DM%E3%80%90%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92xPython%E3%80%91">DTWで長さの違う波形を比較しよう！ - YouTube</a></p></li>
+<li><p><a class="reference external" href="https://rtavenar.github.io/blog/dtw.html">An introduction to Dynamic Time Warping</a></p></li>
 </ol>
 </section>
 </section>

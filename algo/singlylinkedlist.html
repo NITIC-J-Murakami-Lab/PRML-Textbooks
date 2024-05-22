@@ -493,6 +493,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#append">要素の追加（append）</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remove">要素の削除（remove）</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#singlylinkedlist">SinglyLinkedListの全プログラム</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">参考文献</a></li>
 </ul>
             </nav>
         </div>
@@ -515,6 +516,10 @@ document.write(`
 <p><img alt="リストの例 - 3つの整数値からなる線形リスト" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Singly-linked-list.svg/2880px-Singly-linked-list.svg.png" /></p>
 <p>Pythonではポインターを直接扱うことはないので，これを実装するならばC言語のようなポインターを直接扱えるプログラミング言語の方が適切かもしれません．（しかし）ここでは簡単のためにPythonのクラスを使って実装していきます．<br />
 リストの構成要素を<code class="docutils literal notranslate"><span class="pre">Node</span></code>クラス，リスト自体を<code class="docutils literal notranslate"><span class="pre">SinglyLinkedList</span></code>クラスで実装します．</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>以降のプログラムは<a class="reference external" href="https://qiita.com/tsudaryo1715/items/12c4848028716ab015bb">連結リストを学ぶ -Python- #Python - Qiita</a>のプログラムを参考にしています．大方同じです．</p>
+</aside>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 型ヒントのためのimport</span>
@@ -541,8 +546,8 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="hint admonition">
+<p class="admonition-title">__str__メソッド</p>
 <p><code class="docutils literal notranslate"><span class="pre">__str__</span></code>は<code class="docutils literal notranslate"><span class="pre">print</span></code>関数にこのインスタンスを渡した時に表示される文字列を変更するための特殊なメソッドです．</p>
 <p><code class="docutils literal notranslate"><span class="pre">__str__</span></code>がない場合はクラスの名前とメモリ番地が表示されます．</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -572,17 +577,16 @@ document.write(`
             <span class="k">return</span> <span class="kc">None</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>【headとtailプロパティ】<br />
-<code class="docutils literal notranslate"><span class="pre">self.head</span></code>はリストが空の場合は<code class="docutils literal notranslate"><span class="pre">None</span></code>を持ちます．また，<code class="docutils literal notranslate"><span class="pre">self.head</span> <span class="pre">is</span> <span class="pre">None</span></code>ならば末尾も同様に<code class="docutils literal notranslate"><span class="pre">None</span></code>なので，末尾要素を返す<code class="docutils literal notranslate"><span class="pre">tail</span></code>プロパティも追加しておきます．ここで<code class="docutils literal notranslate"><span class="pre">tail</span></code>をインスタンス変数ではなくプロパティとして宣言したのは，この方がこの次のappendメソッドの実装時に都合が良いからです．</p>
+<div class="note admonition">
+<p class="admonition-title">headとtailプロパティ</p>
+<p><code class="docutils literal notranslate"><span class="pre">self.head</span></code>はリストが空の場合は<code class="docutils literal notranslate"><span class="pre">None</span></code>を持ちます．また，<code class="docutils literal notranslate"><span class="pre">self.head</span> <span class="pre">is</span> <span class="pre">None</span></code>ならば末尾も同様に<code class="docutils literal notranslate"><span class="pre">None</span></code>なので，末尾要素を返す<code class="docutils literal notranslate"><span class="pre">tail</span></code>プロパティも追加しておきます．ここで<code class="docutils literal notranslate"><span class="pre">tail</span></code>をインスタンス変数ではなくプロパティとして宣言したのは，この方がこの次のappendメソッドの実装時に都合が良いからです．</p>
 </div>
 </section>
 <section id="append">
 <h2>要素の追加（append）<a class="headerlink" href="#append" title="Link to this heading">#</a></h2>
 <p>リストの末尾に新しいノードを追加するappendメソッドを実装します．</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="note admonition">
+<p class="admonition-title">appendメソッド</p>
 <p>【appendメソッド】</p>
 <ol class="arabic simple">
 <li><p>もしも<code class="docutils literal notranslate"><span class="pre">self.head</span> <span class="pre">is</span> <span class="pre">None</span></code>（先頭要素が空）ならば，先頭要素に直接新しいノードを登録します．</p></li>
@@ -624,10 +628,9 @@ document.write(`
 <section id="remove">
 <h2>要素の削除（remove）<a class="headerlink" href="#remove" title="Link to this heading">#</a></h2>
 <p>任意の値を持ったノードをリストから削除する<code class="docutils literal notranslate"><span class="pre">remove</span></code>メソッドを実装します．</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>【removeメソッド】<br />
-ここでは評価対象ノード<code class="docutils literal notranslate"><span class="pre">current</span></code>と，今の評価対象ノードの一つ前のノード<code class="docutils literal notranslate"><span class="pre">previous</span></code>を，リストの先頭から一つづつずらしながら，「<code class="docutils literal notranslate"><span class="pre">current</span></code>が削除対象か」をチェックしていきます．</p>
+<div class="note admonition">
+<p class="admonition-title">removeメソッド</p>
+<p>ここでは評価対象ノード<code class="docutils literal notranslate"><span class="pre">current</span></code>と，今の評価対象ノードの一つ前のノード<code class="docutils literal notranslate"><span class="pre">previous</span></code>を，リストの先頭から一つづつずらしながら，「<code class="docutils literal notranslate"><span class="pre">current</span></code>が削除対象か」をチェックしていきます．</p>
 <ul class="simple">
 <li><p>「<code class="docutils literal notranslate"><span class="pre">current</span></code>が削除対象」ならば前ノードのポインター<code class="docutils literal notranslate"><span class="pre">previous.next</span></code>を評価対象の次のノードに指定します．</p></li>
 <li><p>ただし，「先頭要素が削除対象」ならば<code class="docutils literal notranslate"><span class="pre">previous</span></code>は空なので，<code class="docutils literal notranslate"><span class="pre">self.head</span></code>を直接「評価対象の次のノード」で上書きします．</p></li>
@@ -801,6 +804,16 @@ document.write(`
 </div>
 </div>
 </section>
+<section id="id3">
+<h2>参考文献<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://qiita.com/tsudaryo1715/items/12c4848028716ab015bb">連結リストを学ぶ -Python- #Python - Qiita</a></p></li>
+<li><p><a class="reference external" href="https://ja.wikipedia.org/wiki/%E9%80%A3%E7%B5%90%E3%83%AA%E3%82%B9%E3%83%88">連結リスト - Wikipedia</a></p></li>
+<li><p><a class="reference external" href="http://ysserve.wakasato.jp/sugsi/Lecture/c2/e_07-02-01.html#:~:text=%E7%B7%9A%E5%BD%A2%E3%83%AA%E3%82%B9%E3%83%88%E3%81%A8%E3%81%AF%E5%90%8C%E3%81%98,%E3%81%AA%E3%81%84%E3%81%A8%E3%81%84%E3%81%91%E3%81%BE%E3%81%9B%E3%82%93%E3%80%82">連結リスト - http://ysserve.wakasato.jp/</a></p></li>
+<li><p><a class="reference external" href="https://www.momoyama-usagi.com/entry/info-algo-list">うさぎでもわかる配列と連結リスト | 工業大学生ももやまのうさぎ塾</a></p></li>
+<li><p><a class="reference external" href="https://zenn.dev/masahiro_toba/books/436c018f5cd4e2/viewer/af0195">配列と連結リスト｜アルゴリズム、データ構造の基本</a></p></li>
+</ol>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -872,6 +885,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#append">要素の追加（append）</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remove">要素の削除（remove）</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#singlylinkedlist">SinglyLinkedListの全プログラム</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">参考文献</a></li>
 </ul>
   </nav></div>
 
