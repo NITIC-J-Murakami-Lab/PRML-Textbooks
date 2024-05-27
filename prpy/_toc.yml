@@ -77,3 +77,4 @@ parts:
         - file: neuralnet/cbow.myst.md
         - file: neuralnet/skip_gram
     - file: neuralnet/cnn
+    - file: neuralnet/rnn

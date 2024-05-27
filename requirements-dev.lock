@@ -158,6 +158,8 @@ mdit-py-plugins==0.4.0
     # via myst-parser
 mdurl==0.1.2
     # via markdown-it-py
+ml-dtypes==0.2.0
+    # via prpy
 mpmath==1.3.0
     # via sympy
 mypy==1.10.0
@@ -190,6 +192,7 @@ numpy==1.26.4
     # via contourpy
     # via cufflinks
     # via matplotlib
+    # via ml-dtypes
     # via numba
     # via opencv-python
     # via palmerpenguins
@@ -307,6 +310,9 @@ scipy==1.13.0
     # via umap-learn
 seaborn==0.13.2
     # via prpy
+setuptools==69.5.1
+    # via cufflinks
+    # via sphinx-togglebutton
 six==1.16.0
     # via asttokens
     # via cufflinks
@@ -436,6 +442,3 @@ widgetsnbextension==4.0.10
     # via ipywidgets
 zipp==3.18.1
     # via importlib-metadata
-setuptools==69.5.1
-    # via cufflinks
-    # via sphinx-togglebutton
