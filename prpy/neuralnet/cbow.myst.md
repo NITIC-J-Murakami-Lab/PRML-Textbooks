@@ -53,7 +53,7 @@ def parse_args():
     parser.add_argument("--window_size", type=int, default=11)
     parser.add_argument("--topn", type=int, default=5, help="検索単語数")
     parser.add_argument("--query", type=str, help="文字列を渡すと類似する単語をtopn個検索する")
-    return parser
+    return parser.parse_args()
 
 
 class CBoW(nn.Module):
