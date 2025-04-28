@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="分割型階層的クラスタリングの可視化">
+    <title>Divisive Hierarchical Clustering Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .visualization {
+            border: 1px solid #ccc;
+            margin: 10px;
+            position: relative;
+        }
+        .visualization-title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .input-group input {
+            width: 60px;
+            padding: 5px;
+        }
+        #stepDescription {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #stepInfo {
+            margin: 10px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>分割型階層的クラスタリングの可視化</h1>
+        <div class="input-group">
+            <label for="numPoints">データ数:</label>
+            <input type="number" id="numPoints" value="20" min="5" max="50">
+        </div>
+        <div id="scatterPlot" class="visualization">
+            <div class="visualization-title">散布図</div>
+        </div>
+        <div id="stepDescription">フェーズ: 初期状態</div>
+        <div id="stepInfo">ステップ: 0</div>
+        <div>
+            <button id="nextStep">Next Step</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // 設定
+        const width = 600;
+        const height = 600;
+        let numPoints = 20;
+        const colors = d3.schemeCategory10;
+
+        // データ生成
+        function generateData() {
+            const data = [];
+            for (let i = 0; i < numPoints; i++) {
+                data.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    id: i,
+                    cluster: 0  // 初期状態では全て同じクラスタ
+                });
+            }
+            return data;
+        }
+
+        // ユークリッド距離の計算
+        function calculateDistance(point1, point2) {
+            return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+        }
+
+        // クラスタの重心を計算
+        function calculateCentroid(points) {
+            const x = d3.mean(points, d => d.x);
+            const y = d3.mean(points, d => d.y);
+            return { x, y };
+        }
+
+        // クラスタ内の分散を計算
+        function calculateVariance(points, centroid) {
+            return d3.sum(points, d => Math.pow(calculateDistance(d, centroid), 2));
+        }
+
+        // 最適な分割点を見つける（K-means++の初期化方法を使用）
+        function findSplitPoints(points) {
+            const centroid = calculateCentroid(points);
+            
+            // 最も重心から遠い点を1つ目の分割点とする
+            let maxDist = -1;
+            let splitPoint1 = null;
+            points.forEach(point => {
+                const dist = calculateDistance(point, centroid);
+                if (dist > maxDist) {
+                    maxDist = dist;
+                    splitPoint1 = point;
+                }
+            });
+
+            // 2つ目の分割点は、1つ目の分割点から最も遠い点
+            maxDist = -1;
+            let splitPoint2 = null;
+            points.forEach(point => {
+                if (point !== splitPoint1) {
+                    const dist = calculateDistance(point, splitPoint1);
+                    if (dist > maxDist) {
+                        maxDist = dist;
+                        splitPoint2 = point;
+                    }
+                }
+            });
+
+            return [splitPoint1, splitPoint2];
+        }
+
+        // クラスタを2つに分割
+        function splitCluster(points, splitPoints) {
+            const cluster1 = [];
+            const cluster2 = [];
+
+            points.forEach(point => {
+                const dist1 = calculateDistance(point, splitPoints[0]);
+                const dist2 = calculateDistance(point, splitPoints[1]);
+                if (dist1 < dist2) {
+                    cluster1.push(point);
+                } else {
+                    cluster2.push(point);
+                }
+            });
+
+            return [cluster1, cluster2];
+        }
+
+        // 散布図の初期化
+        function initializeScatterPlot() {
+            d3.select("#scatterPlot").selectAll("*").remove();
+            const svg = d3.select("#scatterPlot")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            return svg;
+        }
+
+        // 散布図の更新
+        function updateScatterPlot(svg, data) {
+            svg.selectAll("*").remove();
+
+            // クラスタごとにグループ化
+            const clusters = d3.group(data, d => d.cluster);
+
+            // クラスタの矩形を描画
+            clusters.forEach((points, clusterId) => {
+                const xExtent = d3.extent(points, d => d.x);
+                const yExtent = d3.extent(points, d => d.y);
+                
+                svg.append("rect")
+                    .attr("x", xExtent[0] - 5)
+                    .attr("y", yExtent[0] - 5)
+                    .attr("width", xExtent[1] - xExtent[0] + 10)
+                    .attr("height", yExtent[1] - yExtent[0] + 10)
+                    .attr("fill", colors[clusterId % colors.length])
+                    .attr("fill-opacity", 0.2)
+                    .attr("stroke", colors[clusterId % colors.length])
+                    .attr("stroke-width", 2);
+            });
+
+            // データ点の描画
+            svg.selectAll("circle")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("r", 5)
+                .attr("fill", d => colors[d.cluster % colors.length]);
+        }
+
+        // メイン処理
+        let data = generateData();
+        let scatterPlotSvg = initializeScatterPlot();
+        let step = 0;
+        let phase = "初期状態";
+        let nextClusterId = 1;
+
+        // フェーズの更新
+        function updatePhase() {
+            if (step === 0) {
+                phase = "初期状態";
+            } else if (d3.group(data, d => d.cluster).size < data.length) {
+                phase = "クラスタ分割";
+            } else {
+                phase = "終了";
+                d3.select("#nextStep").property("disabled", true);
+            }
+            d3.select("#stepDescription").text(`フェーズ: ${phase}`);
+        }
+
+        // ステップの更新
+        function updateStep() {
+            if (phase !== "終了") {
+                // 分散が最大のクラスタを見つける
+                const clusters = d3.group(data, d => d.cluster);
+                let maxVariance = -1;
+                let targetCluster = null;
+                let targetClusterId = null;
+
+                clusters.forEach((points, clusterId) => {
+                    if (points.length > 1) {  // 1点のクラスタは分割しない
+                        const centroid = calculateCentroid(points);
+                        const variance = calculateVariance(points, centroid);
+                        if (variance > maxVariance) {
+                            maxVariance = variance;
+                            targetCluster = points;
+                            targetClusterId = clusterId;
+                        }
+                    }
+                });
+
+                if (targetCluster) {
+                    // クラスタを分割
+                    const splitPoints = findSplitPoints(targetCluster);
+                    const [cluster1, cluster2] = splitCluster(targetCluster, splitPoints);
+
+                    // 新しいクラスタIDを割り当て
+                    cluster2.forEach(point => {
+                        const dataPoint = data.find(d => d.id === point.id);
+                        dataPoint.cluster = nextClusterId;
+                    });
+                    nextClusterId++;
+                    step++;
+                }
+            }
+            updatePhase();
+        }
+
+        // イベントハンドラ
+        d3.select("#nextStep").on("click", () => {
+            if (phase !== "終了") {
+                updateStep();
+                updateScatterPlot(scatterPlotSvg, data);
+                d3.select("#stepInfo").text(`ステップ: ${step}`);
+            }
+        });
+
+        d3.select("#reset").on("click", () => {
+            data = generateData();
+            step = 0;
+            phase = "初期状態";
+            nextClusterId = 1;
+            scatterPlotSvg = initializeScatterPlot();
+            updateScatterPlot(scatterPlotSvg, data);
+            d3.select("#stepInfo").text(`ステップ: ${step}`);
+            d3.select("#stepDescription").text(`フェーズ: ${phase}`);
+            d3.select("#nextStep").property("disabled", false);
+        });
+
+        // 初期表示
+        updateScatterPlot(scatterPlotSvg, data);
+        updatePhase();
+    </script>
+</body>
+</html> 
