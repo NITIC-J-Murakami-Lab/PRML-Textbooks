@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ウォード法による階層型クラスタリングの可視化">
+    <title>Ward's Hierarchical Clustering Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .visualization {
+            border: 1px solid #ccc;
+            margin: 10px;
+            position: relative;
+        }
+        .visualization-title {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .input-group input {
+            width: 60px;
+            padding: 5px;
+        }
+        #stepDescription {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #stepInfo {
+            margin: 10px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ウォード法による階層型クラスタリングの可視化</h1>
+        <div class="input-group">
+            <label for="numPoints">データ数:</label>
+            <input type="number" id="numPoints" value="20" min="5" max="50">
+        </div>
+        <div id="scatterPlot" class="visualization">
+            <div class="visualization-title">散布図</div>
+        </div>
+        <div id="stepDescription">フェーズ: 初期状態</div>
+        <div id="stepInfo">ステップ: 0</div>
+        <div>
+            <button id="nextStep">Next Step</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // 設定
+        const width = 600;
+        const height = 600;
+        let numPoints = 20;
+        const colors = d3.schemeCategory10;
+
+        // データ生成
+        function generateData() {
+            const data = [];
+            for (let i = 0; i < numPoints; i++) {
+                data.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    id: i,
+                    cluster: [i]
+                });
+            }
+            return data;
+        }
+
+        // ユークリッド距離の計算
+        function calculateDistance(point1, point2) {
+            return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+        }
+
+        // クラスター間の距離（ウォード法）の計算
+        function calculateWardDistance(cluster1, cluster2, data) {
+            const points1 = data.filter(d => cluster1.includes(d.id));
+            const points2 = data.filter(d => cluster2.includes(d.id));
+            
+            const centroid1 = {
+                x: d3.mean(points1, d => d.x),
+                y: d3.mean(points1, d => d.y)
+            };
+            const centroid2 = {
+                x: d3.mean(points2, d => d.x),
+                y: d3.mean(points2, d => d.y)
+            };
+            
+            return calculateDistance(centroid1, centroid2);
+        }
+
+        // 散布図の初期化
+        function initializeScatterPlot() {
+            d3.select("#scatterPlot").selectAll("*").remove();
+            const svg = d3.select("#scatterPlot")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            return svg;
+        }
+
+        // 散布図の更新
+        function updateScatterPlot(svg, data, clusters) {
+            // データ点の更新
+            const points = svg.selectAll(".point")
+                .data(data, d => d.id);
+
+            points.enter()
+                .append("circle")
+                .attr("class", "point")
+                .attr("r", 5)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", "#ccc");
+
+            // クラスターの矩形を描画
+            clusters.forEach((cluster, i) => {
+                const pointsInCluster = data.filter(d => cluster.includes(d.id));
+                const xExtent = d3.extent(pointsInCluster, d => d.x);
+                const yExtent = d3.extent(pointsInCluster, d => d.y);
+                
+                svg.append("rect")
+                    .attr("x", xExtent[0] - 5)
+                    .attr("y", yExtent[0] - 5)
+                    .attr("width", xExtent[1] - xExtent[0] + 10)
+                    .attr("height", yExtent[1] - yExtent[0] + 10)
+                    .attr("fill", colors[i % colors.length])
+                    .attr("fill-opacity", 0.2)
+                    .attr("stroke", colors[i % colors.length])
+                    .attr("stroke-width", 2);
+            });
+        }
+
+        // メイン処理
+        let data = generateData();
+        let clusters = data.map(d => [d.id]);
+        let scatterPlotSvg = initializeScatterPlot();
+        let step = 0;
+        let phase = "初期状態";
+
+        // フェーズの更新
+        function updatePhase() {
+            if (step === 0) {
+                phase = "初期状態";
+            } else if (clusters.length > 1) {
+                phase = "クラスタマージ";
+            } else {
+                phase = "終了";
+                // 終了フェーズでは次のステップボタンを無効化
+                d3.select("#nextStep").property("disabled", true);
+            }
+            d3.select("#stepDescription").text(`フェーズ: ${phase}`);
+        }
+
+        // ステップの更新
+        function updateStep() {
+            if (clusters.length > 1) {
+                // 最も近い2つのクラスターを探す
+                let minDistance = Infinity;
+                let cluster1 = null;
+                let cluster2 = null;
+                let cluster1Index = -1;
+                let cluster2Index = -1;
+
+                for (let i = 0; i < clusters.length; i++) {
+                    for (let j = i + 1; j < clusters.length; j++) {
+                        const distance = calculateWardDistance(clusters[i], clusters[j], data);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            cluster1 = clusters[i];
+                            cluster2 = clusters[j];
+                            cluster1Index = i;
+                            cluster2Index = j;
+                        }
+                    }
+                }
+
+                // クラスターのマージ
+                if (cluster1 && cluster2) {
+                    const mergedCluster = [...cluster1, ...cluster2];
+                    clusters.splice(cluster2Index, 1);
+                    clusters.splice(cluster1Index, 1);
+                    clusters.push(mergedCluster);
+                    step++;
+                }
+            }
+            updatePhase();
+        }
+
+        // イベントハンドラ
+        d3.select("#nextStep").on("click", () => {
+            if (phase !== "終了") {
+                updateStep();
+                updateScatterPlot(scatterPlotSvg, data, clusters);
+                d3.select("#stepInfo").text(`ステップ: ${step}`);
+            }
+        });
+
+        d3.select("#reset").on("click", () => {
+            data = generateData();
+            clusters = data.map(d => [d.id]);
+            step = 0;
+            phase = "初期状態";
+            scatterPlotSvg = initializeScatterPlot();
+            updateScatterPlot(scatterPlotSvg, data, clusters);
+            d3.select("#stepInfo").text(`ステップ: ${step}`);
+            d3.select("#stepDescription").text(`フェーズ: ${phase}`);
+            // リセット時に次のステップボタンを有効化
+            d3.select("#nextStep").property("disabled", false);
+        });
+
+        // 初期表示
+        updateScatterPlot(scatterPlotSvg, data, clusters);
+        updatePhase();
+    </script>
+</body>
+</html>
