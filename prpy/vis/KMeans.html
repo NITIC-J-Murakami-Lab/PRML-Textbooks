@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="description" content="K-meansクラスタリングの可視化">
+    <!-- K-meansクラスタリングの可視化 -->
+
+    <title>K-means Clustering Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #visualization {
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .input-group input {
+            width: 60px;
+            padding: 5px;
+        }
+        #stepDescription {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #stepInfo {
+            margin: 10px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>K-means Clustering Visualization</h1>
+        <div class="input-group">
+            <label for="numPoints">データ数:</label>
+            <input type="number" id="numPoints" value="100" min="10" max="500">
+            <label for="numClusters">クラスター数:</label>
+            <input type="number" id="numClusters" value="3" min="2" max="10">
+        </div>
+        <div id="visualization"></div>
+        <div id="stepDescription">フェーズ: 初期状態</div>
+        <div id="stepInfo">ステップ: 0</div>
+        <div>
+            <button id="nextStep">Next Step</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // 設定
+        const width = 800;
+        const height = 600;
+        let numPoints = 100;
+        let numClusters = 3;
+        const colors = d3.schemeCategory10;
+
+        // データ生成
+        function generateData() {
+            const data = [];
+            for (let i = 0; i < numPoints; i++) {
+                data.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    cluster: -1
+                });
+            }
+            return data;
+        }
+
+        // クラスタ重心の初期化
+        function initializeCentroids(data) {
+            const centroids = [];
+            for (let i = 0; i < numClusters; i++) {
+                centroids.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    cluster: i
+                });
+            }
+            return centroids;
+        }
+
+        // ユークリッド距離の計算
+        function calculateDistance(point1, point2) {
+            return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+        }
+
+        // 新しい重心位置の計算
+        function calculateNewCentroids(data, centroids) {
+            return centroids.map((centroid, i) => {
+                const clusterPoints = data.filter(p => p.cluster === i);
+                return {
+                    x: clusterPoints.length > 0 ? d3.mean(clusterPoints, d => d.x) : centroid.x,
+                    y: clusterPoints.length > 0 ? d3.mean(clusterPoints, d => d.y) : centroid.y,
+                    cluster: i
+                };
+            });
+        }
+
+        // 可視化の初期化
+        function initializeVisualization() {
+            d3.select("#visualization").selectAll("*").remove();
+            const svg = d3.select("#visualization")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            return svg;
+        }
+
+        // 描画の更新
+        function updateVisualization(svg, data, centroids, showLines = false, showCentroidLines = false, newCentroids = null) {
+            // データ点の更新
+            const points = svg.selectAll(".point")
+                .data(data, d => d.x + "," + d.y);
+
+            points.enter()
+                .append("circle")
+                .attr("class", "point")
+                .attr("r", 5)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", d => d.cluster === -1 ? "#ccc" : colors[d.cluster]);
+
+            points.transition()
+                .duration(500)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", d => d.cluster === -1 ? "#ccc" : colors[d.cluster]);
+
+            // 重心の更新
+            const centroidPoints = svg.selectAll(".centroid")
+                .data(centroids, d => d.cluster);
+
+            centroidPoints.enter()
+                .append("path")
+                .attr("class", "centroid")
+                .attr("d", d3.symbol().type(d3.symbolStar).size(100))
+                .attr("transform", d => `translate(${d.x},${d.y})`)
+                .attr("fill", (d, i) => colors[i]);
+
+            centroidPoints.transition()
+                .duration(500)
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+
+            // 距離線の表示
+            if (showLines) {
+                const lines = svg.selectAll(".line")
+                    .data(data, d => d.x + "," + d.y);
+
+                lines.enter()
+                    .append("line")
+                    .attr("class", "line")
+                    .attr("x1", d => d.x)
+                    .attr("y1", d => d.y)
+                    .attr("x2", d => centroids[d.cluster].x)
+                    .attr("y2", d => centroids[d.cluster].y)
+                    .attr("stroke", d => colors[d.cluster])
+                    .attr("stroke-width", 1)
+                    .attr("stroke-opacity", 0.3);
+
+                lines.transition()
+                    .duration(500)
+                    .attr("x1", d => d.x)
+                    .attr("y1", d => d.y)
+                    .attr("x2", d => centroids[d.cluster].x)
+                    .attr("y2", d => centroids[d.cluster].y);
+
+                lines.exit().remove();
+            } else {
+                svg.selectAll(".line").remove();
+            }
+
+            // 重心移動の線分表示
+            if (showCentroidLines && newCentroids) {
+                svg.selectAll(".centroid-line").remove(); // 既存の線を削除
+
+                const centroidLines = svg.selectAll(".centroid-line")
+                    .data(data, d => d.x + "," + d.y);
+
+                centroidLines.enter()
+                    .append("line")
+                    .attr("class", "centroid-line")
+                    .attr("x1", d => d.x)
+                    .attr("y1", d => d.y)
+                    .attr("x2", d => newCentroids[d.cluster].x)
+                    .attr("y2", d => newCentroids[d.cluster].y)
+                    .attr("stroke", d => colors[d.cluster])
+                    .attr("stroke-width", 2)
+                    .attr("stroke-dasharray", "5,5")
+                    .attr("stroke-opacity", 0.5);
+
+                centroidLines.transition()
+                    .duration(500)
+                    .attr("x1", d => d.x)
+                    .attr("y1", d => d.y)
+                    .attr("x2", d => newCentroids[d.cluster].x)
+                    .attr("y2", d => newCentroids[d.cluster].y);
+
+                centroidLines.exit().remove();
+            } else {
+                svg.selectAll(".centroid-line").remove();
+            }
+        }
+
+        // メイン処理
+        let data = generateData();
+        let centroids = initializeCentroids(data);
+        let svg = initializeVisualization();
+        let showLines = false;
+        let showCentroidLines = false;
+        let phase = 0; // 0: 初期状態, 1: クラスター割り当て, 2: 重心移動の準備, 3: 重心移動
+        let step = 0;
+
+        // フェーズ説明の更新
+        function updatePhaseDescription() {
+            const descriptions = [
+                "フェーズ: 初期状態",
+                "フェーズ: クラスター割り当て（各点に最も近い重心を割り当て）",
+                "フェーズ: 重心移動の準備（各クラスターの重心を計算）",
+                "フェーズ: 重心移動（計算された位置に重心を移動）"
+            ];
+            d3.select("#stepDescription").text(descriptions[phase]);
+        }
+
+        // ステップ数の更新
+        function updateStepInfo() {
+            d3.select("#stepInfo").text(`ステップ: ${step}`);
+        }
+
+        // 初期表示
+        updateVisualization(svg, data, centroids);
+        updatePhaseDescription();
+        updateStepInfo();
+
+        // 入力値の変更イベント
+        d3.select("#numPoints").on("change", function() {
+            numPoints = +this.value;
+            resetVisualization();
+        });
+
+        d3.select("#numClusters").on("change", function() {
+            numClusters = +this.value;
+            resetVisualization();
+        });
+
+        // ボタンイベント
+        d3.select("#nextStep").on("click", () => {
+            if (phase === 0) {
+                // クラスター割り当て
+                data.forEach(point => {
+                    let minDistance = Infinity;
+                    let closestCluster = -1;
+
+                    centroids.forEach((centroid, i) => {
+                        const distance = calculateDistance(point, centroid);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestCluster = i;
+                        }
+                    });
+
+                    point.cluster = closestCluster;
+                });
+                showLines = true;
+                showCentroidLines = false;
+                phase = 1;
+            } else if (phase === 1) {
+                // 重心移動の準備
+                showLines = false;
+                showCentroidLines = true;
+                const newCentroids = calculateNewCentroids(data, centroids);
+                phase = 2;
+                // 点線を表示するために、まず現在の状態を更新
+                updateVisualization(svg, data, centroids, false, false);
+                // その後に点線を追加
+                setTimeout(() => {
+                    updateVisualization(svg, data, centroids, false, true, newCentroids);
+                }, 100);
+            } else if (phase === 2) {
+                // 重心移動
+                const newCentroids = calculateNewCentroids(data, centroids);
+                setTimeout(() => {
+                    centroids = newCentroids;
+                    showCentroidLines = false;
+                    phase = 3;
+                    updateVisualization(svg, data, centroids);
+                    updatePhaseDescription();
+                }, 1000);
+            } else {
+                // 次のイテレーションの準備
+                phase = 0;
+                showLines = false;
+                showCentroidLines = false;
+                step++;
+            }
+            updateVisualization(svg, data, centroids, showLines, showCentroidLines);
+            updatePhaseDescription();
+            updateStepInfo();
+        });
+
+        function resetVisualization() {
+            data = generateData();
+            centroids = initializeCentroids(data);
+            showLines = false;
+            showCentroidLines = false;
+            phase = 0;
+            step = 0;
+            svg = initializeVisualization();
+            updateVisualization(svg, data, centroids);
+            updatePhaseDescription();
+            updateStepInfo();
+        }
+
+        d3.select("#reset").on("click", resetVisualization);
+    </script>
+</body>
+</html> 
