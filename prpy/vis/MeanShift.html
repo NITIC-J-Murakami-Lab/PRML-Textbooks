@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mean-Shiftクラスタリングの可視化">
+    <title>Mean-Shift Clustering Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #visualization {
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .input-group input {
+            width: 60px;
+            padding: 5px;
+        }
+        #stepDescription {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #stepInfo {
+            margin: 10px 0;
+            color: #666;
+        }
+        #methodInfo {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+        #completionInfo {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mean-Shift Clustering Visualization</h1>
+        <div class="input-group">
+            <label for="numPoints">データ数:</label>
+            <input type="number" id="numPoints" value="100" min="10" max="500">
+            <label for="bandwidth">バンド幅:</label>
+            <input type="number" id="bandwidth" value="50" min="10" max="200">
+        </div>
+        <div id="visualization"></div>
+        <div id="methodInfo">
+            <h3>使用している密度推定手法</h3>
+            <p>ガウスカーネル密度推定（Gaussian Kernel Density Estimation）</p>
+            <p>カーネル関数: \(K(x) = \exp\left(-\frac{1}{2}\left(\frac{x}{h}\right)^2\right)\)</p>
+            <p>ここで、\(h\)はバンド幅（bandwidth）を表します。</p>
+            <p>Mean-Shiftの更新式: \(\mathbf{x}^{(t+1)} = \frac{\sum_{i=1}^{n} K\left(\frac{\|\mathbf{x}^{(t)} - \mathbf{x}_i\|}{h}\right) \mathbf{x}_i}{\sum_{i=1}^{n} K\left(\frac{\|\mathbf{x}^{(t)} - \mathbf{x}_i\|}{h}\right)}\)</p>
+        </div>
+        <div id="stepDescription">フェーズ: 初期状態</div>
+        <div id="stepInfo">ステップ: 0</div>
+        <div id="completionInfo"></div>
+        <div>
+            <button id="nextStep">Next Step</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // 設定
+        const width = 800;
+        const height = 600;
+        let numPoints = 100;
+        let bandwidth = 50;
+        const colors = d3.schemeCategory10;
+        const CONVERGENCE_THRESHOLD = 1.0; // 収束判定の閾値
+
+        // データ生成
+        function generateData() {
+            const data = [];
+            for (let i = 0; i < numPoints; i++) {
+                data.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    cluster: -1,
+                    originalX: null,
+                    originalY: null,
+                    finalX: null,
+                    finalY: null,
+                    clusterSize: 1,
+                    originalCluster: -1,
+                    tempCluster: -1  // 一時的なクラスター情報
+                });
+            }
+            return data;
+        }
+
+        // ガウスカーネル関数
+        function gaussianKernel(distance, bandwidth) {
+            return Math.exp(-0.5 * Math.pow(distance / bandwidth, 2));
+        }
+
+        // Mean-Shiftの重心計算
+        function calculateMeanShift(data, point, bandwidth) {
+            let weightedSumX = 0;
+            let weightedSumY = 0;
+            let totalWeight = 0;
+
+            data.forEach(otherPoint => {
+                const distance = Math.sqrt(
+                    Math.pow(point.x - otherPoint.x, 2) + 
+                    Math.pow(point.y - otherPoint.y, 2)
+                );
+                const weight = gaussianKernel(distance, bandwidth);
+                
+                weightedSumX += otherPoint.x * weight;
+                weightedSumY += otherPoint.y * weight;
+                totalWeight += weight;
+            });
+
+            return {
+                x: weightedSumX / totalWeight,
+                y: weightedSumY / totalWeight
+            };
+        }
+
+        // 可視化の初期化
+        function initializeVisualization() {
+            d3.select("#visualization").selectAll("*").remove();
+            const svg = d3.select("#visualization")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            return svg;
+        }
+
+        // 描画の更新
+        function updateVisualization(svg, data, showShift = false) {
+            // 元のデータ点の表示
+            const originalPoints = svg.selectAll(".original-point")
+                .data(data, d => d.x + "," + d.y);
+
+            originalPoints.enter()
+                .append("circle")
+                .attr("class", "original-point")
+                .attr("r", 3)
+                .attr("cx", d => d.originalX || d.x)
+                .attr("cy", d => d.originalY || d.y)
+                .attr("fill", d => {
+                    const cluster = d.tempCluster !== -1 ? d.tempCluster : d.originalCluster;
+                    return cluster === -1 ? "none" : colors[cluster % colors.length];
+                })
+                .attr("stroke", "black")
+                .attr("stroke-width", 1);
+
+            originalPoints.transition()
+                .duration(500)
+                .attr("cx", d => d.originalX || d.x)
+                .attr("cy", d => d.originalY || d.y)
+                .attr("fill", d => {
+                    const cluster = d.tempCluster !== -1 ? d.tempCluster : d.originalCluster;
+                    return cluster === -1 ? "none" : colors[cluster % colors.length];
+                });
+
+            // 現在の重心位置の表示
+            const currentPoints = svg.selectAll(".current-point")
+                .data(data, d => d.x + "," + d.y);
+
+            currentPoints.enter()
+                .append("circle")
+                .attr("class", "current-point")
+                .attr("r", 5)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", d => d.cluster === -1 ? "#ccc" : colors[d.cluster % colors.length])
+                .attr("stroke", "black")
+                .attr("stroke-width", 1);
+
+            currentPoints.transition()
+                .duration(500)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", d => d.cluster === -1 ? "#ccc" : colors[d.cluster % colors.length]);
+
+            // シフトベクトルの表示
+            const shifts = svg.selectAll(".shift")
+                .data(data, d => d.x + "," + d.y);
+
+            shifts.enter()
+                .append("line")
+                .attr("class", "shift")
+                .attr("x1", d => d.x)
+                .attr("y1", d => d.y)
+                .attr("x2", d => d.originalX || d.x)
+                .attr("y2", d => d.originalY || d.y)
+                .attr("stroke", d => {
+                    const cluster = d.tempCluster !== -1 ? d.tempCluster : d.originalCluster;
+                    return cluster === -1 ? "#666" : colors[cluster % colors.length];
+                })
+                .attr("stroke-width", 1)
+                .attr("stroke-dasharray", "3,3")
+                .style("opacity", showShift ? 1 : 0);
+
+            shifts.transition()
+                .duration(500)
+                .attr("x1", d => d.x)
+                .attr("y1", d => d.y)
+                .attr("x2", d => d.originalX || d.x)
+                .attr("y2", d => d.originalY || d.y)
+                .attr("stroke", d => {
+                    const cluster = d.tempCluster !== -1 ? d.tempCluster : d.originalCluster;
+                    return cluster === -1 ? "#666" : colors[cluster % colors.length];
+                })
+                .style("opacity", showShift ? 1 : 0);
+
+            shifts.exit().remove();
+        }
+
+        // メイン処理
+        let data = generateData();
+        let svg = initializeVisualization();
+        let showShift = false;
+        let phase = 0; // 0: 初期状態, 1: 重心移動, 2: クラスタリング
+        let step = 0;
+
+        // フェーズ説明の更新
+        function updatePhaseDescription() {
+            const descriptions = [
+                "フェーズ: 初期状態",
+                "フェーズ: 重心移動（Mean-Shift）",
+                "フェーズ: クラスタリング（収束した点のグループ化）"
+            ];
+            d3.select("#stepDescription").text(descriptions[phase]);
+        }
+
+        // ステップ数の更新
+        function updateStepInfo() {
+            d3.select("#stepInfo").text(`ステップ: ${step}`);
+        }
+
+        // 完了情報の更新
+        function updateCompletionInfo(numClusters) {
+            const completionInfo = d3.select("#completionInfo");
+            completionInfo.style("display", "block")
+                .html(`
+                    <h3>クラスタリング完了</h3>
+                    <p>終了条件: すべての点の移動距離が ${CONVERGENCE_THRESHOLD} 未満</p>
+                    <p>検出されたクラスタ数: ${numClusters}</p>
+                `);
+        }
+
+        // 初期表示
+        updateVisualization(svg, data);
+        updatePhaseDescription();
+        updateStepInfo();
+
+        // 入力値の変更イベント
+        d3.select("#numPoints").on("change", function() {
+            numPoints = +this.value;
+            resetVisualization();
+        });
+
+        d3.select("#bandwidth").on("change", function() {
+            bandwidth = +this.value;
+            resetVisualization();
+        });
+
+        // ボタンイベント
+        d3.select("#nextStep").on("click", () => {
+            if (phase === 0) {
+                // 重心移動の準備
+                data.forEach(point => {
+                    point.originalX = point.x;
+                    point.originalY = point.y;
+                });
+                showShift = true;
+                phase = 1;
+            } else if (phase === 1) {
+                // 重心移動
+                let hasMoved = false;
+                data.forEach(point => {
+                    const newPosition = calculateMeanShift(data, point, bandwidth);
+                    const distance = Math.sqrt(
+                        Math.pow(newPosition.x - point.x, 2) + 
+                        Math.pow(newPosition.y - point.y, 2)
+                    );
+                    
+                    if (distance > CONVERGENCE_THRESHOLD) {
+                        hasMoved = true;
+                        point.x = newPosition.x;
+                        point.y = newPosition.y;
+                    }
+                });
+
+                if (!hasMoved) {
+                    phase = 2;
+                }
+            } else {
+                // クラスタリング
+                const clusters = [];
+                data.forEach(point => {
+                    let assigned = false;
+                    for (let i = 0; i < clusters.length; i++) {
+                        const cluster = clusters[i];
+                        const distance = Math.sqrt(
+                            Math.pow(point.x - cluster.x, 2) + 
+                            Math.pow(point.y - cluster.y, 2)
+                        );
+                        if (distance < bandwidth) {
+                            point.cluster = i;
+                            point.tempCluster = i; // 一時的なクラスター情報を設定
+                            cluster.size = (cluster.size || 1) + 1;
+                            assigned = true;
+                            break;
+                        }
+                    }
+                    if (!assigned) {
+                        point.cluster = clusters.length;
+                        point.tempCluster = clusters.length; // 一時的なクラスター情報を設定
+                        clusters.push({
+                            x: point.x,
+                            y: point.y,
+                            size: 1
+                        });
+                    }
+                });
+
+                // クラスターのマージ処理
+                const mergedClusters = [];
+                clusters.forEach((cluster, i) => {
+                    let merged = false;
+                    for (let j = 0; j < mergedClusters.length; j++) {
+                        const mergedCluster = mergedClusters[j];
+                        const distance = Math.sqrt(
+                            Math.pow(cluster.x - mergedCluster.x, 2) + 
+                            Math.pow(cluster.y - mergedCluster.y, 2)
+                        );
+                        if (distance < bandwidth) {
+                            // 大きい方のクラスターにマージ
+                            if (cluster.size > mergedCluster.size) {
+                                mergedCluster.x = cluster.x;
+                                mergedCluster.y = cluster.y;
+                                mergedCluster.size = cluster.size;
+                                // 小さいクラスターの点を新しいクラスターに移動
+                                data.forEach(p => {
+                                    if (p.tempCluster === i) {
+                                        p.cluster = j;
+                                        p.originalCluster = j; // 元のクラスター情報を更新
+                                        p.tempCluster = j; // 一時的なクラスター情報も更新
+                                    }
+                                });
+                            } else {
+                                // 小さいクラスターの点を大きいクラスターに移動
+                                data.forEach(p => {
+                                    if (p.tempCluster === i) {
+                                        p.cluster = j;
+                                        p.originalCluster = j; // 元のクラスター情報を更新
+                                        p.tempCluster = j; // 一時的なクラスター情報も更新
+                                    }
+                                });
+                            }
+                            merged = true;
+                            break;
+                        }
+                    }
+                    if (!merged) {
+                        mergedClusters.push({
+                            x: cluster.x,
+                            y: cluster.y,
+                            size: cluster.size
+                        });
+                        // マージされなかったクラスターの点の情報を更新
+                        data.forEach(p => {
+                            if (p.tempCluster === i) {
+                                p.originalCluster = i;
+                            }
+                        });
+                    }
+                });
+
+                // 一時的なクラスター情報をクリア
+                data.forEach(point => {
+                    point.tempCluster = -1;
+                });
+
+                updateCompletionInfo(mergedClusters.length);
+                phase = 0;
+                step++;
+            }
+            updateVisualization(svg, data, showShift);
+            updatePhaseDescription();
+            updateStepInfo();
+        });
+
+        function resetVisualization() {
+            data = generateData();
+            showShift = false;
+            phase = 0;
+            step = 0;
+            svg = initializeVisualization();
+            updateVisualization(svg, data);
+            updatePhaseDescription();
+            updateStepInfo();
+            d3.select("#completionInfo").style("display", "none");
+        }
+
+        d3.select("#reset").on("click", resetVisualization);
+    </script>
+</body>
+</html>
