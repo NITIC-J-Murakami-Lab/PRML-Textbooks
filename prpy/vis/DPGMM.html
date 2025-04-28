@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DPGMMクラスタリングの可視化">
+    <title>Dirichlet Process Gaussian Mixture Model Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.5.0/math.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .visualization-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 20px 0;
+        }
+        #visualization2D {
+            width: 48%;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+        #visualization3D {
+            width: 48%;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            margin-right: 10px;
+        }
+        .input-group input {
+            width: 60px;
+            padding: 5px;
+        }
+        #stepDescription {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #stepInfo {
+            margin: 10px 0;
+            color: #666;
+        }
+        #clusterInfo {
+            margin: 10px 0;
+            color: #333;
+            font-weight: bold;
+        }
+        .math-container {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        #stickBreaking {
+            width: 100%;
+            height: 150px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+        }
+        .merge-info {
+            margin: 10px 0;
+            color: #333;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dirichlet Process Gaussian Mixture Model Visualization</h1>
+        
+        <div class="math-container">
+            <p>多変量正規分布: \(p(\mathbf{x}|\boldsymbol{\mu}, \boldsymbol{\Sigma}) = \frac{1}{(2\pi)^{d/2}|\boldsymbol{\Sigma}|^{1/2}} \exp\left(-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})\right)\)</p>
+            <p>DPGMMモデル: \(G \sim DP(\alpha, G_0), \quad \theta_i \sim G, \quad x_i \sim F(\theta_i)\)</p>
+            <p>ここで \(\alpha\) は濃度パラメータ、\(G_0\) は基底分布です</p>
+            <p>棒折り過程: \(\beta_k \sim Beta(1, \alpha), \quad \pi_k = \beta_k \prod_{i=1}^{k-1}(1-\beta_i)\)</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="numPoints">データ数:</label>
+            <input type="number" id="numPoints" value="100" min="10" max="500">
+            <label for="alpha">濃度パラメータ α:</label>
+            <input type="number" id="alpha" value="1.0" min="0.1" max="10" step="0.1">
+            <label for="mergeThreshold">マージ閾値:</label>
+            <input type="number" id="mergeThreshold" value="150" min="50" max="500" step="10">
+        </div>
+        
+        <div id="stickBreaking"></div>
+        
+        <div class="visualization-container">
+            <div id="visualization2D"></div>
+            <div id="visualization3D"></div>
+        </div>
+        
+        <div id="clusterInfo">アクティブなクラスター数: 0</div>
+        <div id="mergeInfo" class="merge-info">マージ情報: なし</div>
+        <div id="stepDescription">フェーズ: 初期状態</div>
+        <div id="stepInfo">ステップ: 0</div>
+        <div>
+            <button id="nextStep">Next Step</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        // 設定
+        const width = 800;
+        const height = 600;
+        let numPoints = 100;
+        let alphaConcentration = 1.0;
+        let maxClusters = 20;  // 最大クラスタ数（実際は使われないクラスタもある）
+        let mergeThreshold = 150; // クラスターマージの閾値
+        const colors = d3.schemeCategory10.concat(d3.schemeSet2, d3.schemeSet3).slice(0, maxClusters);
+        
+        // データ生成（クラスタごとにガウス分布からデータを生成）
+        function generateData() {
+            const data = [];
+            // 各クラスタのパラメータをランダムに設定
+            const clusterParams = [];
+            
+            // 実際のクラスタ数を生成（3〜5程度）
+            const actualClusters = Math.floor(Math.random() * 3) + 3;
+            
+            for (let k = 0; k < actualClusters; k++) {
+                // クラスタの中心を設定
+                const centerX = Math.random() * width * 0.8 + width * 0.1;
+                const centerY = Math.random() * height * 0.8 + height * 0.1;
+                
+                // 共分散行列のパラメータ
+                const varX = Math.random() * 5000 + 3000;
+                const varY = Math.random() * 5000 + 3000;
+                const covar = (Math.random() - 0.5) * 2000;
+                
+                clusterParams.push({
+                    center: [centerX, centerY],
+                    covar: [[varX, covar], [covar, varY]],
+                    weight: 1 / actualClusters
+                });
+            }
+            
+            // 各クラスタからデータを生成
+            for (let i = 0; i < numPoints; i++) {
+                // どのクラスタからサンプリングするかをランダムに決定
+                const clusterIdx = Math.floor(Math.random() * actualClusters);
+                const params = clusterParams[clusterIdx];
+                
+                // 選択したクラスタの分布からサンプリング
+                const [x, y] = sampleFromGaussian(params.center, params.covar);
+                
+                data.push({
+                    x: x,
+                    y: y,
+                    trueCluster: clusterIdx,  // 真のクラスタ（生成時に使用したクラスタ）
+                    cluster: -1,              // DPGMM推定のクラスタ（初期値は-1）
+                    responsibilities: Array(maxClusters).fill(1/maxClusters)  // 各クラスタへの所属確率
+                });
+            }
+            
+            return { data, clusterParams, actualClusters };
+        }
+        
+        // 多変量ガウス分布からのサンプリング
+        function sampleFromGaussian(mean, covar) {
+            // Box-Muller法で標準正規分布からサンプリング
+            const u1 = Math.random();
+            const u2 = Math.random();
+            const z1 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            const z2 = Math.sqrt(-2 * Math.log(u1)) * Math.sin(2 * Math.PI * u2);
+            
+            // 共分散行列をコレスキー分解
+            const L = choleskyDecomposition(covar);
+            
+            // 標準正規分布からのサンプルを変換
+            const x = mean[0] + L[0][0] * z1 + L[0][1] * z2;
+            const y = mean[1] + L[1][0] * z1 + L[1][1] * z2;
+            
+            return [x, y];
+        }
+        
+        // コレスキー分解
+        function choleskyDecomposition(A) {
+            const n = A.length;
+            const L = Array(n).fill().map(() => Array(n).fill(0));
+            
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j <= i; j++) {
+                    let sum = 0;
+                    
+                    if (j === i) {
+                        for (let k = 0; k < j; k++) {
+                            sum += L[j][k] * L[j][k];
+                        }
+                        L[j][j] = Math.sqrt(A[j][j] - sum);
+                    } else {
+                        for (let k = 0; k < j; k++) {
+                            sum += L[i][k] * L[j][k];
+                        }
+                        L[i][j] = (A[i][j] - sum) / L[j][j];
+                    }
+                }
+            }
+            
+            return L;
+        }
+        
+        // DPGMMパラメータの初期化
+        function initializeDPGMMParams() {
+            const params = [];
+            const initialActiveClusters = 3;  // 最初にアクティブにするクラスター数
+            
+            // 棒折り過程のシミュレーション
+            const stickWeights = simulateStickBreaking(initialActiveClusters, alphaConcentration);
+            
+            for (let k = 0; k < maxClusters; k++) {
+                // 最初のいくつかのクラスターだけが実際に使われる
+                const isActive = k < initialActiveClusters;
+                
+                params.push({
+                    mean: [Math.random() * width, Math.random() * height],
+                    covar: [[5000, 0], [0, 5000]],  // 初期の共分散行列は対角行列
+                    weight: isActive ? stickWeights[k] || 1.0 / initialActiveClusters : 1e-10,  // 非アクティブクラスタの重みは非常に小さい
+                    cluster: k,
+                    isActive: isActive,
+                    mergeHistory: [] // マージ履歴を追跡
+                });
+            }
+            
+            // 重みの正規化
+            const totalWeight = params.reduce((sum, p) => sum + p.weight, 0);
+            params.forEach(p => p.weight /= totalWeight);
+            
+            return params;
+        }
+        
+        // 棒折り過程のシミュレーション
+        function simulateStickBreaking(numSticks, alpha) {
+            const weights = [];
+            let remainingStick = 1.0;
+            
+            for (let i = 0; i < numSticks - 1; i++) {
+                // Beta(1, alpha)からサンプリング
+                const beta = sampleBeta(1, alpha);
+                const weight = beta * remainingStick;
+                weights.push(weight);
+                remainingStick -= weight;
+            }
+            
+            // 最後の棒の処理
+            if (numSticks > 0) {
+                weights.push(remainingStick);
+            }
+            
+            return weights;
+        }
+        
+        // Beta分布からのサンプリング
+        function sampleBeta(a, b) {
+            // ガンマ分布からサンプリングしてBeta分布を生成
+            const x = sampleGamma(a, 1);
+            const y = sampleGamma(b, 1);
+            return x / (x + y);
+        }
+        
+        // ガンマ分布からのサンプリング（簡易実装）
+        function sampleGamma(shape, scale) {
+            // 単純化のためにshapeが1に近い場合の近似を使用
+            if (Math.abs(shape - 1.0) < 0.01) {
+                return -Math.log(Math.random()) * scale;
+            }
+            
+            // 一般的なガンマサンプリングは複雑なので、
+            // ここでは単純化して、正規分布ベースの近似を使う
+            const d = shape - 1/3;
+            const c = 1 / Math.sqrt(9 * d);
+            
+            while (true) {
+                const x = sampleNormal(0, 1);
+                const v = Math.pow(1 + c * x, 3);
+                
+                if (v > 0) {
+                    const u = Math.random();
+                    if (u < Math.exp(0.5 * x * x + d - d * v + d * Math.log(v))) {
+                        return d * v * scale;
+                    }
+                }
+            }
+        }
+        
+        // 標準正規分布からのサンプリング（Box-Muller法）
+        function sampleNormal(mean, stdDev) {
+            const u1 = Math.random();
+            const u2 = Math.random();
+            const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            return mean + z * stdDev;
+        }
+        
+        // 行列式の計算
+        function determinant(matrix) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+        
+        // 2x2行列の逆行列を計算
+        function inverseMatrix(matrix) {
+            const det = determinant(matrix);
+            if (Math.abs(det) < 1e-10) {
+                // 行列が特異行列に近い場合は、少し対角成分を大きくする
+                matrix[0][0] += 100;
+                matrix[1][1] += 100;
+                return inverseMatrix(matrix);
+            }
+            
+            return [
+                [matrix[1][1] / det, -matrix[0][1] / det],
+                [-matrix[1][0] / det, matrix[0][0] / det]
+            ];
+        }
+        
+        // 多変量ガウス分布の確率密度関数
+        function gaussianPDF(x, mean, covar) {
+            const d = 2;  // 2次元
+            const diffX = x[0] - mean[0];
+            const diffY = x[1] - mean[1];
+            const diff = [diffX, diffY];
+            
+            // 逆行列の計算
+            const invCovar = inverseMatrix(covar);
+            
+            // マハラノビス距離の計算
+            const expTerm = diff[0] * (invCovar[0][0] * diff[0] + invCovar[0][1] * diff[1]) +
+                           diff[1] * (invCovar[1][0] * diff[0] + invCovar[1][1] * diff[1]);
+            
+            // 行列式の計算
+            const det = determinant(covar);
+            
+            // 確率密度関数の計算
+            const normalizer = 1 / (Math.pow(2 * Math.PI, d / 2) * Math.sqrt(Math.abs(det)));
+            return normalizer * Math.exp(-0.5 * expTerm);
+        }
+        
+        // Eステップ: 責任の計算 (ディリクレプロセスを考慮)
+        function calculateResponsibilities(data, dpParams) {
+            // アクティブなクラスタのみを取得
+            const activeParams = dpParams.filter(p => p.isActive);
+            const activeIndices = activeParams.map(p => p.cluster);
+            
+            data.forEach(point => {
+                const probs = Array(maxClusters).fill(0);
+                let totalProb = 0;
+                
+                // アクティブなクラスタの確率密度を計算
+                for (const params of activeParams) {
+                    const k = params.cluster;
+                    const prob = params.weight * gaussianPDF([point.x, point.y], params.mean, params.covar);
+                    probs[k] = prob;
+                    totalProb += prob;
+                }
+                
+                // 責任（事後確率）の計算
+                // すべてのクラスタに対する責任を計算（非アクティブなクラスタは0）
+                for (let k = 0; k < maxClusters; k++) {
+                    point.responsibilities[k] = totalProb > 0 ? probs[k] / totalProb : (activeIndices.includes(k) ? 1.0 / activeIndices.length : 0);
+                }
+                
+                // 所属確率が最大のクラスタを割り当て
+                point.cluster = point.responsibilities.indexOf(Math.max(...point.responsibilities));
+            });
+        }
+        
+        // Mステップ: パラメータの更新 (ディリクレプロセスを考慮)
+        function updateParameters(data, dpParams) {
+            const N = data.length;
+            const newParams = [];
+            let mergeInfo = "マージ情報: なし";
+            
+            // 現在のアクティブなクラスタを更新
+            for (let k = 0; k < maxClusters; k++) {
+                let Nk = 0;
+                let sumX = 0;
+                let sumY = 0;
+                
+                // 各クラスタの統計量を計算
+                data.forEach(point => {
+                    const resp = point.responsibilities[k];
+                    Nk += resp;
+                    sumX += resp * point.x;
+                    sumY += resp * point.y;
+                });
+                
+                // 濃度パラメータに基づいて混合係数を更新（ディリクレプロセスの効果）
+                // Nkが小さい場合は非アクティブにする可能性がある
+                const weight = (Nk + alphaConcentration / maxClusters) / (N + alphaConcentration);
+                
+                // クラスタがアクティブかどうかを判断 (重みのしきい値)
+                const isActive = weight > 0.01 / maxClusters; // しきい値以下なら非アクティブ
+                
+                // 平均の更新
+                const meanX = Nk > 0 ? sumX / Nk : (dpParams[k].isActive ? dpParams[k].mean[0] : Math.random() * width);
+                const meanY = Nk > 0 ? sumY / Nk : (dpParams[k].isActive ? dpParams[k].mean[1] : Math.random() * height);
+                
+                // 共分散行列の更新
+                let covXX = 0;
+                let covYY = 0;
+                let covXY = 0;
+                
+                data.forEach(point => {
+                    const resp = point.responsibilities[k];
+                    const diffX = point.x - meanX;
+                    const diffY = point.y - meanY;
+                    
+                    covXX += resp * diffX * diffX;
+                    covYY += resp * diffY * diffY;
+                    covXY += resp * diffX * diffY;
+                });
+                
+                // 共分散行列の正則化（特異行列になるのを防ぐ）
+                const reg = 1e-6;
+                const covar = [
+                    [Nk > 0 ? covXX / Nk + reg : 1000, Nk > 0 ? covXY / Nk : 0],
+                    [Nk > 0 ? covXY / Nk : 0, Nk > 0 ? covYY / Nk + reg : 1000]
+                ];
+                
+                // マージ履歴を引き継ぐ
+                const mergeHistory = dpParams[k].mergeHistory ? [...dpParams[k].mergeHistory] : [];
+                
+                newParams.push({
+                    mean: [meanX, meanY],
+                    covar: covar,
+                    weight: weight,
+                    cluster: k,
+                    isActive: isActive,
+                    mergeHistory: mergeHistory
+                });
+            }
+            
+            // クラスターのマージ処理
+            const activeParams = newParams.filter(p => p.isActive);
+            
+            if (activeParams.length > 1) {
+                // クラスター間の距離を計算
+                const mergeCandidate = findMergeCandidates(activeParams);
+                
+                if (mergeCandidate) {
+                    const { cluster1, cluster2, distance } = mergeCandidate;
+                    
+                    // マージを実行
+                    mergeInfo = `マージ情報: クラスター ${cluster1} と ${cluster2} をマージ (距離: ${distance.toFixed(2)})`;
+                    mergeCluster(newParams, cluster1, cluster2);
+                }
+            }
+            
+            // 新しいクラスタの作成（必要に応じて）
+            const totalActiveClusterWeights = newParams.filter(p => p.isActive).reduce((sum, p) => sum + p.weight, 0);
+            
+            // もし重みの合計が1よりも小さい場合、新しいクラスタを作成
+            if (totalActiveClusterWeights < 0.9 && newParams.filter(p => p.isActive).length < maxClusters - 1) {
+                // 非アクティブなクラスタのうち1つをアクティブにする
+                const inactiveIndices = newParams.map((p, idx) => p.isActive ? -1 : idx).filter(idx => idx >= 0);
+                
+                if (inactiveIndices.length > 0) {
+                    const newClusterIdx = inactiveIndices[Math.floor(Math.random() * inactiveIndices.length)];
+                    newParams[newClusterIdx].isActive = true;
+                    newParams[newClusterIdx].weight = (1 - totalActiveClusterWeights) * 0.5; // 残りの重みの一部を割り当て
+                    
+                    // ランダムな位置に設定
+                    newParams[newClusterIdx].mean = [Math.random() * width, Math.random() * height];
+                    newParams[newClusterIdx].covar = [[3000, 0], [0, 3000]];
+                    
+                    if (mergeInfo === "マージ情報: なし") {
+                        mergeInfo = `マージ情報: 新しいクラスター ${newClusterIdx} を生成`;
+                    }
+                }
+            }
+            
+            // 重みの正規化（合計が1になるように）
+            const finalTotalWeight = newParams.reduce((sum, p) => sum + p.weight, 0);
+            newParams.forEach(p => p.weight /= finalTotalWeight);
+            
+            // マージ情報を更新
+            updateMergeInfo(mergeInfo);
+            
+            return newParams;
+        }
+        
+        // クラスターマージ候補を見つける
+        function findMergeCandidates(activeParams) {
+            let minDistance = Infinity;
+            let candidate = null;
+            
+            for (let i = 0; i < activeParams.length; i++) {
+                for (let j = i + 1; j < activeParams.length; j++) {
+                    const cluster1 = activeParams[i];
+                    const cluster2 = activeParams[j];
+                    
+                    // クラスター間の距離を計算（マハラノビス距離）
+                    const distance = calculateClusterDistance(cluster1, cluster2);
+                    
+                    // 最小距離のペアを見つける
+                    if (distance < minDistance && distance < mergeThreshold) {
+                        minDistance = distance;
+                        candidate = {
+                            cluster1: cluster1.cluster,
+                            cluster2: cluster2.cluster,
+                            distance: distance
+                        };
+                    }
+                }
+            }
+            
+            return candidate;
+        }
+        
+        // クラスター間の距離を計算
+        function calculateClusterDistance(cluster1, cluster2) {
+            // 平均間のユークリッド距離（単純化のため）
+            const dx = cluster1.mean[0] - cluster2.mean[0];
+            const dy = cluster1.mean[1] - cluster2.mean[1];
+            const baseDistance = Math.sqrt(dx * dx + dy * dy);
+            
+            // 共分散類似性も考慮（単純化のため対角要素のみ）
+            const covSimilarity = Math.abs(cluster1.covar[0][0] - cluster2.covar[0][0]) + 
+                                 Math.abs(cluster1.covar[1][1] - cluster2.covar[1][1]);
+            
+            return baseDistance + 0.01 * covSimilarity;
+        }
+        
+        // クラスターをマージする
+        function mergeCluster(params, cluster1Idx, cluster2Idx) {
+            const cluster1 = params.find(p => p.cluster === cluster1Idx);
+            const cluster2 = params.find(p => p.cluster === cluster2Idx);
+            
+            if (!cluster1 || !cluster2) return;
+            
+            // 重みを合計
+            const totalWeight = cluster1.weight + cluster2.weight;
+            
+            // 加重平均で新しい平均を計算
+            const newMean = [
+                (cluster1.mean[0] * cluster1.weight + cluster2.mean[0] * cluster2.weight) / totalWeight,
+                (cluster1.mean[1] * cluster1.weight + cluster2.mean[1] * cluster2.weight) / totalWeight
+            ];
+            
+            // 共分散行列をマージ（簡易的な方法）
+            const newCovar = [
+                [
+                    (cluster1.covar[0][0] * cluster1.weight + cluster2.covar[0][0] * cluster2.weight) / totalWeight,
+                    (cluster1.covar[0][1] * cluster1.weight + cluster2.covar[0][1] * cluster2.weight) / totalWeight
+                ],
+                [
+                    (cluster1.covar[1][0] * cluster1.weight + cluster2.covar[1][0] * cluster2.weight) / totalWeight,
+                    (cluster1.covar[1][1] * cluster1.weight + cluster2.covar[1][1] * cluster2.weight) / totalWeight
+                ]
+            ];
+            
+            // マージ履歴を更新
+            const mergeHistory = [
+                ...(cluster1.mergeHistory || []),
+                ...(cluster2.mergeHistory || []),
+                { from: cluster2Idx, to: cluster1Idx, step: step }
+            ];
+            
+            // クラスター1を更新
+            cluster1.mean = newMean;
+            cluster1.covar = newCovar;
+            cluster1.weight = totalWeight;
+            cluster1.mergeHistory = mergeHistory;
+            
+            // クラスター2を非アクティブにする
+            cluster2.isActive = false;
+            cluster2.weight = 1e-10;
+        }
+        
+        // マージ情報を更新
+        function updateMergeInfo(info) {
+            d3.select("#mergeInfo").text(info);
+        }
+        
+        // 2Dビジュアライゼーションの初期化
+        function initialize2DVisualization() {
+            d3.select("#visualization2D").selectAll("*").remove();
+            const svg = d3.select("#visualization2D")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            // タイトルを追加
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", 30)
+                .attr("text-anchor", "middle")
+                .attr("font-size", "16px")
+                .attr("font-weight", "bold")
+                .text("データ点とクラスター");
+            
+            return svg;
+        }
+        
+        // 3Dビジュアライゼーションの初期化
+        function initialize3DVisualization() {
+            // まず現在のコンテナ内容をクリア
+            const container = document.getElementById('visualization3D');
+            
+            // Plotlyの完全なクリーンアップ（もし既にプロットが存在する場合）
+            if (container && container._fullData) {
+                Plotly.purge(container);
+            }
+            
+            // 既存のコンテナ内容を完全に削除
+            d3.select("#visualization3D").html("");
+            
+            // コンテナに新しいdiv要素を作成
+            const newPlotDiv = document.createElement('div');
+            newPlotDiv.style.width = '100%';
+            newPlotDiv.style.height = '100%';
+            container.appendChild(newPlotDiv);
+            
+            return newPlotDiv;
+        }
+        
+        // グリッド上の確率密度を計算
+        function calculateDensityGrid(dpParams, gridSize = 50) {
+            const gridData = [];
+            const stepX = width / gridSize;
+            const stepY = height / gridSize;
+            
+            // アクティブなクラスタのみを使用
+            const activeParams = dpParams.filter(p => p.isActive);
+            
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const x = i * stepX;
+                    const y = j * stepY;
+                    let density = 0;
+                    
+                    // 各クラスタの確率密度の合計を計算
+                    for (const params of activeParams) {
+                        density += params.weight * gaussianPDF([x, y], params.mean, params.covar);
+                    }
+                    
+                    gridData.push({
+                        x: x,
+                        y: y,
+                        z: density
+                    });
+                }
+            }
+            
+            return gridData;
+        }
+        
+        // 2Dビジュアライゼーションの更新
+        function update2DVisualization(svg, data, dpParams) {
+            // アクティブなクラスタを抽出
+            const activeParams = dpParams.filter(p => p.isActive);
+            
+            // データ点の更新
+            const points = svg.selectAll(".point")
+                .data(data, d => d.x + "," + d.y);
+            
+            points.enter()
+                .append("circle")
+                .attr("class", "point")
+                .attr("r", 5)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", d => d.cluster === -1 ? "#ccc" : colors[d.cluster])
+                .attr("fill-opacity", 0.7);
+            
+            points.transition()
+                .duration(500)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("fill", d => d.cluster === -1 ? "#ccc" : colors[d.cluster]);
+            
+            // コンター（等高線）の描画
+            svg.selectAll(".contour").remove();
+            
+            // グリッド上の確率密度を計算
+            const gridData = calculateDensityGrid(dpParams);
+            
+            // D3のContoursを使って等高線を描画
+            const contours = d3.contourDensity()
+                .x(d => d.x)
+                .y(d => d.y)
+                .weight(d => d.z)
+                .size([width, height])
+                .thresholds(10)
+                (gridData);
+            
+            svg.append("g")
+                .attr("class", "contour")
+                .selectAll("path")
+                .data(contours)
+                .enter()
+                .append("path")
+                .attr("d", d3.geoPath())
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-opacity", 0.3)
+                .attr("stroke-width", 1);
+            
+            // 分布の中心を表示（アクティブなクラスタのみ）
+            const centers = svg.selectAll(".center")
+                .data(activeParams, d => d.cluster);
+            
+            centers.enter()
+                .append("path")
+                .attr("class", "center")
+                .attr("d", d3.symbol().type(d3.symbolStar).size(100))
+                .attr("transform", d => `translate(${d.mean[0]},${d.mean[1]})`)
+                .attr("fill", d => colors[d.cluster]);
+            
+            centers.transition()
+                .duration(500)
+                .attr("transform", d => `translate(${d.mean[0]},${d.mean[1]})`);
+            
+            centers.exit().remove();
+            
+            // 楕円（共分散行列の可視化）を描画
+            svg.selectAll(".ellipse").remove();
+            
+            activeParams.forEach(params => {
+                // 共分散行列から楕円のパラメータを計算
+                const covar = params.covar;
+                const eigenValues = calculateEigenvalues(covar);
+                const eigenVectors = calculateEigenvectors(covar, eigenValues);
+                
+                // 楕円の描画
+                const ellipse = svg.append("ellipse")
+                    .attr("class", "ellipse")
+                    .attr("cx", params.mean[0])
+                    .attr("cy", params.mean[1])
+                    .attr("rx", Math.sqrt(eigenValues[0]) * 2)  // 2シグマ楕円
+                    .attr("ry", Math.sqrt(eigenValues[1]) * 2)
+                    .attr("fill", "none")
+                    .attr("stroke", colors[params.cluster])
+                    .attr("stroke-width", 2)
+                    .attr("stroke-dasharray", "5,5");
+                
+                // 楕円の回転角度を計算
+                const angle = Math.atan2(eigenVectors[0][1], eigenVectors[0][0]) * 180 / Math.PI;
+                ellipse.attr("transform", `translate(${params.mean[0]},${params.mean[1]}) rotate(${angle}) translate(${-params.mean[0]},${-params.mean[1]})`);
+            });
+            
+            // クラスタ数の更新
+            updateClusterInfo(activeParams.length);
+        }
+        
+        // 共分散行列の固有値を計算
+        function calculateEigenvalues(covar) {
+            const a = 1;
+            const b = -(covar[0][0] + covar[1][1]);
+            const c = covar[0][0] * covar[1][1] - covar[0][1] * covar[1][0];
+            
+            const delta = b * b - 4 * a * c;
+            const lambda1 = (-b + Math.sqrt(delta)) / (2 * a);
+            const lambda2 = (-b - Math.sqrt(delta)) / (2 * a);
+            
+            return [lambda1, lambda2];
+        }
+        
+        // 共分散行列の固有ベクトルを計算
+        function calculateEigenvectors(covar, eigenValues) {
+            const vectors = [];
+            
+            for (const lambda of eigenValues) {
+                const A = covar[0][0] - lambda;
+                const B = covar[0][1];
+                
+                if (Math.abs(B) > 1e-10) {
+                    const v1 = -B;
+                    const v2 = A;
+                    const norm = Math.sqrt(v1 * v1 + v2 * v2);
+                    vectors.push([v1 / norm, v2 / norm]);
+                } else {
+                    const C = covar[1][0];
+                    const D = covar[1][1] - lambda;
+                    
+                    if (Math.abs(C) > 1e-10) {
+                        const v1 = -D;
+                        const v2 = C;
+                        const norm = Math.sqrt(v1 * v1 + v2 * v2);
+                        vectors.push([v1 / norm, v2 / norm]);
+                    } else {
+                        // 対角行列の場合
+                        if (Math.abs(A) < Math.abs(D)) {
+                            vectors.push([1, 0]);
+                        } else {
+                            vectors.push([0, 1]);
+                        }
+                    }
+                }
+            }
+            
+            return vectors;
+        }
+        
+        // 3Dビジュアライゼーションの更新
+        function update3DVisualization(container, data, dpParams) {
+            // アクティブなクラスタを抽出
+            const activeParams = dpParams.filter(p => p.isActive);
+            
+            // グリッド上の確率密度を計算
+            const gridSize = 30;
+            const x = Array.from({ length: gridSize }, (_, i) => i * (width / gridSize));
+            const y = Array.from({ length: gridSize }, (_, i) => i * (height / gridSize));
+            
+            // 3D密度データの計算
+            const densityData = [];
+            
+            for (let i = 0; i < x.length; i++) {
+                const row = [];
+                for (let j = 0; j < y.length; j++) {
+                    let density = 0;
+                    
+                    // 各クラスタの確率密度の合計を計算（アクティブなクラスタのみ）
+                    for (const params of activeParams) {
+                        density += params.weight * gaussianPDF([x[i], y[j]], params.mean, params.covar);
+                    }
+                    
+                    row.push(density);
+                }
+                densityData.push(row);
+            }
+            
+            // 散布図データの準備
+            const scatter3dData = data.map(point => {
+                let density = 0;
+                
+                // 各クラスタの確率密度を合計（アクティブなクラスタのみ）
+                for (const params of activeParams) {
+                    density += params.weight * gaussianPDF([point.x, point.y], params.mean, params.covar);
+                }
+                
+                return {
+                    x: point.x,
+                    y: point.y,
+                    z: density,
+                    cluster: point.cluster
+                };
+            });
+            
+            // 3D散布図を作成
+            const scatterTrace = {
+                type: 'scatter3d',
+                mode: 'markers',
+                x: scatter3dData.map(d => d.x),
+                y: scatter3dData.map(d => d.y),
+                z: scatter3dData.map(d => d.z),
+                marker: {
+                    size: 4,
+                    color: scatter3dData.map(d => d.cluster === -1 ? '#ccc' : colors[d.cluster]),
+                    opacity: 0.7
+                },
+                name: 'データポイント'
+            };
+            
+            // 3D表面を作成
+            const surfaceTrace = {
+                type: 'surface',
+                x: x,
+                y: y,
+                z: densityData,
+                colorscale: 'Viridis',
+                opacity: 0.8,
+                showscale: false,
+                contours: {
+                    z: {
+                        show: true,
+                        usecolormap: true,
+                        highlightcolor: "#42f462",
+                        project: { z: true }
+                    }
+                },
+                name: '確率密度'
+            };
+            
+            // レイアウト設定
+            const layout = {
+                title: 'DPGMM 3D確率密度',
+                scene: {
+                    xaxis: { title: 'X' },
+                    yaxis: { title: 'Y' },
+                    zaxis: { title: '確率密度' }
+                },
+                margin: { l: 0, r: 0, b: 0, t: 30 },
+                showlegend: false
+            };
+            
+            // プロットの描画
+            Plotly.newPlot(container, [surfaceTrace, scatterTrace], layout);
+        }
+        
+        // クラスタ数の情報を更新
+        function updateClusterInfo(numActiveClusters) {
+            d3.select("#clusterInfo").text(`アクティブなクラスター数: ${numActiveClusters}`);
+        }
+        
+        // メイン処理
+        let { data, clusterParams, actualClusters } = generateData();
+        let dpParams = initializeDPGMMParams();
+        let svg2D = initialize2DVisualization();
+        let container3D = initialize3DVisualization();
+        let phase = 0; // 0: 初期状態, 1: E-step, 2: M-step
+        let step = 0;
+        
+        // フェーズ説明の更新
+        function updatePhaseDescription() {
+            const descriptions = [
+                "フェーズ: 初期状態",
+                "フェーズ: E-step（各データポイントの各クラスタへの帰属確率（責任）を計算）",
+                "フェーズ: M-step（責任に基づいてパラメータを更新とクラスター生成/削除）"
+            ];
+            d3.select("#stepDescription").text(descriptions[phase]);
+        }
+        
+        // ステップ数の更新
+        function updateStepInfo() {
+            d3.select("#stepInfo").text(`EMステップ: ${step}`);
+        }
+        
+        // 初期表示
+        update2DVisualization(svg2D, data, dpParams);
+        update3DVisualization(container3D, data, dpParams);
+        updateStickBreakingVisualization(dpParams);
+        updatePhaseDescription();
+        updateStepInfo();
+        updateClusterInfo(dpParams.filter(p => p.isActive).length);
+        
+        // 入力値の変更イベント
+        d3.select("#numPoints").on("change", function() {
+            numPoints = +this.value;
+            resetVisualization();
+        });
+        
+        d3.select("#alpha").on("change", function() {
+            alphaConcentration = +this.value;
+            // アルファを変更してもリセットはしない（次のEMステップで反映される）
+        });
+        
+        // ボタンイベント
+        d3.select("#nextStep").on("click", () => {
+            if (phase === 0) {
+                // E-step
+                calculateResponsibilities(data, dpParams);
+                phase = 1;
+            } else if (phase === 1) {
+                // M-step
+                dpParams = updateParameters(data, dpParams);
+                phase = 2;
+            } else {
+                // 次のイテレーションの準備
+                phase = 0;
+                step++;
+            }
+            
+            update2DVisualization(svg2D, data, dpParams);
+            update3DVisualization(container3D, data, dpParams);
+            updateStickBreakingVisualization(dpParams);
+            updatePhaseDescription();
+            updateStepInfo();
+        });
+        
+        function resetVisualization() {
+            const result = generateData();
+            data = result.data;
+            clusterParams = result.clusterParams;
+            actualClusters = result.actualClusters;
+            dpParams = initializeDPGMMParams();
+            phase = 0;
+            step = 0;
+            
+            svg2D = initialize2DVisualization();
+            container3D = initialize3DVisualization();
+            
+            // 2D可視化を更新
+            update2DVisualization(svg2D, data, dpParams);
+            updateStickBreakingVisualization(dpParams);
+            
+            // 3D表示の問題を解決するため、より長い遅延を設定
+            setTimeout(() => {
+                update3DVisualization(container3D, data, dpParams);
+            }, 300);
+            
+            updatePhaseDescription();
+            updateStepInfo();
+            updateClusterInfo(dpParams.filter(p => p.isActive).length);
+            updateMergeInfo("マージ情報: なし");
+        }
+        
+        d3.select("#reset").on("click", resetVisualization);
+        
+        // マージ閾値の変更イベント
+        d3.select("#mergeThreshold").on("change", function() {
+            mergeThreshold = +this.value;
+            // 閾値を変更してもリセットはしない（次のステップで反映される）
+        });
+        
+        // 棒折り過程の可視化
+        function updateStickBreakingVisualization(dpParams) {
+            // アクティブなクラスタのみを取得し、重み順にソート
+            const activeParams = dpParams.filter(p => p.isActive)
+                                        .sort((a, b) => b.weight - a.weight);
+            
+            const stickSvg = d3.select("#stickBreaking");
+            stickSvg.selectAll("*").remove();
+            
+            const svg = stickSvg.append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("viewBox", `0 0 ${width} 150`);
+            
+            // タイトルを追加
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", 20)
+                .attr("text-anchor", "middle")
+                .attr("font-size", "14px")
+                .attr("font-weight", "bold")
+                .text("棒折り過程の可視化");
+            
+            // 棒グラフの描画
+            const barHeight = 40;
+            const barY = 60;
+            let cumulativeWidth = 0;
+            
+            activeParams.forEach((param, i) => {
+                const barWidth = width * param.weight;
+                
+                // 棒の描画
+                svg.append("rect")
+                    .attr("x", cumulativeWidth)
+                    .attr("y", barY)
+                    .attr("width", barWidth)
+                    .attr("height", barHeight)
+                    .attr("fill", colors[param.cluster])
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 1);
+                
+                // クラスタ番号とウェイトの表示
+                if (barWidth > 40) { // 十分な幅がある場合のみテキスト表示
+                    svg.append("text")
+                        .attr("x", cumulativeWidth + barWidth / 2)
+                        .attr("y", barY + barHeight / 2 + 5)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "white")
+                        .attr("font-size", "12px")
+                        .attr("font-weight", "bold")
+                        .text(`C${param.cluster}`);
+                    
+                    svg.append("text")
+                        .attr("x", cumulativeWidth + barWidth / 2)
+                        .attr("y", barY + barHeight + 20)
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "black")
+                        .attr("font-size", "10px")
+                        .text(`${(param.weight * 100).toFixed(1)}%`);
+                }
+                
+                cumulativeWidth += barWidth;
+            });
+            
+            // 非アクティブなクラスタがあれば「残り」として表示
+            const remainingWeight = 1 - cumulativeWidth / width;
+            if (remainingWeight > 0.01) {
+                svg.append("rect")
+                    .attr("x", cumulativeWidth)
+                    .attr("y", barY)
+                    .attr("width", width * remainingWeight)
+                    .attr("height", barHeight)
+                    .attr("fill", "#cccccc")
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 1);
+                
+                svg.append("text")
+                    .attr("x", cumulativeWidth + (width * remainingWeight) / 2)
+                    .attr("y", barY + barHeight / 2 + 5)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "white")
+                    .attr("font-size", "12px")
+                    .text("残り");
+            }
+            
+            // α値の表示
+            svg.append("text")
+                .attr("x", width - 10)
+                .attr("y", 130)
+                .attr("text-anchor", "end")
+                .attr("font-size", "12px")
+                .text(`α = ${alphaConcentration.toFixed(1)}`);
+        }
+    </script>
+</body>
+</html> 
